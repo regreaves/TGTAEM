@@ -1,16 +1,12 @@
 import java.util.*;
 
 public class Inventory {
-	String command;
-	String description;
-	String name;
-	List<String> words;
-	boolean validity;
+	int maxSize;
+  ArrayList items;
 
-	public Inventory(String command, String description, String name) {
-		this.command = command;
-		this.description = description;
-		this.name = name;
+	public Inventory(int maxSize) {
+		this.maxSize = maxSize;
+    this.items = new ArrayList();
 	}
 
 	public boolean checkValidity() {
