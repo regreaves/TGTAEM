@@ -28,6 +28,14 @@ public class NPC
     return;
   }
 
+  public ArrayList getAvailableActions() {
+    return availableActions;
+  }
+
+  public ArrayList getPossibleActions() {
+    return possibleActions;
+  }
+
   public void addLoot(Item item) {
     return;
   }
@@ -54,6 +62,14 @@ public class NPC
 
   public String getName() {
     return "empty";
+  }
+
+  public void setFriendly(boolean friend) {
+    return;
+  }
+
+  public ArrayList getDialogue() {
+    return dialogueBank;
   }
 
 }
