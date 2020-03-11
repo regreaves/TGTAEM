@@ -23,7 +23,7 @@ public class Actor
   }
 
   public void getStats() {
-    return
+    return;
   }
 
   public Bool checkAlive() {
@@ -34,4 +34,15 @@ public class Actor
     return "empty";
   }
 
+  public void setLocation(String locationID) {
+    return;
+  }
+
+  public String getID() {
+    return "empty";
+  }
+
+  public void kill() {
+    return;
+  }
 }
