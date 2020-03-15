@@ -10,11 +10,11 @@ public class Game
   ArrayList map;
   ArrayList actionsTaken;
   ArrayList roomsVisited;
-  Int playerDeaths;
-  Int victories;
+  int playerDeaths;
+  int victories;
   ArrayList checkpoints;
 
-  public Game(User user, Player player, Parser parser, Inventory items, NPC npcs, ArrayList map, ArrayList actionsTaken, ArrayList roomsVisited, Int playerDeaths, Int victories, ArrayList checkpoints) {
+  public Game(User user, Player player, Parser parser, Inventory items, NPC npcs, ArrayList map, ArrayList actionsTaken, ArrayList roomsVisited, int playerDeaths, int victories, ArrayList checkpoints) {
 	  this.user = user;
     this.player = player;
     this.parser = parser;

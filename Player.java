@@ -4,9 +4,9 @@ public class Player
 {
   Inventory inventory;
 
-  public Player(Inventory inventory) {
-	  this.inventory = inventory;
-  	}
+  public Player() {
+	return;
+  }
 
   public void changeStats() {
     return;
@@ -16,4 +16,7 @@ public class Player
     return;
   }
 
+  public String getInventory() {
+	return "empty";
+  }
 }
