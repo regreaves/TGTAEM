@@ -5,9 +5,9 @@ public class Actor
   List stats;
   String location;
   String id;
-  Bool alive;
+  boolean alive;
 
-  public Actor(List stats, String location, String id, Bool alive) {
+  public Actor(List stats, String location, String id, boolean alive) {
 	  this.stats = stats;
 	  this.location = location;
     this.id = id;
@@ -26,7 +26,7 @@ public class Actor
     return;
   }
 
-  public Bool checkAlive() {
+  public boolean checkAlive() {
     return true;
   }
 

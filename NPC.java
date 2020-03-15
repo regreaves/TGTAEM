@@ -7,11 +7,11 @@ public class NPC
   ArrayList availableActions;
   String description;
   String name;
-  Bool friend;
+  boolean friend;
   ArrayList dialogueBank;
 
-  public NPC(ArrayList loot, ArrayList possibleActions, ArrayList availableActions, String description, String name, Bool friend, ArrayList dialogueBank) {
-	  this.loot = loot;
+  public NPC(ArrayList loot, ArrayList possibleActions, ArrayList availableActions, String description, String name, boolean friend, ArrayList dialogueBank) {
+	this.loot = loot;
     this.possibleActions = possibleActions;
     this.availableActions = availableActions;
     this.description = description;
