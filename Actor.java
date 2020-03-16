@@ -8,14 +8,15 @@ public class Actor
   boolean alive;
 
   public Actor(List stats, String location, String id, boolean alive) {
-	  this.stats = stats;
-	  this.location = location;
+	this.stats = stats;
+	this.location = location;
     this.id = id;
     this.alive = alive;
   	}
 
   public void setStats(List stats) {
-    return;
+    this.stats = stats;
+	return;
   }
 
   public void modifyStats(List stats) {
@@ -23,26 +24,32 @@ public class Actor
   }
 
   public void getStats() {
-    return;
+    return this.stats;
   }
 
   public boolean checkAlive() {
-    return true;
+    if(this.alive == true){
+		return true;
+	}else{
+		return false;
+	}
   }
 
   public String getLocation() {
-    return "empty";
+    return location;
   }
 
   public void setLocation(String locationID) {
-    return;
+    this.location = locationID;
+	return;
   }
 
   public String getID() {
-    return "empty";
+    return id;
   }
 
   public void kill() {
+	this.alive = false;
     return;
   }
 }
