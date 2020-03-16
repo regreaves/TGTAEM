@@ -19,8 +19,13 @@ public class Inventory {
 	}
 
 	public boolean checkSize() {
-		//TODO
-		return true;
+		int x = items.size();
+		if (x < this.maxSize) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	public ArrayList getItems() {
@@ -33,17 +38,28 @@ public class Inventory {
 	}
 
 	public void addItems(ArrayList items) {
-		//TODO
+		this.items.addAll(items);
 		return;
 	}
 
 	public void dropItem(Item item) {
 		//TODO
+		int x = this.items.indexOf(item);
+		Item drop = this.items.get(x);
+		this.items.remove(x);
+		//need to add the removed item to the room the player is in
 		return;
 	}
 
 	public void removeItems(Item items) {
 		//TODO
+		int x = 0;
+		while(x < items.size()) {
+			Item remove = items.get(x);
+			this.items.remove(remove);
+			//need to add each removed item to the room the player is in
+			x += 1;
+		}
 		return;
 	}
 

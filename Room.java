@@ -12,16 +12,26 @@ public class Room
  ArrayList possibleActions = new ArrayList();
  boolean visited;
 
- Room(String ID, String displayName, String description, ArrayList connections, ArrayList items, ArrayList npcs, ArrayList availableActions, ArrayList possibleActions, boolean visited) {
+ Room(String ID, String displayName, String description, ArrayList connections, ArrayList items, ArrayList npcs, ArrayList actions, boolean visited) {
    this.ID = ID;
    this.displayName = displayName;
    this.description = description;
    this.connections = connections;
    this.items = items;
    this.npcs = npcs;
-   this.availableActions = availableActions;
-   this.possibleActions = possibleActions;
    this.visited = visited;
+   int x = 0;
+   boolean canDo = false;
+   while(x < actions.size()) {
+     canDo = Action.checkCondition(actions.get(x));
+     if(canDo) {
+       availableActions.add(actions.get(x));
+     }
+     else {
+       possibleActions.add(actions.get(x));
+     }
+     x+=1;
+   }
  }
 
 public  String getID() {
@@ -77,6 +87,13 @@ public void addItems(ArrayList items) {
 
 public void removeItems(ArrayList items) {
   //TODO
+  int x = 0;
+  while(x < items.size()) {
+    Item remove = items.get(x);
+    this.items.remove(remove);
+    //need to add each removed item to the player's inventory
+    x += 1;
+  }
   return;
 }
 
@@ -85,12 +102,13 @@ public ArrayList getNPCs() {
 }
 
 public void addNPC(NPC npc) {
-  //TODO
+  this.npcs.add(npc);
   return;
 }
 
 public void removeNPC(NPC npc) {
-  //TODO
+  int x = this.npcs.indexOf(npc);
+  this.npcs.remove(x);
   return;
 }
 
@@ -109,11 +127,6 @@ public ArrayList getAllActions() {
     x += 1;
   }
   return actions;
-}
-
-public void setAllActions(ArrayList actions) {
-  //TODO
-  return;
 }
 
 public ArrayList getAvailableActions() {

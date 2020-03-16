@@ -88,11 +88,6 @@ public class Item
     return actions;
   }
 
-  public void setAllActions(ArrayList actions) {
-    //TODO
-    return;
-  }
-
   public ArrayList getAvailableActions()  {
     checkActions();
     return availableActions;
