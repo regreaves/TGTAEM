@@ -14,10 +14,12 @@ public class Game
   int victories;
   ArrayList checkpoints;
 
-  public Game(User user, Player player, Parser parser, Inventory items, NPC npcs, ArrayList map, ArrayList actionsTaken, ArrayList roomsVisited, int playerDeaths, int victories, ArrayList checkpoints) {
+  //not done here yet
+  public Game(User user)
+  {
 	  this.user = user;
-    this.player = player;
-    this.parser = parser;
+    this.player = new Player();
+    this.parser = new Parser();
     this.items = items;
     this.npcs = npcs;
     this.map = map;
@@ -26,7 +28,7 @@ public class Game
     this.playerDeaths = playerDeaths;
     this.victories = victories;
     this.checkpoints = checkpoints;
-  	}
+  }
 
   public void makeMap(String map) {
     return;
@@ -57,7 +59,17 @@ public class Game
   }
 
   public void loadGame(String game) {
-    return;
+    this.user = user;
+    this.player = player;
+    this.parser = parser;
+    this.items = items;
+    this.npcs = npcs;
+    this.map = map;
+    this.actionsTaken = actionsTaken;
+    this.roomsVisited = roomsVisited;
+    this.playerDeaths = playerDeaths;
+    this.victories = victories;
+    this.checkpoints = checkpoints;
   }
 
   public void teleport(String string) {
