@@ -4,19 +4,23 @@ public class Player
 {
   Inventory inventory;
 
-  public Player() {
-	return;
+  public Player()
+  {
+	  this.inventory = new Inventory();
   }
 
-  public void changeStats() {
+  public void changeStats()
+  {
     return;
   }
 
-  public void checkInventory() {
+  public void checkInventory()
+  {
     return;
   }
 
-  public String getInventory() {
-	return "empty";
+  public String getInventory()
+  {
+	   return inventory;
   }
 }

@@ -8,13 +8,18 @@ public class Parser
   ArrayList actionBank;
   Map synonymToWord;
 
-  public Parser(ArrayList verbBank, ArrayList nounBank, ArrayList directionBank, ArrayList actionBank, Map synonymToWord) {
+  public Parser(String file) {
 	  this.verbBank = verbBank;
     this.nounBank = nounBank;
     this.directionBank = directionBank;
     this.actionBank = actionBank;
     this.synonymToWord = synonymToWord;
   	}
+
+  private sortFile(String file)
+  {
+    
+  }
 
   public void getInput() {
     return;

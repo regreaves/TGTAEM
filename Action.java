@@ -1,27 +1,47 @@
 import java.util.*;
 
 public class Action {
-	String command;
-	String description;
 	String name;
-	List<String> words;
-	boolean validity;
+	Word verb;
+	Word noun;
+	int method;
 
-	public Action(String command, String description, String name) {
-		this.command = command;
-		this.description = description;
+	public Action(String name, Word verb, Word noun, int method)
+	{
 		this.name = name;
+		this.verb = verb;
+		this.noun = noun;
+		this.method = method;
 	}
 
-	public boolean checkValidity() {
-		return true;
-	}
+	public String performAction()
+	{
+		if(method == 1)	//take
+		{
 
-	public String performAction() {
-		return "empty";
+		}
+		else if (method == 2) //drop
+		{
+
+		}
 	}
 
 	public String displayAction(String command){
 		return "empty";
+	}
+
+	private String take(String location)
+	{
+
+	}
+
+	private String drop(String location)
+	{
+
+	}
+
+	private String standOn(String Location)
+	{
+
 	}
 }

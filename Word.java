@@ -2,48 +2,67 @@ import java.util.*;
 
 public class Word
 {
-  boolean isNoun;
-  boolean isVerb;
-  ArrayList synonyms;
-  int order;
+  String name;
+  String prime;
+  int type;
+  boolean isVerb = false;
+  boolean isNoun = false;
+  boolean isDirection = false;
+  boolean isPrime = false;
 
-  public Word(boolean isNoun, boolean isVerb, ArrayList synonyms, int order) {
-	this.isNoun = isNoun;
-    this.isVerb = isVerb;
-    this.synonyms = synonyms;
-    this.order = order;
-  	}
+  public Word(String name, String prime, int type)
+  {
+    this.name = name;
+    this.prime = prime;
+    this.type = type;
 
-  public boolean checkOrder() {
-    return true;
+    if(type == 1)
+    {
+      isVerb = true;
+    }
+    else if(type == 2)
+    {
+      isNoun = true;
+    }
+    else if(type == 3)
+    {
+      isDirection = true;
+    }
+    if(name.equals(prime))
+    {
+      isPrime = true;
+    }
   }
-  
-  public int getOrder() {
-	return 0;
+
+  public String getWord()
+  {
+    return name;
   }
-  
-  public ArrayList getSynonyms() {
-	return;
+
+  public String getPrime()
+  {
+    return prime;
   }
-  
-  public void addSynonyms(String word, String syn) {
-	return;
+
+  public int getType()
+  {
+    return this.type;
   }
-  
-  public void setIsNoun(boolean noun) {
-	return;
+
+  public boolean isVerb()
+  {
+    return isVerb;
   }
-  
-  public boolean isNoun() {
-	return true;
+
+  public boolean isNoun()
+  {
+    return isNoun;
   }
-  
-  public void setIsVerb(boolean verb) {
-	return;
+
+  public boolean isPrime()
+  {
+    return isPrime();
   }
-  
-  public boolean isVerb() {
-	return true;
-  }
+
 
 }
