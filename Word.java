@@ -2,9 +2,9 @@ import java.util.*;
 
 public class Word
 {
-  String name;
-  String prime;
-  int type;
+  String name;               //the word as input, can be synonym of prime
+  String prime;              //the main version that the game uses to reference action/item
+  int type;                 //1=verb, 2=noun, 3=direction
   boolean isVerb = false;
   boolean isNoun = false;
   boolean isDirection = false;
@@ -34,7 +34,19 @@ public class Word
     }
   }
 
-  public String getWord()
+  public Word getWord(String word)
+  {
+    if(name.equals(word))
+    {
+      return this;
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+  public String getName()
   {
     return name;
   }

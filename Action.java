@@ -26,6 +26,33 @@ public class Action {
 		}
 	}
 
+	public Action getAction(String name)
+	{
+		if(name.equals(this.name))
+		{
+			return this;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public Word getVerb()
+	{
+		return this.verb;
+	}
+
+	public Word getNoun()
+	{
+		return this.noun;
+	}
+
+	public int getMethod()
+	{
+		return this.method;
+	}
+
 	public String displayAction(String command){
 		return "empty";
 	}
@@ -40,8 +67,6 @@ public class Action {
 
 	}
 
-	private String standOn(String Location)
-	{
+	//private String standOn(String Location)
 
-	}
 }
