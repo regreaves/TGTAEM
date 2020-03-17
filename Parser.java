@@ -124,10 +124,18 @@ public class Parser
 
   public Action getAction(String input)
   {
+    Action action = null;
     String[] words = input.split(" ");
-    if(words.length > 2)
+    if(words.length != 2)
     {
-      //TODO
+      if(words.length == 1)     //fix
+      {
+        action = Action.going(words[0]);
+      }
+      else
+      {
+        //TODO
+      }
     }
     Word v = makeWord(words[0], 1);
     Word n = makeWord(words[1], 2);
@@ -136,7 +144,6 @@ public class Parser
       System.out.println("Not a valid action");
     }
     String name = v.getPrime() + " " + n.getPrime();
-    Action action = null;
     if(checkAction(name))
     {
       action = Action.getAction(name);

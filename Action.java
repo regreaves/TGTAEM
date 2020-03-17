@@ -14,16 +14,24 @@ public class Action {
 		this.method = method;
 	}
 
-	public String performAction()
+	public String performAction(String location)
 	{
-		if(method == 1)	//take
+		String display = "";
+
+		if(method == 0)	//go
 		{
 
+		}
+		else if(method == 1)	//take
+		{
+			display = take(location);
 		}
 		else if (method == 2) //drop
 		{
-
+			display = drop(location);
 		}
+
+		return display;
 	}
 
 	public Action getAction(String name)
@@ -36,6 +44,11 @@ public class Action {
 		{
 			return null;
 		}
+	}
+
+	public Action going(String direction)
+	{
+		return null;
 	}
 
 	public Word getVerb()
@@ -57,9 +70,14 @@ public class Action {
 		return "empty";
 	}
 
+	private String go(String location)
+	{
+		return null;
+	}
+
 	private String take(String location)
 	{
-
+		
 	}
 
 	private String drop(String location)
