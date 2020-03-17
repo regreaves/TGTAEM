@@ -21,19 +21,54 @@ public class NPC
   	}
 
   public void addActions(ArrayList actions) {
-    return;
+   int x = 0;
+   boolean canDo = false;
+   while(x < actions.size())
+   {
+     canDo = Action.checkCondition(actions.get(x));
+     if(canDo)
+     {
+       availableActions.add(actions.get(x));
+     }
+     else
+     {
+       possibleActions.add(actions.get(x));
+     }
+     x+=1;
+   }
   }
 
   public void checkActions() {
-    return;
+   int x = 0;
+   boolean canDo = false;
+   while(x < possibleActions.size())
+   {
+     canDo = Action.checkCondition(possibleActions.get(x));
+     if(canDo)
+     {
+       availableActions.add(possibleActions.get(x));
+     }
+     x+=1;
+   }
+
+   x = 0;
+   while(x < availableActions.size())
+   {
+     canDo = Action.checkCondition(availableActions.get(x));
+     if(!canDo)
+     {
+       possibleActions.add(availableActions.get(x));
+     }
+     x+=1;
+   }
   }
 
   public ArrayList getAvailableActions() {
-    return availableActions;
+    return this.availableActions;
   }
 
   public ArrayList getPossibleActions() {
-    return possibleActions;
+    return this.possibleActions;
   }
 
   public void addLoot(Item item) {
@@ -45,6 +80,7 @@ public class NPC
   }
 
   public void setDescription(String description) {
+	this.description = description;
     return;
   }
 
@@ -53,23 +89,25 @@ public class NPC
   }
 
   public String getDescription() {
-    return "empty";
+    return this.description;
   }
 
   public void setName(String name) {
+	this.name = name;
     return;
   }
 
   public String getName() {
-    return "empty";
+    return this.name;
   }
 
   public void setFriendly(boolean friend) {
+	this.friend = friend;
     return;
   }
 
   public ArrayList getDialogue() {
-    return dialogueBank;
+    return this.dialogueBank;
   }
 
 }
