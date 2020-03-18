@@ -7,12 +7,43 @@ public class Actor
   String id;
   boolean alive;
 
-  public Actor(List stats, String location, String id, boolean alive) {
-	this.stats = stats;
-	this.location = location;
-    this.id = id;
-    this.alive = alive;
-  	}
+  public Actor(String actorFile) {
+	
+  }
+	
+  private void getActor(String file) {
+	BufferedReader reader = null;
+    try
+    {
+      reader = new BufferedReader(new FileReader(file));
+      String line = "";
+      line = reader.readLine();   //skip headings
+      while((line = reader.readLine()) != null)
+      {
+        String[] entry = line.split(",");
+        stats.add(entry[0], entry[1], entry[2]);
+		String location = entry[3];
+		String id = entry[4];
+		boolean = alive[5];
+      }
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+    }
+    finally
+    {
+      try
+      {
+        reader.close();
+      }
+      catch(IOException e)
+      {
+        e.printStackTrace();
+      }
+
+    }
+  }
 
   public void setStats(List stats) {
     this.stats = stats;
