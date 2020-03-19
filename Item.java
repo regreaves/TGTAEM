@@ -26,6 +26,37 @@ public class Item
     this.isHidden = isHidden;
   }
 
+  private void getItems(String file) {
+    BufferedReader reader = null;
+    try {
+      reader = new BufferedReader(new FileReader(file));
+      String line = "";
+      line = reader.readLine();   //skip headings
+      while((line = reader.readLine()) != null) {
+        String[] entry = line.split(",");
+        String name = entry[0];
+        String id = entry[1];
+        String location = entry[2];
+        String init_dscrpt = entry[3];
+        String invent_dscrpt = entry[4];
+        boolean canTake = entry[5];
+        boolean hasItem = entry[6];
+        boolean isHidden = entry[7];
+      }
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
+    finally {
+      try {
+        reader.close();
+      }
+      catch(IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
   public String getName() {
     return name;
   }
