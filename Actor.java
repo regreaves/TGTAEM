@@ -21,9 +21,9 @@ public class Actor
       while((line = reader.readLine()) != null)
       {
         String[] entry = line.split(",");
-        stats.add(entry[0], entry[1], entry[2]);
-		String location = entry[3];
-		String id = entry[4];
+		String id = entry[0];
+        stats.add(entry[1], entry[2], entry[3]);
+		String location = entry[4];
 		boolean = alive[5];
       }
     }
