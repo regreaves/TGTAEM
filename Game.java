@@ -6,28 +6,18 @@ public class Game
   Player player;
   Parser parser;
   Inventory items;
-  NPC npcs;
+  ArrayList npcs = new ArrayList();
   ArrayList map;
-  ArrayList actionsTaken;
-  ArrayList roomsVisited;
-  int playerDeaths;
-  int victories;
+  ArrayList actionsTaken = new ArrayList();
+  ArrayList roomsVisited = new ArrayList();
+  int playerDeaths = 0;
+  int victories = 0;
   ArrayList checkpoints;
 
   //not done here yet
-  public Game(User user)
+  public Game(User user, Player player, Parser parser)
   {
 	  this.user = user;
-    this.player = new Player();
-    this.parser = new Parser();
-    this.items = items;
-    this.npcs = npcs;
-    this.map = map;
-    this.actionsTaken = actionsTaken;
-    this.roomsVisited = roomsVisited;
-    this.playerDeaths = playerDeaths;
-    this.victories = victories;
-    this.checkpoints = checkpoints;
   }
 
   public void makeMap(String map) {

@@ -1,0 +1,8 @@
+name,id,actions,,,,,
+table,i01,stand on table,push table,hide under table,flip table,reset table,look under table
+vase,i02,take vase,drop vase,dump vase,throw vase,break vase,drink water
+flowers,i03,take flowers,drop flowers,smell flowers,eat flowers,,
+coat,i04,take coat,drop coat,wear coat,check pockets,,
+coins,i05,take coins,drop coins,examine coins,spend coins,,
+flashlight,i06,take flashlight,drop flashlight,turn on flashlight,turn off flashlight,throw flashlight,hit with flashlight
+bed,i07,stand on bed,jump on bed ,sleep in bed,hide under bed,look under bed,check for monsters

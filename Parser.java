@@ -109,6 +109,10 @@ public class Parser
     {
       bank = this.nounBank;
     }
+    else if(type == 3)
+    {
+      bank = this.directionBank;
+    }
     int i = 0;
     while(i < bank.size())
     {
@@ -128,9 +132,10 @@ public class Parser
     String[] words = input.split(" ");
     if(words.length != 2)
     {
-      if(words.length == 1)     //fix
+      if(words.length == 1)   //only accepting directions as short forms
       {
-        action = Action.going(words[0]);
+        Word d = makeWord(words[0], 3);
+        action = Action.going(d.getPrime());
       }
       else
       {
@@ -138,7 +143,12 @@ public class Parser
       }
     }
     Word v = makeWord(words[0], 1);
-    Word n = makeWord(words[1], 2);
+    int type = 2;
+    if((v.getPrime()).equals("go"))
+    {
+      type = 3;
+    }
+    Word n = makeWord(words[1], type);
     if(v == null || n == null)
     {
       System.out.println("Not a valid action");
