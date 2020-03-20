@@ -77,7 +77,7 @@ public class Action {
 
 	private String take(String location)
 	{
-		
+
 	}
 
 	private String drop(String location)

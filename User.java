@@ -11,8 +11,9 @@ public class User
 	  this.password = password;
   	}
 
-  public verifyInfo(username, password) {
-
+  public void verifyInfo(String username, String password) {
+    //TODO
+    return;
   }
 
 }

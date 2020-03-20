@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class Room
 {
@@ -8,44 +9,36 @@ public class Room
  ArrayList connections = new ArrayList();
  ArrayList items = new ArrayList();
  ArrayList npcs = new ArrayList();
- ArrayList availableActions = new ArrayList();
- ArrayList possibleActions = new ArrayList();
- boolean visited;
+ ArrayList actions = new ArrayList();
+ boolean visited = false;
 
- Room(String ID, String displayName, String description, ArrayList connections, ArrayList items, ArrayList npcs, ArrayList actions, boolean visited) {
-   this.ID = ID;
-   this.displayName = displayName;
-   this.description = description;
-   this.connections = connections;
-   this.items = items;
-   this.npcs = npcs;
-   this.visited = visited;
-   int x = 0;
-   boolean canDo = false;
-   while(x < actions.size()) {
-     canDo = Action.checkCondition(actions.get(x));
-     if(canDo) {
-       availableActions.add(actions.get(x));
-     }
-     else {
-       possibleActions.add(actions.get(x));
-     }
-     x+=1;
-   }
- }
+ Room(String ID, String displayName, String description, ArrayList connections, ArrayList items, ArrayList npcs, ArrayList actions) {
+    this.ID = ID;
+    this.displayName = displayName;
+    this.description = description;
+    this.connections = connections;
+    this.items = items;
+    this.npcs = npcs;
+    this.actions = actions;
+  }
 
  private void getRooms(String file) {
-   BufferedReader reader = null;
-   try {
-     reader = new BufferedReader(new FileReader(file));
-     String line = "";
-     line = reader.readLine();   //skip headings
-     while((line = reader.readLine()) != null) {
-       String[] entry = line.split(",");
-       String id = entry[0];
-       String displayName = entry[1];
-       String description = entry[2];
-       connections.add(entry[3], entry[4], entry[5], entry[6], entry[7], entry[8], entry[9], entry[10], entry[11], entry[12]);
+    BufferedReader reader = null;
+    try {
+      reader = new BufferedReader(new FileReader(file));
+      String line = "";
+      line = reader.readLine();   //skip headings
+      while((line = reader.readLine()) != null) {
+        String[] entry = line.split(",");
+        String id = entry[0];
+        String displayName = entry[1];
+        String description = entry[2];
+        int i = 3;
+        while(i < 13)
+        {
+          connections.add(entry[i]);
+          i++;
+        }
      }
    }
    catch(Exception e) {
