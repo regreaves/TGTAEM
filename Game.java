@@ -6,49 +6,62 @@ public class Game
   Player player;
   Parser parser;
   Inventory items;
-  ArrayList npcs = new ArrayList();
-  ArrayList map;
-  ArrayList actionsTaken = new ArrayList();
-  ArrayList roomsVisited = new ArrayList();
+  ArrayList<NPC> npcs = new ArrayList<>();
+  Map map;
+  ArrayList<Action> actionsTaken = new ArrayList<>();
+  ArrayList<String> roomsVisited = new ArrayList<>();
   int playerDeaths = 0;
   int victories = 0;
-  ArrayList checkpoints;
+  ArrayList<Checkpoint> checkpoints = new ArrayList<>();
 
   //not done here yet
   public Game(User user, Player player, Parser parser)
   {
 	  this.user = user;
+    this.player = player;
+    this.parser = parser;
   }
 
-  public void makeMap(String map) {
+  public void makeMap(String mapFile)
+  {
     return;
   }
 
-  public void addRooms(String rooms) {
-    return;
+  public void makeItems(String itemFile)
+  {
+
+  }
+
+  public void makeNPCS(String npcFile)
+  {
+
   }
 
   public void addActionTaken(Action action) {
+    actionsTaken.add(action);
     return;
   }
 
-  public void addRoomVisited(String room) {
+  public void addRoomVisited(String roomID) {
+    roomsVisited.add(roomID);
     return;
   }
 
   public void playerDies() {
+    playerDeaths++;
     return;
   }
 
-  public void addVictory() {
+  public void playerWins() {
+    victories++;
     return;
   }
 
-  public void saveGame() {
+  public void saveGame() {    //TODO with checkpoint
     return;
   }
 
-  public void loadGame(String game) {
+  public void loadGame(Checkpoint checkpoint) {   //TODO: implement with checkpoint
     this.user = user;
     this.player = player;
     this.parser = parser;
@@ -62,7 +75,8 @@ public class Game
     this.checkpoints = checkpoints;
   }
 
-  public void teleport(String string) {
+  public void teleport(String roomID) {
+    player.location = roomID; //TODO: I think more is needed here
     return;
   }
 

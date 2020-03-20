@@ -3,10 +3,10 @@ import java.io.*;
 
 public class Parser
 {
-  ArrayList verbBank;
-  ArrayList nounBank;
-  ArrayList directionBank;
-  ArrayList actionBank;
+  ArrayList<Word> verbBank = new ArrayList<>();
+  ArrayList<Word> nounBank = new ArrayList<>();
+  ArrayList<Word> directionBank = new ArrayList<>();
+  ArrayList<Action> actionBank = new ArrayList<>();
 
   public Parser(String wordFile, String actionFile) {
 
