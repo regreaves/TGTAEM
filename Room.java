@@ -34,6 +34,33 @@ public class Room
    }
  }
 
+ private void getRooms(String file) {
+   BufferedReader reader = null;
+   try {
+     reader = new BufferedReader(new FileReader(file));
+     String line = "";
+     line = reader.readLine();   //skip headings
+     while((line = reader.readLine()) != null) {
+       String[] entry = line.split(",");
+       String id = entry[0];
+       String displayName = entry[1];
+       String description = entry[2];
+       connections.add(entry[3], entry[4], entry[5], entry[6], entry[7], entry[8], entry[9], entry[10], entry[11], entry[12]);
+     }
+   }
+   catch(Exception e) {
+     e.printStackTrace();
+   }
+   finally {
+     try {
+       reader.close();
+     }
+     catch(IOException e) {
+       e.printStackTrace();
+     }
+   }
+ }
+
 public  String getID() {
    return ID;
  }

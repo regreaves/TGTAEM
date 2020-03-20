@@ -28,8 +28,26 @@ public class Inventory {
 		}
 	}
 
+	public int getCurrentSize() {
+		int currentSize = this.maxSize - this.items.size();
+		return currentSize;
+	}
+
 	public ArrayList getItems() {
 		return items;
+	}
+
+	public Item getItemName(String name) {
+		Item item;
+		int i = 0;
+		while(i < this.items.size()) {
+			item = this.items.get(i);
+			if (name == item.getName()) {
+				return item;
+			}
+			i++;
+		}
+		return null;
 	}
 
 	public void setItems(ArrayList items) {
@@ -61,6 +79,11 @@ public class Inventory {
 			x += 1;
 		}
 		return;
+	}
+
+	public int getNumberItems() {
+		int number = this.items.size();
+		return number;
 	}
 
 	public boolean checkValidity() {
