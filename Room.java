@@ -6,13 +6,13 @@ public class Room
  String ID;
  String displayName;
  String description;
- ArrayList connections = new ArrayList();
- ArrayList items = new ArrayList();
- ArrayList npcs = new ArrayList();
- ArrayList actions = new ArrayList();
+ ArrayList<String> connections = new ArrayList<>();
+ ArrayList<Item> items = new ArrayList<>();
+ ArrayList<NPC> npcs = new ArrayList<>();
+ ArrayList<Action> actions = new ArrayList<>();
  boolean visited = false;
 
- Room(String ID, String displayName, String description, ArrayList connections, ArrayList items, ArrayList npcs, ArrayList actions) {
+ Room(String ID, String displayName, String description, ArrayList<String> connections, ArrayList<Item> items, ArrayList<NPC> npcs, ArrayList<Action> actions) {
     this.ID = ID;
     this.displayName = displayName;
     this.description = description;
@@ -30,10 +30,12 @@ public class Room
       line = reader.readLine();   //skip headings
       while((line = reader.readLine()) != null) {
         String[] entry = line.split(",");
+
         String id = entry[0];
         String displayName = entry[1];
         String description = entry[2];
         int i = 3;
+
         while(i < 13)
         {
           connections.add(entry[i]);
@@ -86,38 +88,46 @@ public void addDescription(String description) {
   return;
 }
 
-public ArrayList getConnections() {
+public ArrayList<String> getConnections() {
   return connections;
 }
 
-public void setConnections(ArrayList connections) {
+public void setConnections(ArrayList<String> connections) {
   this.connections = connections;
   return;
 }
 
-public ArrayList getItems() {
+public ArrayList<Item> getItems() {
   return items;
 }
 
-public void addItems(ArrayList items) {
-  this.items = items;
-  ArrayList actions = item.getAllActions();
-  addActions(actions);
-}
-
-public void removeItems(ArrayList items) {
-  //TODO
+public void addItems(ArrayList<Item> items) {
+  int i = 0;
   int x = 0;
-  while(x < items.size()) {
-    Item remove = items.get(x);
-    this.items.remove(remove);
-    //need to add each removed item to the player's inventory
-    x += 1;
+  Item item;
+  Action action;
+  while(i < items.getSize()) {
+    item = items.get(i);
+    this.items.add(item);
+    item.setLocation = this.ID;
+    ArrayList<Action> actions = item.getActions();
+    while(x < actions.getSize()) {
+      action = actions.get(x);
+      this.actions.add(action);
+      x++;
+    }
+    i++;
   }
   return;
 }
 
-public ArrayList getNPCs() {
+public Item removeItem(Item item, Inventory inventory) {
+  int x = this.items.indexOf(item);
+  item.setLocation(inventory.id);
+  return this.items.remove(x);
+}
+
+public ArrayList<NPC> getNPCs() {
   return npcs;
 }
 
@@ -132,83 +142,46 @@ public void removeNPC(NPC npc) {
   return;
 }
 
-public ArrayList getAllActions() {
-  ArrayList actions = new ArrayList();
-  int x = 0;
-  while(x < availableActions.size())
-  {
-    actions.add(availableActions.get(x));
-    x += 1;
-  }
-  x = 0;
-  while(x < possibleActions.size())
-  {
-    actions.add(possibleActions.get(x));
-    x += 1;
-  }
+public ArrayList<Action> getActions() {
   return actions;
 }
 
-public ArrayList getAvailableActions() {
-  return availableActions;
-}
-
-public void setAvailableActions(ArrayList availableActions) {
-  this.availableActions = availableActions;
+public void addActions(ArrayList<Item> items) {
+  int i = 0;
+  int x = 0;
+  Item item;
+  Action action;
+  while(i < items.getSize()) {
+    item = items.get(i);
+    ArrayList<Action> actions = item.getActions();
+    while(x < actions.getSize()) {
+      action = actions.get(x);
+      this.actions.add(action);
+      x++;
+    }
+    i++;
+  }
   return;
 }
 
-public ArrayList getPossibleActions() {
-  return possibleActions;
-}
-
-public void setPossibleActions(ArrayList possibleActions) {
-  this.possibleActions = possibleActions;
+public void removeActions(ArrayList<Item> items) {
+  //TODO
+  int i = 0;
+  int x = 0;
+  Item item;
+  Action action;
+  while(i < items.getSize()) {
+    item = items.get(i);
+    ArrayList<Action> actions = item.getActions();
+    while(x < actions.getSize()) {
+      action = actions.get(x);
+      this.actions.remove(action);
+      x++;
+    }
+    i++;
+  }
   return;
 }
-
-public void addActions(ArrayList actions) {
-   int x = 0;
-   boolean canDo = false;
-   while(x < actions.size())
-   {
-     canDo = Action.checkCondition(actions.get(x));
-     if(canDo)
-     {
-       availableActions.add(actions.get(x));
-     }
-     else
-     {
-       possibleActions.add(actions.get(x));
-     }
-     x+=1;
-   }
- }
-
-public void checkActions() {
-   int x = 0;
-   boolean canDo = false;
-   while(x < possibleActions.size())
-   {
-     canDo = Action.checkCondition(possibleActions.get(x));
-     if(canDo)
-     {
-       availableActions.add(possibleActions.get(x));
-     }
-     x+=1;
-   }
-
-   x = 0;
-   while(x < availableActions.size())
-   {
-     canDo = Action.checkCondition(availableActions.get(x));
-     if(!canDo)
-     {
-       possibleActions.add(availableActions.get(x));
-     }
-     x+=1;
-   }
- }
 
 public boolean getVisited() {
   return visited;
