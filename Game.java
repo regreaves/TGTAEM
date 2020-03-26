@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class Game
 {
@@ -27,6 +28,37 @@ public class Game
     return;
   }
 
+  private void getRooms(String file) {
+     BufferedReader reader = null;
+     try {
+       reader = new BufferedReader(new FileReader(file));
+       String line = "";
+       line = reader.readLine();   //skip headings
+       while((line = reader.readLine()) != null) {
+         String[] entry = line.split(",");
+         String id = entry[0];
+         String displayName = entry[1];
+         String description = entry[2];
+         int i = 3;
+         while(i < 13)
+         {
+           connections.add(entry[i]);
+           i++;
+         }
+      }
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
+    finally {
+      try {
+        reader.close();
+      }
+      catch(IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
   public void makeItems(String itemFile)
   {
 
