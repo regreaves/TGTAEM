@@ -1,3 +1,5 @@
+package objects;
+
 import java.util.*;
 
 public class Player
@@ -6,7 +8,7 @@ public class Player
 
   public Player()
   {
-	  this.inventory = new Inventory();
+	  this.inventory = new Inventory(0, null, null);
   }
 
   public void changeStats()
@@ -19,7 +21,7 @@ public class Player
     return;
   }
 
-  public String getInventory()
+  public Inventory getInventory()
   {
 	   return inventory;
   }

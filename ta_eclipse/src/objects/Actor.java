@@ -1,8 +1,11 @@
+package objects;
+
+import java.io.*;
 import java.util.*;
 
 public class Actor
 {
-  List stats;
+  ArrayList<String> stats = new ArrayList<>();
   String location;
   String id;
   boolean alive;
@@ -21,10 +24,12 @@ public class Actor
       while((line = reader.readLine()) != null)
       {
         String[] entry = line.split(",");
-		String id = entry[0];
-        stats.add(entry[1], entry[2], entry[3]);
-		String location = entry[4];
-		boolean = alive[5];
+		id = entry[0];
+        stats.add(entry[1]);
+        stats.add(entry[2]);
+        stats.add(entry[3]);
+		location = entry[4];
+		alive = entry[5] != null;
       }
     }
     catch(Exception e)
@@ -45,16 +50,16 @@ public class Actor
     }
   }
 
-  public void setStats(List stats) {
+  public void setStats(ArrayList<String> stats) {
     this.stats = stats;
 	return;
   }
 
-  public void modifyStats(List stats) {
+  public void modifyStats(ArrayList<?> stats) {
     return;
   }
 
-  public void getStats() {
+  public ArrayList<String> getStats() {
     return this.stats;
   }
 

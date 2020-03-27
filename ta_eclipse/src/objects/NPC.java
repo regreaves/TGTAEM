@@ -1,16 +1,19 @@
+package objects;
+
 import java.util.*;
+import command.Action;
 
 public class NPC
 {
-  ArrayList loot;
-  ArrayList possibleActions;
-  ArrayList availableActions;
+  ArrayList<String> loot = new ArrayList<>();
+  ArrayList<String> possibleActions = new ArrayList<>();
+  ArrayList<String> availableActions = new ArrayList<>();
   String description;
   String name;
   boolean friend;
-  ArrayList dialogueBank;
+  ArrayList<String> dialogueBank = new ArrayList<>();
 
-  public NPC(ArrayList loot, ArrayList possibleActions, ArrayList availableActions, String description, String name, boolean friend, ArrayList dialogueBank) {
+  public NPC(ArrayList<String> loot, ArrayList<String> possibleActions, ArrayList<String> availableActions, String description, String name, boolean friend, ArrayList<String> dialogueBank) {
 	this.loot = loot;
     this.possibleActions = possibleActions;
     this.availableActions = availableActions;
@@ -20,7 +23,7 @@ public class NPC
     this.dialogueBank = dialogueBank;
   	}
 
-  public void addActions(ArrayList actions) {
+  public void addActions(ArrayList<String> actions) {
    int x = 0;
    boolean canDo = false;
    while(x < actions.size())
@@ -63,11 +66,11 @@ public class NPC
    }
   }
 
-  public ArrayList getAvailableActions() {
+  public ArrayList<String> getAvailableActions() {
     return this.availableActions;
   }
 
-  public ArrayList getPossibleActions() {
+  public ArrayList<String> getPossibleActions() {
     return this.possibleActions;
   }
 
@@ -106,7 +109,7 @@ public class NPC
     return;
   }
 
-  public ArrayList getDialogue() {
+  public ArrayList<String> getDialogue() {
     return this.dialogueBank;
   }
 

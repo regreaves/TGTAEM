@@ -1,10 +1,13 @@
+package state;
+
 import java.util.*;
+import objects.Player;
 
 public class Checkpoint {
 	Player player;
 	String location;
-	ArrayList actionsTaken = new ArrayList();
-	ArrayList roomsVisited = new ArrayList();
+	ArrayList<String> actionsTaken = new ArrayList<>();
+	ArrayList<String> roomsVisited = new ArrayList<>();
 	int playerDeaths;
 	int victories;
 	String name;
@@ -17,11 +20,11 @@ public class Checkpoint {
 		return;
 	}
 
-	public void setActionTaken(ArrayList actionsTaken) {
+	public void setActionTaken(ArrayList<?> actionsTaken) {
 		return;
 	}
 
-	public void setRoomsVisited(ArrayList roomsVisited) {
+	public void setRoomsVisited(ArrayList<?> roomsVisited) {
 		return;
 	}
 
