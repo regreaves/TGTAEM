@@ -1,5 +1,7 @@
+package objects;
+
 import java.util.*;
-import java.io.*;
+import command.Action;
 
 public class Item
 {
@@ -76,7 +78,7 @@ public class Item
   public void addActions(ArrayList<Action> actions) {
     int i = 0;
     Action action;
-    while(i < actions.getSize()) {
+    while(i < actions.size()) {
       action = actions.get(i);
       this.actions.add(action);
     }
