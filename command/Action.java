@@ -2,16 +2,41 @@ import java.util.*;
 
 public class Action {
 	String name;
-	Word verb;
-	Word noun;
+	ArrayList<String> altNames = new ArrayList<>();
 	int method;
 
-	public Action(String name, Word verb, Word noun, int method)
+	public Action(String name, int method)
 	{
 		this.name = name;
-		this.verb = verb;
-		this.noun = noun;
 		this.method = method;
+	}
+
+	public Action getAction(String name)
+	{
+		if(name.equals(this.name))
+		{
+			return this;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public int getMethod()
+	{
+		return this.method;
+	}
+
+	public ArrayList<String> getAltNames()
+	{
+		return this.altNames;
+	}
+
+	public void addAltName(String alt)
+	{
+		this.altNames.add(alt);
+		return;
 	}
 
 	public String performAction(String location)
@@ -34,36 +59,11 @@ public class Action {
 		return display;
 	}
 
-	public Action getAction(String name)
-	{
-		if(name.equals(this.name))
-		{
-			return this;
-		}
-		else
-		{
-			return null;
-		}
-	}
+
 
 	public Action going(String direction)
 	{
 		return null;
-	}
-
-	public Word getVerb()
-	{
-		return this.verb;
-	}
-
-	public Word getNoun()
-	{
-		return this.noun;
-	}
-
-	public int getMethod()
-	{
-		return this.method;
 	}
 
 	public String displayAction(String command){
@@ -77,12 +77,12 @@ public class Action {
 
 	private String take(String location)
 	{
-
+		return null;
 	}
 
 	private String drop(String location)
 	{
-
+		return null;
 	}
 
 	//private String standOn(String Location)

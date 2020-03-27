@@ -27,58 +27,6 @@ public class Item
     this.isHidden = isHidden;
   }
 
-  private void getItems(String file) {
-    BufferedReader reader = null;
-    try {
-      reader = new BufferedReader(new FileReader(file));
-      String line = "";
-      line = reader.readLine();   //skip headings
-      while((line = reader.readLine()) != null) {
-        String[] entry = line.split(",");
-        int take = Integer.parseInt(entry[5]);
-        int has = Integer.parseInt(entry[6]);
-        int hidden = Integer.parseInt(entry[7]);
-
-        String name = entry[0];
-        String id = entry[1];
-        String location = entry[2];
-        String init_dscrpt = entry[3];
-        String invent_dscrpt = entry[4];
-
-        if (take == 1) {
-          boolean canTake = true;
-        }
-        else {
-          boolean canTake = false;
-        }
-
-        if (has == 1) {
-          boolean hasItem = true;
-        }
-        else {
-          boolean hasItem = false;
-        }
-
-        if (hidden == 1) {
-          boolean isHidden = true;
-        }
-        else {
-          boolean isHidden = false;
-        }
-      }
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-    finally {
-      try {
-        reader.close();
-      }
-      catch(IOException e) {
-        e.printStackTrace();
-      }
-    }
-  }
 
   public String getName() {
     return name;

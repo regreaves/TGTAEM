@@ -12,49 +12,12 @@ public class Room
  ArrayList<Action> actions = new ArrayList<>();
  boolean visited = false;
 
- Room(String ID, String displayName, String description, ArrayList<String> connections, ArrayList<Item> items, ArrayList<NPC> npcs, ArrayList<Action> actions) {
+ Room(String ID, String displayName, String description, ArrayList<String> connections) {
     this.ID = ID;
     this.displayName = displayName;
     this.description = description;
     this.connections = connections;
-    this.items = items;
-    this.npcs = npcs;
-    this.actions = actions;
   }
-
- private void getRooms(String file) {
-    BufferedReader reader = null;
-    try {
-      reader = new BufferedReader(new FileReader(file));
-      String line = "";
-      line = reader.readLine();   //skip headings
-      while((line = reader.readLine()) != null) {
-        String[] entry = line.split(",");
-
-        String id = entry[0];
-        String displayName = entry[1];
-        String description = entry[2];
-        int i = 3;
-
-        while(i < 13)
-        {
-          connections.add(entry[i]);
-          i++;
-        }
-     }
-   }
-   catch(Exception e) {
-     e.printStackTrace();
-   }
-   finally {
-     try {
-       reader.close();
-     }
-     catch(IOException e) {
-       e.printStackTrace();
-     }
-   }
- }
 
 public  String getID() {
    return ID;
