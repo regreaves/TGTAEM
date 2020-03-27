@@ -86,6 +86,11 @@ public class Action {
 		return null;
 	}
 
+	public static boolean checkCondition(String string) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	//private String standOn(String Location)
 
 }
