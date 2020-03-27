@@ -1,5 +1,7 @@
+package objects;
+
 import java.util.*;
-import java.io.*;
+import command.Action;
 
 public class Room
 {
@@ -69,12 +71,12 @@ public void addItems(ArrayList<Item> items) {
   int x = 0;
   Item item;
   Action action;
-  while(i < items.getSize()) {
+  while(i < items.size()) {
     item = items.get(i);
     this.items.add(item);
-    item.setLocation = this.ID;
+    item.setLocation(this.ID);
     ArrayList<Action> actions = item.getActions();
-    while(x < actions.getSize()) {
+    while(x < actions.size()) {
       action = actions.get(x);
       this.actions.add(action);
       x++;
@@ -114,10 +116,10 @@ public void addActions(ArrayList<Item> items) {
   int x = 0;
   Item item;
   Action action;
-  while(i < items.getSize()) {
+  while(i < items.size()) {
     item = items.get(i);
     ArrayList<Action> actions = item.getActions();
-    while(x < actions.getSize()) {
+    while(x < actions.size()) {
       action = actions.get(x);
       this.actions.add(action);
       x++;
@@ -133,10 +135,10 @@ public void removeActions(ArrayList<Item> items) {
   int x = 0;
   Item item;
   Action action;
-  while(i < items.getSize()) {
+  while(i < items.size()) {
     item = items.get(i);
     ArrayList<Action> actions = item.getActions();
-    while(x < actions.getSize()) {
+    while(x < actions.size()) {
       action = actions.get(x);
       this.actions.remove(action);
       x++;

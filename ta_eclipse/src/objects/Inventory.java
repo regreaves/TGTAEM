@@ -1,3 +1,5 @@
+package objects;
+
 import java.util.*;
 
 public class Inventory {
@@ -77,9 +79,9 @@ public class Inventory {
 
 	public String displayInventory(String command) {
 		int i = 0;
-		String inventory;
+		String inventory = null;
 		Item item;
-		while(i < this.items.getSize()) {
+		while(i < this.items.size()) {
 			item = this.items.get(i);
 			inventory += item.getName();
 		}
