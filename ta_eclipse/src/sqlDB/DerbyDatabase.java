@@ -36,7 +36,7 @@ public class DerbyDatabase implements IDatabase {
 				ArrayList<String> words = new ArrayList<>();
 
 				try {
-					stmt = conn.prepareStatement("select word " + " from words inner join actions where verb = ? ");
+					stmt = conn.prepareStatement("select word " + " from words where prime = ? and type = 1");
 					stmt.setString(1, prime);
 					resultSet = stmt.executeQuery();
 
@@ -44,7 +44,7 @@ public class DerbyDatabase implements IDatabase {
 					Boolean found = false;
 					while (resultSet.next()) {
 						found = true;
-						words.add(resultSet.getString(0));
+						words.add(resultSet.getString(1));
 					}
 
 					// check if the title was found
@@ -60,6 +60,93 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 
+	@Override
+	public ArrayList<String> getNouns(String prime) {
+		return executeTransaction(new Transaction<ArrayList<String>>() {
+			public ArrayList<String> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				ArrayList<String> words = new ArrayList<>();
+
+				try {
+					stmt = conn.prepareStatement("select word " + " from words where prime = ? and type = 2");
+					stmt.setString(1, prime);
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+					Boolean found = false;
+					while (resultSet.next()) {
+						found = true;
+						words.add(resultSet.getString(1));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("<" + prime + "> was not found in the words table");
+					}
+					return words;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	@Override
+	public ArrayList<Action> getActions() {
+		return executeTransaction(new Transaction<ArrayList<Action>>() {
+			public ArrayList<Action> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				ArrayList<Action> actions = new ArrayList<>();
+
+				try {
+					stmt = conn.prepareStatement("select name, verb, noun, method from actions");
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+					Boolean found = false;
+					while (resultSet.next()) {
+						found = true;
+						String name = resultSet.getString(1);
+						Word verb = Word.makeWord(resultSet.getString(2), 1);
+						Word noun = Word.makeWord(resultSet.getString(3), 2);
+						int method = resultSet.getInt(4);
+						Action action = new Action(name, verb, noun, method);
+						actions.add(action);
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("error in actions table");
+					}
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+				
+				for (Action action: actions)
+				{
+					String verb = action.getVerb().getName();
+					String noun = action.getNoun().getName();
+					ArrayList<String> verbSyn = getVerbs(verb);
+					ArrayList<String> nounSyn = getNouns(noun);
+					for(String v : verbSyn)
+					{
+						for(String n : nounSyn)
+						{
+							String alt = v + " " + n;
+							action.addAltName(alt);
+						}
+					}
+				}
+				
+				return actions;
+			}
+		});
+	}
+	
 	public <ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
 		try {
 			return doExecuteTransaction(txn);
@@ -111,20 +198,6 @@ public class DerbyDatabase implements IDatabase {
 		conn.setAutoCommit(false);
 
 		return conn;
-	}
-
-	private void loadAuthor(Author author, ResultSet resultSet, int index) throws SQLException {
-		author.setAuthorId(resultSet.getInt(index++));
-		author.setLastname(resultSet.getString(index++));
-		author.setFirstname(resultSet.getString(index++));
-	}
-
-	private void loadBook(Book book, ResultSet resultSet, int index) throws SQLException {
-		book.setBookId(resultSet.getInt(index++));
-		book.setAuthorId(resultSet.getInt(index++));
-		book.setTitle(resultSet.getString(index++));
-		book.setIsbn(resultSet.getString(index++));
-		book.setPublished(resultSet.getInt(index++));
 	}
 
 	public void createTables() {

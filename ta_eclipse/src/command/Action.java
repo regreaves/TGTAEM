@@ -59,6 +59,19 @@ public class Action {
 		return;
 	}
 
+	@Override
+	public String toString()
+	{
+		String a =  this.name + " | " + this.verb.getName() + " | " 
+				+ this.noun.getName() + " | " + this.method + "\n";
+		a += "Alt: ";
+		for(String alt : this.altNames)
+		{
+			a += alt + "\n";
+		}
+		return a;
+	}
+	
 	public String performAction(String location)
 	{
 		String display = "";
