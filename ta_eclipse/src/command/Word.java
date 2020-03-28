@@ -7,7 +7,6 @@ public class Word
   int type;                 //1=verb, 2=noun, 3=direction
   boolean isVerb = false;
   boolean isNoun = false;
-  boolean isDirection = false;
   boolean isPrime = false;
 
   public Word(String name, String prime, int type)
@@ -24,26 +23,17 @@ public class Word
     {
       isNoun = true;
     }
-    else if(type == 3)
-    {
-      isDirection = true;
-    }
     if(name.equals(prime))
     {
       isPrime = true;
     }
   }
-
-  public Word getWord(String word)
-  {
-    if(name.equals(word))
-    {
-      return this;
-    }
-    else
-    {
-      return null;
-    }
+  
+  //Dummy constructor for making word objects when reading in from actions.csv
+  public static Word makeWord(String word, int type)
+  {		
+	  Word newWord = new Word(word, word, type);
+	  return newWord;
   }
 
   public String getName()

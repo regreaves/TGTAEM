@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Scanner;
 
-import sqldemo.DBUtil;
+import sqlDB.DBUtil;
 
 public class Parser
 {

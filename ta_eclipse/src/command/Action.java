@@ -3,12 +3,16 @@ import java.util.*;
 
 public class Action {
 	String name;
+	Word verb;
+	Word noun;
 	ArrayList<String> altNames = new ArrayList<>();
 	int method;
 
-	public Action(String name, int method)
+	public Action(String name, Word verb, Word noun, int method)
 	{
 		this.name = name;
+		this.verb = verb;
+		this.noun = noun;
 		this.method = method;
 	}
 
@@ -22,6 +26,21 @@ public class Action {
 		{
 			return null;
 		}
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+	
+	public Word getVerb()
+	{
+		return verb;
+	}
+		
+	public Word getNoun()
+	{
+		return noun;
 	}
 
 	public int getMethod()
