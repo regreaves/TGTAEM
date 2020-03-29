@@ -1,0 +1,36 @@
+id|actions
+i01|stand on table
+i01|push table
+i01|hide under table
+i01|flip table
+i01|reset table
+i01|look under table
+i01|examine table
+i02|take vase
+i02|drop vase
+i02|dump vase
+i02|throw vase
+i02|break vase
+i02|drink water
+i02|examine vase
+i03|take flowers
+i03|drop flowers
+i03|smell flowers
+i03|eat flowers
+i03|examine flowers
+i04|take coat
+i04|drop coat
+i04|wear coat
+i04|check pockets
+i04|examine coat
+i05|take coins
+i05|drop coins
+i06|examine coins
+i06|spend coins
+i07|stand on bed
+i07|jump on bed
+i07|sleep in bed
+i07|hide under bed
+i07|look under bed
+i07|check for monsters
+i07|examine bed
