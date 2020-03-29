@@ -1,5 +1,7 @@
 *.class
+*.classpath
 *.DS_Store
 /.metadata/
 test.db
 derby.log
+
