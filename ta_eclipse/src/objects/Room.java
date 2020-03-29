@@ -14,7 +14,7 @@ public class Room
  ArrayList<Action> actions = new ArrayList<>();
  boolean visited = false;
 
- Room(String ID, String displayName, String description, ArrayList<String> connections) {
+public Room(String ID, String displayName, String description, ArrayList<String> connections) {
     this.ID = ID;
     this.displayName = displayName;
     this.description = description;
@@ -67,23 +67,11 @@ public ArrayList<Item> getItems() {
 }
 
 public void addItems(ArrayList<Item> items) {
-  int i = 0;
-  int x = 0;
-  Item item;
-  Action action;
-  while(i < items.size()) {
-    item = items.get(i);
-    this.items.add(item);
-    item.setLocation(this.ID);
-    ArrayList<Action> actions = item.getActions();
-    while(x < actions.size()) {
-      action = actions.get(x);
-      this.actions.add(action);
-      x++;
-    }
-    i++;
+  for (Item item : items) {
+	  this.items.add(item);
+	  item.setLocation(this.ID);
+	  this.actions.addAll(item.getActions());
   }
-  return;
 }
 
 public Item removeItem(Item item, Inventory inventory) {
@@ -111,22 +99,8 @@ public ArrayList<Action> getActions() {
   return actions;
 }
 
-public void addActions(ArrayList<Item> items) {
-  int i = 0;
-  int x = 0;
-  Item item;
-  Action action;
-  while(i < items.size()) {
-    item = items.get(i);
-    ArrayList<Action> actions = item.getActions();
-    while(x < actions.size()) {
-      action = actions.get(x);
-      this.actions.add(action);
-      x++;
-    }
-    i++;
-  }
-  return;
+public void addActions(ArrayList<Action> newActions) {
+	actions.addAll(newActions);
 }
 
 public void removeActions(ArrayList<Item> items) {

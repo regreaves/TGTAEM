@@ -2,6 +2,8 @@ package state;
 
 import java.util.*;
 import java.io.*;
+import command.*;
+import objects.*;
 
 public class Game
 {
@@ -20,7 +22,7 @@ public class Game
   //not done here yet
   public Game(User user, Player player, Parser parser)
   {
-	  this.user = user;
+	this.user = user;
     this.player = player;
     this.parser = parser;
   }
@@ -77,26 +79,19 @@ public class Game
         int take = Integer.parseInt(entry[5]);
         int has = Integer.parseInt(entry[6]);
         int hidden = Integer.parseInt(entry[7]);
-
+       
+        boolean canTake = false;
+        boolean hasItem = false;
+        boolean isHidden = false;
+        
         if (take == 1) {
-          boolean canTake = true;
+        	canTake = true;
         }
-        else {
-          boolean canTake = false;
-        }
-
         if (has == 1) {
-          boolean hasItem = true;
+          hasItem = true;
         }
-        else {
-          boolean hasItem = false;
-        }
-
         if (hidden == 1) {
-          boolean isHidden = true;
-        }
-        else {
-          boolean isHidden = false;
+          isHidden = true;
         }
 
         Item i = new Item(name, id, location, init_dscrpt, invent_dscrpt, canTake, hasItem, isHidden);

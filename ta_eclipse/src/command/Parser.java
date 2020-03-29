@@ -1,7 +1,6 @@
 package command;
 
 import java.util.*;
-import java.io.*;
 
 import sqlDB.IDatabase;
 import sqlDB.DatabaseProvider;
@@ -42,6 +41,14 @@ public class Parser
 		  }
 	  }
 	  return null;
+  }
+  
+  
+  public static void main(String[] args)
+  {
+	  Parser p = new Parser();
+	  Action a = p.getAction("Jump on bed");
+	  System.out.println(a);
   }
 
 }
