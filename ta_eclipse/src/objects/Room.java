@@ -68,14 +68,12 @@ public class Room {
 	public void addItems(ArrayList<Item> items) {
 		for (Item item : items) {
 			this.items.add(item);
-			item.setLocation(this.ID);
 			this.actions.addAll(item.getActions());
 		}
 	}
 
 	public Item removeItem(Item item, Inventory inventory) {
 		int x = this.items.indexOf(item);
-		item.setLocation(inventory.id);
 		actions.removeAll(item.getActions());
 		return this.items.remove(x);
 	}
@@ -115,6 +113,46 @@ public class Room {
 	public void setVisited(boolean visited) {
 		this.visited = visited;
 		return;
+	}
+
+	public String getNorth() {
+		return connections.get(0);
+	}
+
+	public String getNorthEast() {
+		return connections.get(1);
+	}
+
+	public String getEast() {
+		return connections.get(2);
+	}
+
+	public String getSouthEast() {
+		return connections.get(3);
+	}
+
+	public String getSouth() {
+		return connections.get(4);
+	}
+
+	public String getSouthWest() {
+		return connections.get(5);
+	}
+
+	public String getWest() {
+		return connections.get(6);
+	}
+
+	public String getNorthWest() {
+		return connections.get(7);
+	}
+
+	public String getUp() {
+		return connections.get(8);
+	}
+
+	public String getDown() {
+		return connections.get(9);
 	}
 
 	// TODO add NPC based methods
