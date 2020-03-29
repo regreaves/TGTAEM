@@ -1,7 +1,5 @@
 package state;
 
-import java.util.*;
-
 public class User
 {
   String username;
