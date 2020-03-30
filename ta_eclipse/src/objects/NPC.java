@@ -3,7 +3,7 @@ package objects;
 import java.util.*;
 import command.Action;
 
-public class NPC
+public class NPC extends Actor
 {
   ArrayList<String> loot = new ArrayList<>();
   ArrayList<String> possibleActions = new ArrayList<>();
