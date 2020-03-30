@@ -1,7 +1,6 @@
 package state;
 
 import java.util.*;
-import java.io.*;
 import java.sql.SQLException;
 
 import command.*;
@@ -14,6 +13,8 @@ public class Game {
 	Player player;
 	Parser parser;
 	DerbyDatabase db;
+
+	String location = "1";
 
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
@@ -44,19 +45,111 @@ public class Game {
 	}
 
 	public String performAction(Action a) {
-		String display;
-		String currentRoom = player.location;
-		if(a.getMethod() == 0)
-		{
-			String id = "0";
-			String direction = a.getNoun().getPrime();
-			if(direction.equals("north"))
-			{
-				id = 
-			}
+		String display = "";
+		int method = a.getMethod();
+		switch (method) {
+		case 0:
+			display = go(a);
+			break;
+		case 1:
+			display = take(a);
+			break;
+		case 2:
+			display = drop(a);
+			break;
+		case 3:
+			display = examine(a);
+			break;
 		}
+
+		return display;
 	}
 
+	private String go(Action a)
+	{
+		String display = "";
+		String id = "0";
+		String direction = a.getNoun().getPrime();
+		switch (direction) {
+		case "north":
+			id = map.get(location).getNorth();
+			break;
+		case "northeast":
+			id = map.get(location).getNorthEast();
+			break;
+		case "east":
+			id = map.get(location).getEast();
+			break;
+		case "southeast":
+			id = map.get(location).getSouthEast();
+			break;
+		case "south":
+			id = map.get(location).getSouth();
+			break;
+		case "southwest":
+			id = map.get(location).getSouthWest();
+			break;
+		case "west":
+			id = map.get(location).getWest();
+			break;
+		case "northwest":
+			id = map.get(location).getNorthWest();
+			break;
+		case "up":
+			id = map.get(location).getUp();
+			break;
+		case "down":
+			id = map.get(location).getDown();
+			break;
+		}
+
+		if (id.equals("0")) {
+			display = "You can't go that way.";
+		} else {
+			map.get(location).setVisited(true);
+			display = loadRoom(id);
+			location = id;
+		}
+		return display;
+	}
+	
+	private String take(Action a)
+	{
+		String display = "";
+		return display;
+	}
+	
+	private String drop(Action a)
+	{
+		String display = "";
+		return display;
+	}
+	
+	private String examine(Action a)
+	{
+		String display = "";
+		String obj = a.getNoun().getPrime();
+		if(obj.equals("room"))
+		{
+			display = map.get(location).look();
+			return display;
+		}
+		else
+		{
+			ArrayList<Item> roomItems = map.get(location).getItems();
+			for(Item i : roomItems)
+			{
+				if(i.getName().equals(obj))
+				{
+					display = i.getInventDscrpt();
+					return display;
+				}
+			}
+		}
+		display = "There's no " + obj + " for you to examine.";
+		return display;
+	}
+	
 	public String loadRoom(String id) {
 		Room r = map.get(id);
 		return r.loadRoom();
@@ -128,7 +221,7 @@ public class Game {
 //				its within this function that there will be probably 
 //				a massive switch case that modifies the game/player state
 //				for each combination of location, player state and action
-				g.performAction(a);
+				System.out.println(g.performAction(a));
 			} else {
 				System.out.println("I don't understand \"" + input + '\"' + " Please try something else.");
 			}

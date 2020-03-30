@@ -1,7 +1,6 @@
 package command;
 import java.util.*;
 
-import state.Game;
 
 public class Action {
 	String name;
@@ -74,57 +73,5 @@ public class Action {
 		return a;
 	}
 	
-	public String performAction(Game g)
-	{
-		String display = "";
-
-		if(method == 0)	//go
-		{
-
-		}
-		else if(method == 1)	//take
-		{
-			display = take(location);
-		}
-		else if (method == 2) //drop
-		{
-			display = drop(location);
-		}
-
-		return display;
-	}
-
-
-
-	public Action going(String direction)
-	{
-		return null;
-	}
-
-	public String displayAction(String command){
-		return "empty";
-	}
-
-	private String go(String location)
-	{
-		return null;
-	}
-
-	private String take(String location)
-	{
-		return null;
-	}
-
-	private String drop(String location)
-	{
-		return null;
-	}
-
-	public static boolean checkCondition(String string) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	//private String standOn(String Location)
 
 }
