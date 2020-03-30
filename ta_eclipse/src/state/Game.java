@@ -2,166 +2,127 @@ package state;
 
 import java.util.*;
 import java.io.*;
+import java.sql.SQLException;
+
 import command.*;
 import objects.*;
+import sqlDB.DatabaseProvider;
+import sqlDB.DerbyDatabase;
 
-public class Game
-{
-  User user;
-  Player player;
-  Parser parser;
-  ArrayList<Item> items = new ArrayList<>();
-  ArrayList<NPC> npcs = new ArrayList<>();
-  HashMap<String, Room> map = new HashMap<>();
-  ArrayList<Action> actionsTaken = new ArrayList<>();
-  ArrayList<String> roomsVisited = new ArrayList<>();
-  int playerDeaths = 0;
-  int victories = 0;
-  ArrayList<Checkpoint> checkpoints = new ArrayList<>();
+public class Game {
+	User user;
+	Player player;
+	Parser parser;
+	DerbyDatabase db;
 
-  //not done here yet
-  public Game(User user, Player player, Parser parser)
-  {
-	this.user = user;
-    this.player = player;
-    this.parser = parser;
-  }
+	ArrayList<Item> items = new ArrayList<>();
+//	ArrayList<NPC> npcs = new ArrayList<>();
+	HashMap<String, Room> map = new HashMap<>();
+//	ArrayList<Action> actionsTaken = new ArrayList<>();
+//	ArrayList<String> roomsVisited = new ArrayList<>();
+//	int playerDeaths = 0;
+//	int victories = 0;
+//	ArrayList<Checkpoint> checkpoints = new ArrayList<>();
 
-  private void makeMap(String file) {
-     BufferedReader reader = null;
-     try {
-       reader = new BufferedReader(new FileReader(file));
-       String line = "";
-       line = reader.readLine();   //skip headings
-       while((line = reader.readLine()) != null) {
-         String[] entry = line.split(",");
-         String id = entry[0];
-         String displayName = entry[1];
-         String description = entry[2];
-         int i = 3;
-         ArrayList<String> connections = new ArrayList<>();
-         while(i < 13)
-         {
-           connections.add(entry[i]);
-           i++;
-         }
-         Room r = new Room(id, displayName, description, connections);
-         map.put(id, r);
-      }
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-    finally {
-      try {
-        reader.close();
-      }
-      catch(IOException e) {
-        e.printStackTrace();
-      }
-    }
-  }
+	// not done here yet
+	public Game(User user, Player player) throws SQLException {
+		DatabaseProvider.setInstance(new DerbyDatabase());
+		this.user = user;
+		this.player = player;
+		this.db = DatabaseProvider.getInstance();
+		this.parser = new Parser(db);
+		map = db.getMap();
+		items = db.getItems();
+		db.placeItems(map, items);
+	}
 
-  private void makeItems(String file) {
-    BufferedReader reader = null;
-    try {
-      reader = new BufferedReader(new FileReader(file));
-      String line = "";
-      line = reader.readLine();   //skip headings
-      while((line = reader.readLine()) != null) {
-        String[] entry = line.split(",");
+	public void makeActions(String file) {
 
-        String name = entry[0];
-        String id = entry[1];
-        String location = entry[2];
-        String init_dscrpt = entry[3];
-        String invent_dscrpt = entry[4];
-        int take = Integer.parseInt(entry[5]);
-        int has = Integer.parseInt(entry[6]);
-        int hidden = Integer.parseInt(entry[7]);
-       
-        boolean canTake = false;
-        boolean hasItem = false;
-        boolean isHidden = false;
-        
-        if (take == 1) {
-        	canTake = true;
-        }
-        if (has == 1) {
-          hasItem = true;
-        }
-        if (hidden == 1) {
-          isHidden = true;
-        }
+	}
+//
+//	public void makeNPCS(String npcFile) {
+//
+//	}
+//
+//	public void addActionTaken(Action action) {
+//		actionsTaken.add(action);
+//		return;
+//	}
+//
+//	public void addRoomVisited(String roomID) {
+//		roomsVisited.add(roomID);
+//		return;
+//	}
+//
+//	public void playerDies() {
+//		playerDeaths++;
+//		return;
+//	}
+//
+//	public void playerWins() {
+//		victories++;
+//		return;
+//	}
+//
+//	public void saveGame() { // TODO with checkpoint
+//		return;
+//	}
 
-        Item i = new Item(name, id, location, init_dscrpt, invent_dscrpt, canTake, hasItem, isHidden);
-        items.add(i);
-      }
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-    finally {
-      try {
-        reader.close();
-      }
-      catch(IOException e) {
-        e.printStackTrace();
-      }
-    }
-  }
+//	public void loadGame(Checkpoint checkpoint) { // TODO: implement with checkpoint
+//		this.user = user;
+//		this.player = player;
+//		this.parser = parser;
+//		this.items = items;
+//		this.npcs = npcs;
+//		this.map = map;
+//		this.actionsTaken = actionsTaken;
+//		this.roomsVisited = roomsVisited;
+//		this.playerDeaths = playerDeaths;
+//		this.victories = victories;
+//		this.checkpoints = checkpoints;
+//	}
+//
+//	public void teleport(String roomID) {
+//		player.location = roomID; // TODO: I think more is needed here
+//		return;
+//	}
 
-  public void makeActions(String file)
-  {
+	public static void main(String[] args) throws SQLException {
+//		remove all tables
+		
+//		create all tables
+//		insert all seed data into tables
+		
+		
+		
+//		init game
+		User u = new User("user", "user");
+		Player p = new Player();
+		Game g = new Game(u, p);
 
-  }
+		Scanner in = new Scanner(System.in);
 
-  public void makeNPCS(String npcFile)
-  {
-
-  }
-
-  public void addActionTaken(Action action) {
-    actionsTaken.add(action);
-    return;
-  }
-
-  public void addRoomVisited(String roomID) {
-    roomsVisited.add(roomID);
-    return;
-  }
-
-  public void playerDies() {
-    playerDeaths++;
-    return;
-  }
-
-  public void playerWins() {
-    victories++;
-    return;
-  }
-
-  public void saveGame() {    //TODO with checkpoint
-    return;
-  }
-
-  public void loadGame(Checkpoint checkpoint) {   //TODO: implement with checkpoint
-    this.user = user;
-    this.player = player;
-    this.parser = parser;
-    this.items = items;
-    this.npcs = npcs;
-    this.map = map;
-    this.actionsTaken = actionsTaken;
-    this.roomsVisited = roomsVisited;
-    this.playerDeaths = playerDeaths;
-    this.victories = victories;
-    this.checkpoints = checkpoints;
-  }
-
-  public void teleport(String roomID) {
-    player.location = roomID; //TODO: I think more is needed here
-    return;
-  }
-
+//		while game.notDone
+		boolean quit = false;
+		while (!quit) {
+//			print game state/message
+			String input = in.next(); // should be nextLine
+//			g.parseAndRunAction
+//			but imo ...
+			Action a = g.parser.getAction(input);
+			if (a != null) {
+//				...this should be g.performAction(a)
+//				game::runAction(Action a, String roomId)
+//				its within this function that there will be probably 
+//				a massive switch case that modifies the game/player state
+//				for each combination of location, player state and action
+				a.performAction(g);
+			}
+		}
+		in.close();
+//		the best thing you can do to help yourself with this
+//		is provide good feedback in console for where you are etc
+//		as well as good error messages that describe the problem 
+//		and show relevant information alongside
+	}
 }

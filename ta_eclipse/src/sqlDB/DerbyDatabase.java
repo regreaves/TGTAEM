@@ -15,7 +15,7 @@ import command.Word;
 import objects.Item;
 import objects.Room;
 
-public class DerbyDatabase implements IDatabase {
+public class DerbyDatabase{
 	static {
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -30,7 +30,6 @@ public class DerbyDatabase implements IDatabase {
 
 	private static final int MAX_ATTEMPTS = 10;
 
-	@Override
 	public ArrayList<String> getVerbs(String prime) {
 		return executeTransaction(new Transaction<ArrayList<String>>() {
 			public ArrayList<String> execute(Connection conn) throws SQLException {
@@ -44,7 +43,7 @@ public class DerbyDatabase implements IDatabase {
 					resultSet = stmt.executeQuery();
 
 					// for testing that a result was returned
-					Boolean found = false;
+					boolean found = false;
 					while (resultSet.next()) {
 						found = true;
 						words.add(resultSet.getString(1));
@@ -63,7 +62,6 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 
-	@Override
 	public ArrayList<String> getNouns(String prime) {
 		return executeTransaction(new Transaction<ArrayList<String>>() {
 			public ArrayList<String> execute(Connection conn) throws SQLException {
@@ -77,7 +75,7 @@ public class DerbyDatabase implements IDatabase {
 					resultSet = stmt.executeQuery();
 
 					// for testing that a result was returned
-					Boolean found = false;
+					boolean found = false;
 					while (resultSet.next()) {
 						found = true;
 						words.add(resultSet.getString(1));
@@ -96,7 +94,6 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 
-	@Override
 	public ArrayList<Action> getActions() {
 		return executeTransaction(new Transaction<ArrayList<Action>>() {
 			public ArrayList<Action> execute(Connection conn) throws SQLException {
@@ -109,7 +106,7 @@ public class DerbyDatabase implements IDatabase {
 					resultSet = stmt.executeQuery();
 
 					// for testing that a result was returned
-					Boolean found = false;
+					boolean found = false;
 					while (resultSet.next()) {
 						found = true;
 						String name = resultSet.getString(1);
@@ -143,6 +140,123 @@ public class DerbyDatabase implements IDatabase {
 				}
 
 				return actions;
+			}
+		});
+	}
+
+	public void placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException{
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		String itemID;
+
+		for (Item i : items) {
+			itemID = i.getID();
+			try {
+				stmt = conn.prepareStatement("select location from itemLoc where id = ?");
+				stmt.setString(1, itemID);
+				resultSet = stmt.executeQuery();
+				
+				boolean found = false;
+				while(resultSet.next()) {
+					found = true;
+					String loc = resultSet.getString(1);
+					Room r = map.get(loc);
+					r.addItem(i);
+				}
+
+				// check if the title was found
+				if (!found) {
+					System.out.println("error in location table");
+				}
+
+			} finally {
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt);
+			}
+		}
+	}
+
+	public ArrayList<Item> getItems() {
+		return executeTransaction(new Transaction<ArrayList<Item>>() {
+			public ArrayList<Item> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				ArrayList<Item> items = new ArrayList<>();
+
+				try {
+					stmt = conn.prepareStatement("select * from items");
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+					Boolean found = false;
+					while (resultSet.next()) {
+						found = true;
+						String id = resultSet.getString(1);
+						String name = resultSet.getString(2);
+						String init_dscrpt = resultSet.getString(3);
+						String invent_dscrpt = resultSet.getString(4);
+						boolean canTake = resultSet.getBoolean(5);
+						boolean isHidden = resultSet.getBoolean(6);
+						Item i = new Item(id, name, init_dscrpt, invent_dscrpt, canTake, isHidden);
+						items.add(i);
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("no items found");
+					}
+					return items;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+
+	public HashMap<String, Room> getMap() {
+		return executeTransaction(new Transaction<HashMap<String, Room>>() {
+			public HashMap<String, Room> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				HashMap<String, Room> map = new HashMap<>();
+
+				try {
+					stmt = conn.prepareStatement("select * from rooms");
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+					Boolean found = false;
+					while (resultSet.next()) {
+						found = true;
+						String id = resultSet.getString(1);
+						String name = resultSet.getString(2);
+						String dscrpt = resultSet.getString(3);
+						ArrayList<String> c = new ArrayList<>();
+						c.add(resultSet.getString(4)); // north
+						c.add(resultSet.getString(5)); // northeast
+						c.add(resultSet.getString(6)); // east
+						c.add(resultSet.getString(7)); // southeast
+						c.add(resultSet.getString(8)); // south
+						c.add(resultSet.getString(9)); // southwest
+						c.add(resultSet.getString(10)); // west
+						c.add(resultSet.getString(11)); // northwest
+						c.add(resultSet.getString(12)); // up
+						c.add(resultSet.getString(13)); // down
+						Room r = new Room(id, name, dscrpt, c);
+						map.put(id, r);
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("map not found");
+					}
+					return map;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
 			}
 		});
 	}
@@ -212,39 +326,42 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt6 = null;
 
 				try {
-					stmt1 = conn.prepareStatement("create table words ("
-							+ "	prime varchar(42)," + "	word varchar(42)," + " type int" + ")");
+					stmt1 = conn.prepareStatement(
+							"create table words (" + "	prime varchar(42)," + "	word varchar(42)," + " type int" + ")");
 					stmt1.executeUpdate();
 
-					stmt2 = conn.prepareStatement("create table actions (" 
-							+ "	name varchar(42)," + " verb varchar(42)," + " noun varchar(42),"   + " method int " + ")");
+					stmt2 = conn.prepareStatement("create table actions (" + "	name varchar(42),"
+							+ " verb varchar(42)," + " noun varchar(42)," + " method int " + ")");
 					stmt2.executeUpdate();
 
-					
-					stmt3 = conn.prepareStatement("create table rooms ("
-							+ " id varchar(5) primary key," +  " name varchar(42)," + " description varchar(200),"
-							+ " north varchar(5), " + " northeast varchar(5), " + " east varchar(5), " + " southeast varchar(5), "
-							+ " south varchar(5), " + " southwest varchar(5), " + " west varchar(5), " + " northwest varchar(5), "
-							+ " up varchar(5), " + " down varchar(5)" + ")");
+					stmt3 = conn.prepareStatement("create table rooms (" + " id varchar(5) primary key,"
+							+ " name varchar(42)," + " description varchar(200)," + " north varchar(5), "
+							+ " northeast varchar(5), " + " east varchar(5), " + " southeast varchar(5), "
+							+ " south varchar(5), " + " southwest varchar(5), " + " west varchar(5), "
+							+ " northwest varchar(5), " + " up varchar(5), " + " down varchar(5)" + ")");
 					stmt3.executeUpdate();
-					
-					stmt4 = conn.prepareStatement("create table items ("
-							+ " id varchar(5) primary key," + " name varchar(42)," + " init_dscrpt varchar(200),"
-							+ " invent_dscrpt varchar(200)," + " canTake bool," + " isHidden bool" + ")");
+
+					stmt4 = conn.prepareStatement("create table items (" + " id varchar(5) primary key,"
+							+ " name varchar(42)," + " init_dscrpt varchar(200)," + " invent_dscrpt varchar(200),"
+							+ " canTake boolean," + " isHidden boolean" + ")");
 					stmt4.executeUpdate();
-					
-					stmt5 = conn.prepareStatement("create table itemLoc ("
-							+ " id varchar(5) primary key," + " location varchar(5)" + ")");
+
+					stmt5 = conn.prepareStatement(
+							"create table itemLoc (" + " id varchar(5) primary key," + " location varchar(5)" + ")");
 					stmt5.executeUpdate();
-					
-					stmt6 = conn.prepareStatement("create table itemAct ("
-							+ " id varchar(5) primary key," + " action varchar(42)" + ")");
+
+					stmt6 = conn.prepareStatement(
+							"create table itemAct (" + " id varchar(5)," + " action varchar(42)" + ")");
 					stmt6.executeUpdate();
-					
+
 					return true;
 				} finally {
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+					DBUtil.closeQuietly(stmt4);
+					DBUtil.closeQuietly(stmt5);
+					DBUtil.closeQuietly(stmt6);
 				}
 			}
 		});
@@ -269,7 +386,7 @@ public class DerbyDatabase implements IDatabase {
 					itemList = InitialData.getItems();
 					itemLoc = InitialData.getItemLoc();
 					itemAction = InitialData.getItemActions();
-					
+
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -280,7 +397,6 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertItem = null;
 				PreparedStatement insertItemLoc = null;
 				PreparedStatement insertItemAction = null;
-
 
 				try {
 					// populate words table
@@ -294,8 +410,8 @@ public class DerbyDatabase implements IDatabase {
 					insertWord.executeBatch();
 
 					// populate actions table
-					insertAction = conn.prepareStatement(
-							"insert into actions (name, verb, noun, method) values (?, ?, ?, ?)");
+					insertAction = conn
+							.prepareStatement("insert into actions (name, verb, noun, method) values (?, ?, ?, ?)");
 					for (Action action : actionList) {
 						insertAction.setString(1, action.getName());
 						insertAction.setString(2, action.getVerb().getName());
@@ -306,12 +422,10 @@ public class DerbyDatabase implements IDatabase {
 					insertAction.executeBatch();
 
 					// populate rooms table
-					insertRoom = conn.prepareStatement(
-							"insert into rooms (id, name, description, north, northeast,"
+					insertRoom = conn.prepareStatement("insert into rooms (id, name, description, north, northeast,"
 							+ " east, southeast, south, southwest, west, northwest, up, down)"
 							+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-					for(Room room : roomList)
-					{
+					for (Room room : roomList) {
 						insertRoom.setString(1, room.getID());
 						insertRoom.setString(2, room.getDisplayName());
 						insertRoom.setString(3, room.getDescription());
@@ -328,12 +442,12 @@ public class DerbyDatabase implements IDatabase {
 						insertRoom.addBatch();
 					}
 					insertRoom.executeBatch();
-					
+
 					// populate items table
-					insertItem = conn.prepareStatement("insert into items (id, name, init_dscrpt, invent_dscrpt, canTake, isHidden)"
-							+ " values (?, ?, ?, ?, ?, ?)");
-					for(Item item : itemList)
-					{
+					insertItem = conn.prepareStatement(
+							"insert into items (id, name, init_dscrpt, invent_dscrpt, canTake, isHidden)"
+									+ " values (?, ?, ?, ?, ?, ?)");
+					for (Item item : itemList) {
 						insertItem.setString(1, item.getID());
 						insertItem.setString(2, item.getName());
 						insertItem.setString(3, item.getInitDscrpt());
@@ -343,33 +457,33 @@ public class DerbyDatabase implements IDatabase {
 						insertItem.addBatch();
 					}
 					insertItem.executeBatch();
-					
+
 					// populate item location table
-					insertItemLoc = conn.prepareStatement("insert into itemLoc (id, location)"
-							+ " values (?, ?)");
-					for(Pair<String, String> p : itemLoc)
-					{
+					insertItemLoc = conn.prepareStatement("insert into itemLoc (id, location)" + " values (?, ?)");
+					for (Pair<String, String> p : itemLoc) {
 						insertItemLoc.setString(1, p.getLeft());
 						insertItemLoc.setString(2, p.getRight());
 						insertItemLoc.addBatch();
 					}
 					insertItemLoc.executeBatch();
-					
+
 					// populate item action table
-					insertItemAction = conn.prepareStatement("insert into itemAct (id, action)"
-							+ " values (?, ?)");
-					for(Pair<String, String> p : itemAction)
-					{
+					insertItemAction = conn.prepareStatement("insert into itemAct (id, action)" + " values (?, ?)");
+					for (Pair<String, String> p : itemAction) {
 						insertItemAction.setString(1, p.getLeft());
 						insertItemAction.setString(2, p.getRight());
 						insertItemAction.addBatch();
 					}
 					insertItemAction.executeBatch();
-					
+
 					return true;
 				} finally {
 					DBUtil.closeQuietly(insertAction);
 					DBUtil.closeQuietly(insertWord);
+					DBUtil.closeQuietly(insertRoom);
+					DBUtil.closeQuietly(insertItem);
+					DBUtil.closeQuietly(insertItemLoc);
+					DBUtil.closeQuietly(insertItemAction);
 				}
 			}
 		});

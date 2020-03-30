@@ -1,6 +1,8 @@
 package command;
 import java.util.*;
 
+import state.Game;
+
 public class Action {
 	String name;
 	Word verb;
@@ -72,7 +74,7 @@ public class Action {
 		return a;
 	}
 	
-	public String performAction(String location)
+	public String performAction(Game g)
 	{
 		String display = "";
 
