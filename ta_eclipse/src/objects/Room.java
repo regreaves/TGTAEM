@@ -1,7 +1,8 @@
 package objects;
 
-import java.util.*;
-import command.*;
+import java.util.ArrayList;
+
+import command.Action;
 
 public class Room {
 	String ID;

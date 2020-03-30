@@ -7,7 +7,8 @@ import java.util.List;
 
 import command.Action;
 import command.Word;
-import objects.*;
+import objects.Item;
+import objects.Room;
 
 public class InitialData {
 	public static List<Word> getWords() throws IOException {
