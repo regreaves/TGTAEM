@@ -2,18 +2,15 @@ package command;
 
 import java.util.*;
 
-import sqlDB.IDatabase;
-import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 
 public class Parser {
 	ArrayList<Action> actionBank = new ArrayList<>();
 	HashMap<String, Action> actionBankMap = new HashMap<>();
-	IDatabase db;
+	DerbyDatabase db;
 
-	public Parser() {
-		DatabaseProvider.setInstance(new DerbyDatabase());
-		this.db = DatabaseProvider.getInstance();
+	public Parser(DerbyDatabase db) {
+		this.db = db;
 		this.actionBank = db.getActions();
 
 		// wjen map make sure all keys are lowercase
@@ -42,9 +39,9 @@ public class Parser {
 	}
 
 	public static void main(String[] args) {
-		Parser p = new Parser();
-		Action a = p.getAction("Jump on bed");
-		System.out.println(a);
+		//Parser p = new Parser();
+		//Action a = p.getAction("Jump on bed");
+		//System.out.println(a);
 	}
 
 }

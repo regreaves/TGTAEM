@@ -66,10 +66,13 @@ public class Room {
 	}
 
 	public void addItems(ArrayList<Item> items) {
-		for (Item item : items) {
-			this.items.add(item);
-			this.actions.addAll(item.getActions());
-		}
+		items.forEach(this::addItem);
+		// #swag
+	}
+
+	public void addItem(Item item) {
+		this.items.add(item);
+		this.actions.addAll(item.getActions());
 	}
 
 	public Item removeItem(Item item, Inventory inventory) {

@@ -2,15 +2,15 @@ package sqlDB;
 
 
 public class DatabaseProvider {
-	private static IDatabase theInstance;
+	private static DerbyDatabase theInstance;
 	
-	public static void setInstance(IDatabase db) {
+	public static void setInstance(DerbyDatabase db) {
 		theInstance = db;
 	}
 	
-	public static IDatabase getInstance() {
+	public static DerbyDatabase getInstance() {
 		if (theInstance == null) {
-			throw new IllegalStateException("IDatabase instance has not been set!");
+			throw new IllegalStateException("DerbyDatabase instance has not been set!");
 		}
 		return theInstance;
 	}
