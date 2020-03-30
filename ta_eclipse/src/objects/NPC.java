@@ -2,6 +2,7 @@ package objects;
 
 import java.util.*;
 import command.Action;
+import objects.Room;
 
 public class NPC extends Actor
 {
@@ -75,10 +76,15 @@ public class NPC extends Actor
   }
 
   public void addLoot(Item item) {
+	loot.add(item.toString());
     return;
   }
 
-  public void dropLoot() {
+  public void dropLoot(Item item) {
+	loot.remove(item.toString());
+	//Will fix later
+	//room = new Room(room.getID(), room.getDisplayName(), room.getDescription(), room.getConnections());
+	//room.addItem(item);
     return;
   }
 
