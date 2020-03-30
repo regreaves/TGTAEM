@@ -6,6 +6,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Derby Database"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jetty9"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="web"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
