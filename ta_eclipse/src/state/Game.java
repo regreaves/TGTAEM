@@ -1,10 +1,15 @@
 package state;
 
-import java.util.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
 
-import command.*;
-import objects.*;
+import command.Action;
+import command.Parser;
+import objects.Item;
+import objects.Player;
+import objects.Room;
 import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 
@@ -14,7 +19,6 @@ public class Game {
 	Parser parser;
 	DerbyDatabase db;
 
-	String location = "1";
 
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
@@ -40,6 +44,11 @@ public class Game {
 		db.placeItems(map, items);
 	}
 
+	public String here()
+	{
+		return player.getLocation();
+	}
+	
 	public void makeActions(String file) {
 
 	}
@@ -69,46 +78,46 @@ public class Game {
 	{
 		String display = "";
 		String id = "0";
-		String direction = a.getNoun().getPrime();
+		String direction = a.noun();
 		switch (direction) {
 		case "north":
-			id = map.get(location).getNorth();
+			id = map.get(here()).getNorth();
 			break;
 		case "northeast":
-			id = map.get(location).getNorthEast();
+			id = map.get(here()).getNorthEast();
 			break;
 		case "east":
-			id = map.get(location).getEast();
+			id = map.get(here()).getEast();
 			break;
 		case "southeast":
-			id = map.get(location).getSouthEast();
+			id = map.get(here()).getSouthEast();
 			break;
 		case "south":
-			id = map.get(location).getSouth();
+			id = map.get(here()).getSouth();
 			break;
 		case "southwest":
-			id = map.get(location).getSouthWest();
+			id = map.get(here()).getSouthWest();
 			break;
 		case "west":
-			id = map.get(location).getWest();
+			id = map.get(here()).getWest();
 			break;
 		case "northwest":
-			id = map.get(location).getNorthWest();
+			id = map.get(here()).getNorthWest();
 			break;
 		case "up":
-			id = map.get(location).getUp();
+			id = map.get(here()).getUp();
 			break;
 		case "down":
-			id = map.get(location).getDown();
+			id = map.get(here()).getDown();
 			break;
 		}
 
 		if (id.equals("0")) {
 			display = "You can't go that way.";
 		} else {
-			map.get(location).setVisited(true);
+			map.get(here()).setVisited(true);
 			display = loadRoom(id);
-			location = id;
+			player.move(id);
 		}
 		return display;
 	}
@@ -116,6 +125,8 @@ public class Game {
 	private String take(Action a)
 	{
 		String display = "";
+		String obj = a.noun();
+		
 		return display;
 	}
 	
@@ -128,15 +139,15 @@ public class Game {
 	private String examine(Action a)
 	{
 		String display = "";
-		String obj = a.getNoun().getPrime();
+		String obj = a.noun();
 		if(obj.equals("room"))
 		{
-			display = map.get(location).look();
+			display = map.get(here()).look();
 			return display;
 		}
 		else
 		{
-			ArrayList<Item> roomItems = map.get(location).getItems();
+			ArrayList<Item> roomItems = map.get(here()).getItems();
 			for(Item i : roomItems)
 			{
 				if(i.getName().equals(obj))
@@ -216,20 +227,12 @@ public class Game {
 			Action a = g.parser.getAction(input);
 
 			if (a != null) {
-//				...this should be g.performAction(a)
-//				game::runAction(Action a, String roomId)
-//				its within this function that there will be probably 
-//				a massive switch case that modifies the game/player state
-//				for each combination of location, player state and action
+				
 				System.out.println(g.performAction(a));
 			} else {
 				System.out.println("I don't understand \"" + input + '\"' + " Please try something else.");
 			}
 		}
 		in.close();
-//		the best thing you can do to help yourself with this
-//		is provide good feedback in console for where you are etc
-//		as well as good error messages that describe the problem 
-//		and show relevant information alongside
 	}
 }

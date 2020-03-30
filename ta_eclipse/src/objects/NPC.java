@@ -1,6 +1,7 @@
 package objects;
 
-import java.util.*;
+import java.util.ArrayList;
+
 import command.Action;
 
 public class NPC extends Actor

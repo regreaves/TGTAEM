@@ -1,6 +1,7 @@
 package state;
 
-import java.util.*;
+import java.util.ArrayList;
+
 import objects.Player;
 
 public class Checkpoint {
