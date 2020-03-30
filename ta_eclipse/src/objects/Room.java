@@ -1,7 +1,7 @@
 package objects;
 
 import java.util.*;
-import command.Action;
+import command.*;
 
 public class Room {
 	String ID;
@@ -18,6 +18,84 @@ public class Room {
 		this.displayName = displayName;
 		this.description = description;
 		this.connections = connections;
+		HashMap<String, Action> map = directions();
+		if (!(getNorth().equals("0"))) {
+			actions.add(map.get("north"));
+		}
+		if (!(getNorthEast().equals("0"))) {
+			actions.add(map.get("northeast"));
+		}
+		if (!(getEast().equals("0"))) {
+			actions.add(map.get("east"));
+		}
+		if (!(getSouthEast().equals("0"))) {
+			actions.add(map.get("southeast"));
+		}
+		if (!(getSouth().equals("0"))) {
+			actions.add(map.get("south"));
+		}
+		if (!(getSouthWest().equals("0"))) {
+			actions.add(map.get("southwest"));
+		}
+		if (!(getWest().equals("0"))) {
+			actions.add(map.get("west"));
+		}
+		if (!(getNorthWest().equals("0"))) {
+			actions.add(map.get("northwest"));
+		}
+		if (!(getUp().equals("0"))) {
+			actions.add(map.get("up"));
+		}
+		if (!(getDown().equals("0"))) {
+			actions.add(map.get("down"));
+		}
+	}
+
+	private HashMap<String, Action> directions() {
+		Word go = Word.makeWord("go", 1);
+		Word n = Word.makeWord("north", 2);
+		Word ne = Word.makeWord("northeast", 2);
+		Word e = Word.makeWord("east", 2);
+		Word se = Word.makeWord("southeast", 2);
+		Word s = Word.makeWord("south", 2);
+		Word sw = Word.makeWord("southwest", 2);
+		Word w = Word.makeWord("west", 2);
+		Word nw = Word.makeWord("northwest", 2);
+		Word u = Word.makeWord("up", 2);
+		Word d = Word.makeWord("down", 2);
+
+		Action north = new Action("go north", go, n, 0);
+		Action northeast = new Action("go northeast", go, ne, 0);
+		Action east = new Action("go east", go, e, 0);
+		Action southeast = new Action("go southeast", go, se, 0);
+		Action south = new Action("go south", go, s, 0);
+		Action southwest = new Action("go southwest", go, sw, 0);
+		Action west = new Action("go west", go, w, 0);
+		Action northwest = new Action("go northwest", go, nw, 0);
+		Action up = new Action("go up", go, u, 0);
+		Action down = new Action("go down", go, d, 0);
+
+		HashMap<String, Action> map = new HashMap<>();
+		map.put("north", north);
+		map.put("northeast", northeast);
+		map.put("east", east);
+		map.put("southeast", southeast);
+		map.put("south", south);
+		map.put("southwest", southwest);
+		map.put("west", west);
+		map.put("northwest", northwest);
+		map.put("up", up);
+		map.put("down", down);
+
+		return map;
+	}
+
+	public String loadRoom() {
+		String dscrpt = this.description;
+		for (Item i : items) {
+			dscrpt += " " + i.init_dscrpt;
+		}
+		return dscrpt;
 	}
 
 	public String getID() {

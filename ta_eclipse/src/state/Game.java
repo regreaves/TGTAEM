@@ -15,9 +15,12 @@ public class Game {
 	Parser parser;
 	DerbyDatabase db;
 
-	ArrayList<Item> items = new ArrayList<>();
-//	ArrayList<NPC> npcs = new ArrayList<>();
 	HashMap<String, Room> map = new HashMap<>();
+	ArrayList<Item> items = new ArrayList<>();
+
+	boolean notDone = true;
+
+//	ArrayList<NPC> npcs = new ArrayList<>();
 //	ArrayList<Action> actionsTaken = new ArrayList<>();
 //	ArrayList<String> roomsVisited = new ArrayList<>();
 //	int playerDeaths = 0;
@@ -39,7 +42,26 @@ public class Game {
 	public void makeActions(String file) {
 
 	}
-//
+
+	public String performAction(Action a) {
+		String display;
+		String currentRoom = player.location;
+		if(a.getMethod() == 0)
+		{
+			String id = "0";
+			String direction = a.getNoun().getPrime();
+			if(direction.equals("north"))
+			{
+				id = 
+			}
+		}
+	}
+
+	public String loadRoom(String id) {
+		Room r = map.get(id);
+		return r.loadRoom();
+	}
+
 //	public void makeNPCS(String npcFile) {
 //
 //	}
@@ -88,35 +110,27 @@ public class Game {
 //	}
 
 	public static void main(String[] args) throws SQLException {
-//		remove all tables
-		
-//		create all tables
-//		insert all seed data into tables
-		
-		
-		
-//		init game
 		User u = new User("user", "user");
 		Player p = new Player();
 		Game g = new Game(u, p);
 
 		Scanner in = new Scanner(System.in);
 
-//		while game.notDone
-		boolean quit = false;
-		while (!quit) {
-//			print game state/message
-			String input = in.next(); // should be nextLine
-//			g.parseAndRunAction
-//			but imo ...
+		System.out.println(g.loadRoom("1"));
+		while (g.notDone) {
+
+			String input = in.nextLine();
 			Action a = g.parser.getAction(input);
+
 			if (a != null) {
 //				...this should be g.performAction(a)
 //				game::runAction(Action a, String roomId)
 //				its within this function that there will be probably 
 //				a massive switch case that modifies the game/player state
 //				for each combination of location, player state and action
-				a.performAction(g);
+				g.performAction(a);
+			} else {
+				System.out.println("I don't understand \"" + input + '\"' + " Please try something else.");
 			}
 		}
 		in.close();
