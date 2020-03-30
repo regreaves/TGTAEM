@@ -77,7 +77,7 @@ public class Inventory {
 		return number;
 	}
 
-	public String displayInventory(String command) {
+	public String displayInventory() {
 		int i = 0;
 		String inventory = null;
 		Item item;

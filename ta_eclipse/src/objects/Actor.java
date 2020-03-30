@@ -5,16 +5,19 @@ import java.util.*;
 
 public class Actor
 {
-  ArrayList<String> stats = new ArrayList<>();
+  ArrayList<String> stats;
   String location;
   String id;
   boolean alive;
 
-  public Actor(String actorFile) {
-	
+  public Actor() {
+	stats = new ArrayList<>();
+	location = "0";
+	id = "0";
+	alive = true;
   }
 	
-  private void getActor(String file) {
+  private void setActor(String file) {
 	BufferedReader reader = null;
     try
     {
@@ -55,7 +58,7 @@ public class Actor
 	return;
   }
 
-  public void modifyStats(ArrayList<?> stats) {
+  public void modifyStats(ArrayList<String> stats) {
     return;
   }
 
@@ -82,6 +85,11 @@ public class Actor
 
   public String getID() {
     return id;
+  }
+  
+  public void setID(String ID) {
+	this.id = ID;
+	return;
   }
 
   public void kill() {
