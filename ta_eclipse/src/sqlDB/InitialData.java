@@ -109,6 +109,7 @@ public class InitialData {
 				String invent_dscrpt = i.next();
 				boolean canTake = false;
 				boolean isHidden = false;
+				boolean moved = false;
 				int x = Integer.parseInt(i.next());
 				if (x == 1) {
 					canTake = true;
@@ -117,7 +118,11 @@ public class InitialData {
 				if (x == 1) {
 					isHidden = true;
 				}
-				Item item = new Item(id, name, init_dscrpt, invent_dscrpt, canTake, isHidden);
+				x = Integer.parseInt(i.next());
+				if (x == 1) {
+					moved = true;
+				}
+				Item item = new Item(id, name, init_dscrpt, invent_dscrpt, canTake, isHidden, moved);
 				itemList.add(item);
 			}
 			return itemList;

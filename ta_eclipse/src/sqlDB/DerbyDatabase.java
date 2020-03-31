@@ -15,7 +15,7 @@ import command.Word;
 import objects.Item;
 import objects.Room;
 
-public class DerbyDatabase{
+public class DerbyDatabase {
 	static {
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -144,7 +144,7 @@ public class DerbyDatabase{
 		});
 	}
 
-	public void placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException{
+	public void placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException {
 		Connection conn = connect();
 		PreparedStatement stmt = null;
 		ResultSet resultSet = null;
@@ -156,9 +156,9 @@ public class DerbyDatabase{
 				stmt = conn.prepareStatement("select location from itemLoc where id = ?");
 				stmt.setString(1, itemID);
 				resultSet = stmt.executeQuery();
-				
+
 				boolean found = false;
-				while(resultSet.next()) {
+				while (resultSet.next()) {
 					found = true;
 					String loc = resultSet.getString(1);
 					Room r = map.get(loc);
@@ -198,7 +198,8 @@ public class DerbyDatabase{
 						String invent_dscrpt = resultSet.getString(4);
 						boolean canTake = resultSet.getBoolean(5);
 						boolean isHidden = resultSet.getBoolean(6);
-						Item i = new Item(id, name, init_dscrpt, invent_dscrpt, canTake, isHidden);
+						boolean moved = resultSet.getBoolean(7);
+						Item i = new Item(id, name, init_dscrpt, invent_dscrpt, canTake, isHidden, moved);
 						items.add(i);
 					}
 
@@ -257,6 +258,62 @@ public class DerbyDatabase{
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);
 				}
+			}
+		});
+	}
+
+	public String takeItem(String id) {
+		return executeTransaction(new Transaction<String>() {
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+
+				try {
+					stmt1 = conn.prepareStatement("insert into invent (id) values (?)");
+					stmt1.setString(1, id);
+					stmt1.executeUpdate();
+
+					stmt2 = conn.prepareStatement("delete from itemLoc where id = ?");
+					stmt2.setString(1, id);
+					stmt2.executeUpdate();
+
+					stmt3 = conn.prepareStatement("update items set moved = ? where id = ?");
+					stmt3.setBoolean(1, true);
+					stmt3.setString(2, id);
+					stmt3.executeUpdate();
+				} finally {
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+				}
+
+				return id;
+			}
+		});
+	}
+
+	public String dropItem(String id, String room) {
+		return executeTransaction(new Transaction<String>() {
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+
+				try {
+					stmt1 = conn.prepareStatement("insert into itemLoc (id, location) values (?, ?)");
+					stmt1.setString(1, id);
+					stmt1.setString(2, room);
+					stmt1.executeUpdate();
+
+					stmt2 = conn.prepareStatement("delete from invent where id = ?");
+					stmt2.setString(1, id);
+					stmt2.executeUpdate();
+				} finally {
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+				}
+
+				return id;
 			}
 		});
 	}
@@ -324,6 +381,7 @@ public class DerbyDatabase{
 				PreparedStatement stmt4 = null;
 				PreparedStatement stmt5 = null;
 				PreparedStatement stmt6 = null;
+				PreparedStatement stmt7 = null;
 
 				try {
 					stmt1 = conn.prepareStatement(
@@ -343,7 +401,7 @@ public class DerbyDatabase{
 
 					stmt4 = conn.prepareStatement("create table items (" + " id varchar(5) primary key,"
 							+ " name varchar(42)," + " init_dscrpt varchar(200)," + " invent_dscrpt varchar(200),"
-							+ " canTake boolean," + " isHidden boolean" + ")");
+							+ " canTake boolean," + " isHidden boolean," + "moved boolean" + ")");
 					stmt4.executeUpdate();
 
 					stmt5 = conn.prepareStatement(
@@ -354,6 +412,9 @@ public class DerbyDatabase{
 							"create table itemAct (" + " id varchar(5)," + " action varchar(42)" + ")");
 					stmt6.executeUpdate();
 
+					stmt7 = conn.prepareStatement("create table invent ( id varchar(5))");
+					stmt7.executeUpdate();
+
 					return true;
 				} finally {
 					DBUtil.closeQuietly(stmt1);
@@ -362,6 +423,7 @@ public class DerbyDatabase{
 					DBUtil.closeQuietly(stmt4);
 					DBUtil.closeQuietly(stmt5);
 					DBUtil.closeQuietly(stmt6);
+					DBUtil.closeQuietly(stmt7);
 				}
 			}
 		});
@@ -445,8 +507,8 @@ public class DerbyDatabase{
 
 					// populate items table
 					insertItem = conn.prepareStatement(
-							"insert into items (id, name, init_dscrpt, invent_dscrpt, canTake, isHidden)"
-									+ " values (?, ?, ?, ?, ?, ?)");
+							"insert into items (id, name, init_dscrpt, invent_dscrpt, canTake, isHidden, moved)"
+									+ " values (?, ?, ?, ?, ?, ?, ?)");
 					for (Item item : itemList) {
 						insertItem.setString(1, item.getID());
 						insertItem.setString(2, item.getName());
@@ -454,6 +516,7 @@ public class DerbyDatabase{
 						insertItem.setString(4, item.getInventDscrpt());
 						insertItem.setBoolean(5, item.canTake());
 						insertItem.setBoolean(6, item.isHidden());
+						insertItem.setBoolean(7, item.moved());
 						insertItem.addBatch();
 					}
 					insertItem.executeBatch();
