@@ -306,7 +306,7 @@ public class Game {
 		String obj = a.noun();
 		ArrayList<Item> roomItems = itemsHere();
 		if (roomItems.contains(roomItems.get(obj.indexOf("vase")))) {
-			display = "You dump the contents of the vase out onto the floor. It’s a mess.";
+			display = "You dump the contents of the vase out onto the floor. It\'s a mess.";
 			return display;
 		}
 		display = "There is nothing to dump in here.";

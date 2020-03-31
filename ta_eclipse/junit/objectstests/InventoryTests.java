@@ -26,9 +26,9 @@ public class InventoryTests {
 	
 	@Before
 	public void setUp() {
-		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", true, false);
-		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", true, false);
-		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", true, false);
+		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", true, false, false);
+		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", true, false, false);
+		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", true, false, false);
 		
 		items1.add(sword);
 		items1.add(axe);
