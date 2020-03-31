@@ -19,7 +19,6 @@ public class InventoryTests {
 	
 	private ArrayList<Item> items1 = new ArrayList<>();
 	private ArrayList<Item> items2 = new ArrayList<>();
-	private ArrayList<Item> items3 = new ArrayList<>();
 	
 	private Item sword;
 	private Item axe;
