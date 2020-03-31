@@ -22,8 +22,11 @@ public class Game {
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
 
-	boolean notDone = true;
-
+	boolean done = false;
+	boolean newGame = true;
+	
+	String command = "";
+	
 //	ArrayList<NPC> npcs = new ArrayList<>();
 //	ArrayList<Action> actionsTaken = new ArrayList<>();
 //	ArrayList<String> roomsVisited = new ArrayList<>();
@@ -32,10 +35,10 @@ public class Game {
 //	ArrayList<Checkpoint> checkpoints = new ArrayList<>();
 
 	// not done here yet
-	public Game(User user, Player player) throws SQLException {
+	public Game() throws SQLException {
 		DatabaseProvider.setInstance(new DerbyDatabase());
-		this.user = user;
-		this.player = player;
+//		this.user = user;
+		this.player = new Player();
 		this.db = DatabaseProvider.getInstance();
 		this.parser = new Parser(db);
 		map = db.getMap();
@@ -43,6 +46,45 @@ public class Game {
 		db.placeItems(map, items);
 	}
 
+	//for use with jsp
+	
+	public boolean isDone() {
+		return done;
+	}
+
+	public boolean isNewGame() {
+		return newGame;
+	}
+
+	public String getAction() {
+		String s = "";
+		Action a = parse(command);
+		if (a != null) {
+			s = performAction(a);
+		} else {
+			s = "I don't understand \"" + command + '\"' + " Please try something else.";
+		}
+		return s;
+	}
+	
+	public String getRoomOne()
+	{
+		newGame = false;
+		return loadRoom("1");
+	}	
+
+	public String getCommand()
+	{
+		return command;
+	}
+	
+	public void setCommand(String command)
+	{
+		this.command = command;
+	}
+	//called by proxy through above methods
+	//probably could change to private
+	
 	public Action parse(String input) {
 		Action a = parser.getAction(input);
 		return a;
@@ -232,23 +274,16 @@ public class Game {
 //	}
 
 	public static void main(String[] args) throws SQLException {
-		User u = new User("user", "user");
-		Player p = new Player();
-		Game g = new Game(u, p);
+//		User u = new User("user", "user");
+//		Player p = new Player();
+		Game g = new Game();
 
 		Scanner in = new Scanner(System.in);
 
 		System.out.println(g.loadRoom("1"));
-		while (g.notDone) {
-			
-			String input = in.nextLine();
-			Action a = g.parse(input);
-			
-			if (a != null) {
-				System.out.println(g.performAction(a));
-			} else {
-				System.out.println("I don't understand \"" + input + '\"' + " Please try something else.");
-			}
+		while (!g.done) {
+			g.setCommand(in.nextLine());
+			System.out.println(g.getAction());
 		}
 		in.close();
 	}
