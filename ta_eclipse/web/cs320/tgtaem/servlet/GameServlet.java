@@ -57,9 +57,15 @@ public class GameServlet extends HttpServlet {
 		// value that was originally assigned to the request attributes, also named "first"
 		// they don't have to be named the same, but in this case, since we are passing them back
 		// and forth, it's a good idea
+<<<<<<< Updated upstream
 		req.setAttribute("first", req.getParameter("first"));
 		log = log.concat(req.getParameter("first").concat("<br>This is a programmed response.<br>"));
 		//log = log.concat(("_ ").concat(req.getParameter("first").concat("<br>This is a programmed response.<br>")));
+=======
+		req.setAttribute("command", req.getParameter("command"));
+		
+		log = log.concat("<br>").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
+>>>>>>> Stashed changes
 		req.setAttribute("log", log);
 		req.setAttribute("surprise", model);
 
