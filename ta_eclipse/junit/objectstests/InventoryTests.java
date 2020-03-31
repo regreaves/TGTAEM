@@ -36,9 +36,12 @@ public class InventoryTests {
 		
 		items2.add(flower);
 		
-		inv1 = new Inventory(10, "inventory one", items1);
-		inv2 = new Inventory(1, "inventory two", items2);
-		inv3 = new Inventory(5, "inventory three", items3);
+		inv1 = new Inventory(10, "inventory one");
+		inv2 = new Inventory(1, "inventory two");
+		inv3 = new Inventory(5, "inventory three");
+		
+		inv1.setItems(items1);
+		inv2.setItems(items2);
 	}
 	
 	@Test
