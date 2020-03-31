@@ -1,4 +1,4 @@
-package cs320.tgtaem.main;
+package main;
 
 import java.io.File;
 

@@ -162,6 +162,7 @@ public class Game {
 			display = "You can't go that way.";
 		} else {
 			map.get(here()).setVisited(true);
+			db.setVisited(here());
 			display = loadRoom(id);
 			player.move(id);
 		}
@@ -175,9 +176,9 @@ public class Game {
 		for (Item i : roomItems) {
 			if (i.getName().equals(obj)) {
 				if (i.canTake()) {
-					player.get(i);
-					Room r = map.get(here());
-					r.removeItem(i);
+//					player.get(i);
+//					Room r = map.get(here());
+//					r.removeItem(i);
 					db.takeItem(i.getID());
 					display = "You take the " + obj + ".";
 					return display;
@@ -194,10 +195,11 @@ public class Game {
 	private String drop(Action a) {
 		String display = "";
 		String obj = a.noun();
-		Item i = player.getInventory().getItemByName(obj);
-		Room r = map.get(here());
-		r.addItem(player.drop(i));
-		db.dropItem(i.getID(), here());
+//		Item i = player.getInventory().getItemByName(obj);
+//		Room r = map.get(here());
+//		r.addItem(player.drop(i));
+		String id = db.getItemID(obj);
+		db.dropItem(id, here());
 		display = "You drop the " + obj + ".";
 		return display;
 	}

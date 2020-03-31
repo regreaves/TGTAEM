@@ -1,4 +1,4 @@
-package cs320.tgtaem.model;
+package model;
 
 // only the controller should be allowed to call the set methods
 // the JSP will call the "get" and "is" methods implicitly

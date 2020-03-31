@@ -1,6 +1,6 @@
-package cs320.tgtaem.controller;
+package controller;
 
-import cs320.tgtaem.model.Numbers;
+import model.Numbers;
 
 /**
  * Controller for numbers.
