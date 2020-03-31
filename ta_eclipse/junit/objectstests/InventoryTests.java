@@ -19,7 +19,6 @@ public class InventoryTests {
 	
 	private ArrayList<Item> items1 = new ArrayList<>();
 	private ArrayList<Item> items2 = new ArrayList<>();
-	private ArrayList<Item> items3 = new ArrayList<>();
 	
 	private Item sword;
 	private Item axe;
@@ -27,18 +26,21 @@ public class InventoryTests {
 	
 	@Before
 	public void setUp() {
-		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", true, false);
-		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", true, false);
-		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", true, false);
+		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", true, false, false);
+		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", true, false, false);
+		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", true, false, false);
 		
 		items1.add(sword);
 		items1.add(axe);
 		
 		items2.add(flower);
 		
-		inv1 = new Inventory(10, "inventory one", items1);
-		inv2 = new Inventory(1, "inventory two", items2);
-		inv3 = new Inventory(5, "inventory three", items3);
+		inv1 = new Inventory(10, "inventory one");
+		inv2 = new Inventory(1, "inventory two");
+		inv3 = new Inventory(5, "inventory three");
+		
+		inv1.setItems(items1);
+		inv2.setItems(items2);
 	}
 	
 	@Test

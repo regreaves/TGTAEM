@@ -24,9 +24,9 @@ public class Game {
 
 	boolean done = false;
 	boolean newGame = true;
-	
+
 	String command = "";
-	
+
 //	ArrayList<NPC> npcs = new ArrayList<>();
 //	ArrayList<Action> actionsTaken = new ArrayList<>();
 //	ArrayList<String> roomsVisited = new ArrayList<>();
@@ -46,8 +46,8 @@ public class Game {
 		db.placeItems(map, items);
 	}
 
-	//for use with jsp
-	
+	// for use with jsp
+
 	public boolean isDone() {
 		return done;
 	}
@@ -66,40 +66,38 @@ public class Game {
 		}
 		return s;
 	}
-	
-	public String getRoomOne()
-	{
+
+	public String getRoomOne() {
 		newGame = false;
 		return loadRoom("1");
-	}	
+	}
 
-	public String getCommand()
-	{
+	public String getCommand() {
 		return command;
 	}
-	
-	public void setCommand(String command)
-	{
+
+	public void setCommand(String command) {
 		this.command = command;
 	}
-	//called by proxy through above methods
-	//probably could change to private
-	
-	public Action parse(String input) {
-		Action a = parser.getAction(input);
-		return a;
+
+	public void setHere(String id) {
+		player.setLocation(id);
 	}
 
 	public String here() {
 		return player.getLocation();
 	}
 
-	public ArrayList<Item> itemsHere() {
-		return map.get(here()).getItems();
+	// called by proxy through above methods
+	// probably could change to private
+
+	public Action parse(String input) {
+		Action a = parser.getAction(input);
+		return a;
 	}
 
-	public void makeActions(String file) {
-
+	public ArrayList<Item> itemsHere() {
+		return map.get(here()).getItems();
 	}
 
 	public String performAction(Action a) {
@@ -117,6 +115,45 @@ public class Game {
 			break;
 		case 3:
 			display = examine(a);
+			break;
+		case 6:
+			display = hideUnder(a);
+			break;
+		case 7:
+			display = flip(a);
+			break;
+		case 8:
+			display = reset(a);
+			break;
+		case 9:
+			display = dump(a);
+			break;
+		case 10:
+			display = throwItem(a);
+			break;
+		case 11:
+			display = breakItem(a);
+			break;
+		case 12:
+			display = drink(a);
+			break;
+		case 13:
+			display = smell(a);
+			break;
+		case 14:
+			display = eat(a);
+			break;
+		case 15:
+			display = wear(a);
+			break;
+		case 23:
+			display = jumpOn(a);
+			break;
+		case 24:
+			display = sleep(a);
+			break;
+		case 26:
+			display = quit(a);
 			break;
 		}
 
@@ -164,6 +201,7 @@ public class Game {
 			display = "You can't go that way.";
 		} else {
 			map.get(here()).setVisited(true);
+			db.setVisited(here());
 			display = loadRoom(id);
 			player.move(id);
 		}
@@ -177,9 +215,10 @@ public class Game {
 		for (Item i : roomItems) {
 			if (i.getName().equals(obj)) {
 				if (i.canTake()) {
-					player.get(i);
-					Room r = map.get(here());
-					r.removeItem(i);
+//					player.get(i);
+//					Room r = map.get(here());
+//					r.removeItem(i);
+					db.takeItem(i.getID());
 					display = "You take the " + obj + ".";
 					return display;
 				} else {
@@ -195,9 +234,11 @@ public class Game {
 	private String drop(Action a) {
 		String display = "";
 		String obj = a.noun();
-		Item i = player.getInventory().getItemByName(obj);
-		Room r = map.get(here());
-		r.addItem(player.drop(i));
+//		Item i = player.getInventory().getItemByName(obj);
+//		Room r = map.get(here());
+//		r.addItem(player.drop(i));
+		String id = db.getItemID(obj);
+		db.dropItem(id, here());
 		display = "You drop the " + obj + ".";
 		return display;
 	}
@@ -218,6 +259,160 @@ public class Game {
 			}
 		}
 		display = "There's no " + obj + " for you to examine.";
+		return display;
+	}
+	
+	private String hideUnder(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("table")))) {
+			display = "You hide under the table. Nothing in here can hurt you, though, so you get back up.";
+			return display;
+		} else if (roomItems.contains(roomItems.get(obj.indexOf("bed")))) {
+			display = "You hide under the bed. Once you realize the coast is clear, you crawl back out.";
+			return display;
+		}
+		display = "There is nothing to hide under in here.";
+		return display;
+	}
+	
+	private String flip(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("table")))) {
+			display = "You flip the table in a fit of rage. Everything on the table goes flying.";
+			return display;
+		}
+		display = "There is nothing to flip in here.";
+		return display;
+	}
+	
+	private String reset(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("table")))) {
+			display = "You calm down and put the table back up.";
+			return display;
+		}
+		display = "There is nothing to reset in here.";
+		return display;
+	}
+	
+	private String dump(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("vase")))) {
+			display = "You dump the contents of the vase out onto the floor. It\'s a mess.";
+			return display;
+		}
+		display = "There is nothing to dump in here.";
+		return display;
+	}
+	
+	private String throwItem(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("vase")))) {
+			display = "You throw the vase against a wall and it shatters into a million pieces. The water stains the wall and the flowers fall to the floor.";
+			return display;
+		}
+		display = "There is nothing to throw in here.";
+		return display;
+	}
+	
+	private String breakItem(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("vase")))) {
+			display = "You smash the vase, spilling water everywhere and while leaving the flowers unharmed.";
+			return display;
+		}
+		display = "There is nothing to break in here.";
+		return display;
+	}
+	
+	private String wear(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("coat")))) {
+			display = "You take the coat and put it on. You feel warm and look very fashionable!";
+			return display;
+		}
+		display = "There is nothing to wear in here.";
+		return display;
+	}
+	
+	private String drink(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("water")))) {
+			display = "You drink the water in the vase. You feel sick to your stomach and a little dizzy.";
+			return display;
+		}
+		display = "There is nothing to drink in here.";
+		return display;
+	}
+	
+	private String smell(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("flowers")))) {
+			display = "You smell the flowers in the vase. They have a delightful scent!";
+			return display;
+		}
+		display = "There is nothing to smell in here.";
+		return display;
+	}
+	
+	private String eat(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("flowers")))) {
+			display = "You eat the flowers in the vase. They taste horrible and make you feel woozy.";
+			return display;
+		}
+		display = "There is nothing to eat in here.";
+		return display;
+	}
+	
+	private String jumpOn(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("bed")))) {
+			display = "Wheeeeeee!";
+			return display;
+		}
+		display = "There is no bed to jump on in here.";
+		return display;
+	}
+	
+	private String sleep(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("bed")))) {
+			display = "You take a quick nap in the " + obj + ". You feel refreshed!";
+			return display;
+		}
+		display = "You cannot sleep in the " + obj + ", no matter how hard you try.";
+		return display;
+	}
+	
+	private String quit(Action a) {
+		String display = "";
+		display = "Quitting game...";
+		done = true;
 		return display;
 	}
 

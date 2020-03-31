@@ -1,4 +1,4 @@
-package cs320.tgtaem.servlet;
+package servlet;
 
 import java.io.IOException;
 

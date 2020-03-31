@@ -12,39 +12,41 @@ public class Room {
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
 	ArrayList<Action> actions = new ArrayList<>();
-	boolean visited = false;
+	boolean visited;
 
-	public Room(String ID, String displayName, String description, ArrayList<String> connections) {
+	public Room(String ID, String displayName, String description, boolean visited, ArrayList<String> connections) {
 		this.ID = ID;
 		this.displayName = displayName;
 		this.description = description;
+		this.visited = visited;
 		this.connections = connections;
 	}
 
 	public String loadRoom() {
 		String dscrpt = displayName;
 		if (!visited) {
-			dscrpt += '\n' + this.description;
+			dscrpt += ":" + '\n' + this.description;
 			for (Item i : items) {
 				if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
 					dscrpt += " " + i.init_dscrpt;
-				}
-				else if(!(i.init_dscrpt.contentEquals("null")) && i.moved()) {
+				} else if (!(i.init_dscrpt.contentEquals("null")) && i.moved()) {
 					dscrpt += " There is a " + i.getName() + " here.";
 				}
-					
+
 			}
 		}
 		return dscrpt;
 	}
-	
+
 	public String look() {
 		String dscrpt = this.description;
-			for (Item i : items) {
-				if (!(i.init_dscrpt.contentEquals("null"))) {
-					dscrpt += " " + i.init_dscrpt;
-				}
+		for (Item i : items) {
+			if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
+				dscrpt += " " + i.init_dscrpt;
+			} else if (!(i.init_dscrpt.contentEquals("null")) && i.moved()) {
+				dscrpt += " There is a " + i.getName() + " here.";
 			}
+		}
 		return dscrpt;
 	}
 

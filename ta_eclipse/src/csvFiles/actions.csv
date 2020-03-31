@@ -30,8 +30,9 @@ examine bed|examine|bed|3
 stand on table|stand on|table|4
 push table|push|table|5
 hide under table|hide under|table|6
+hide under bed|hide under|bed|6
 flip table|flip|table|7
-reset table|reset |table|8
+reset table|reset|table|8
 dump vase|dump|vase|9
 throw vase|throw|vase|10
 break vase|break|vase|11
@@ -48,7 +49,7 @@ hit with flashlight|hit with|flashlight|21
 stand on bed|stand on|bed|22
 jump on bed|jump on|bed|23
 sleep in bed|sleep in|bed|24
-hide under bed|hide under|bed|25
-check for monsters|check for|monsters|26
+check for monsters|check for|monsters|25
 examine table|examine|table|3
 examine room|examine|room|3
+quit game|quit|game|26

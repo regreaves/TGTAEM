@@ -13,19 +13,20 @@ public class Item {
 	boolean isCritical;
 	boolean canTake;
 	boolean isHidden;
-	boolean moved = false;
+	boolean moved;
 	
 	ArrayList<Item> subItems = new ArrayList<>();
 	ArrayList<Action> actions = new ArrayList<>();
 	ArrayList<Action> actionsDone = new ArrayList<>();
 
-	public Item(String id, String name, String init_dscrpt, String invent_dscrpt, boolean canTake, boolean isHidden) {
+	public Item(String id, String name, String init_dscrpt, String invent_dscrpt, boolean canTake, boolean isHidden, boolean moved) {
 		this.name = name;
 		this.id = id;
 		this.init_dscrpt = init_dscrpt;
 		this.invent_dscrpt = invent_dscrpt;
 		this.canTake = canTake;
 		this.isHidden = isHidden;
+		this.moved = moved;
 	}
 	
 	public String getID() {

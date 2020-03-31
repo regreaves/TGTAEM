@@ -10,6 +10,7 @@ public class Player extends Actor {
 		this.location = "1";
 	}
 
+	
 	public void move(String roomID) {
 		location = roomID;
 	}

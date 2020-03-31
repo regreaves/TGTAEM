@@ -1,4 +1,4 @@
-package cs320.tgtaem.servlet;
+package servlet;
 
 import java.io.IOException;
 
@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cs320.tgtaem.controller.NumbersController;
-import cs320.tgtaem.model.Numbers;
+import controller.NumbersController;
+import model.Numbers;
 
 public class AddNumbersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

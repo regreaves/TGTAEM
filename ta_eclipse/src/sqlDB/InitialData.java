@@ -72,18 +72,23 @@ public class InitialData {
 				String id = i.next();
 				String name = i.next();
 				String dscrpt = i.next();
+				boolean visited = false;
+				int x = Integer.parseInt(i.next());
+				if (x == 1) {
+					visited = true;
+				}
 				ArrayList<String> c = new ArrayList<>();
 				c.add(i.next()); // north
 				c.add(i.next()); // northeast
 				c.add(i.next()); // east
 				c.add(i.next()); // southeast
 				c.add(i.next()); // south
-				c.add(i.next()); // southwest
+				c.add(i.next()); // southwests
 				c.add(i.next()); // west
 				c.add(i.next()); // northwest
 				c.add(i.next()); // up
 				c.add(i.next()); // down
-				Room r = new Room(id, name, dscrpt, c);
+				Room r = new Room(id, name, dscrpt, visited, c);
 				roomList.add(r);
 			}
 			return roomList;
@@ -109,6 +114,7 @@ public class InitialData {
 				String invent_dscrpt = i.next();
 				boolean canTake = false;
 				boolean isHidden = false;
+				boolean moved = false;
 				int x = Integer.parseInt(i.next());
 				if (x == 1) {
 					canTake = true;
@@ -117,7 +123,11 @@ public class InitialData {
 				if (x == 1) {
 					isHidden = true;
 				}
-				Item item = new Item(id, name, init_dscrpt, invent_dscrpt, canTake, isHidden);
+				x = Integer.parseInt(i.next());
+				if (x == 1) {
+					moved = true;
+				}
+				Item item = new Item(id, name, init_dscrpt, invent_dscrpt, canTake, isHidden, moved);
 				itemList.add(item);
 			}
 			return itemList;
