@@ -28,23 +28,24 @@ public class Room {
 			for (Item i : items) {
 				if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
 					dscrpt += " " + i.init_dscrpt;
-				}
-				else if(!(i.init_dscrpt.contentEquals("null")) && i.moved()) {
+				} else if (!(i.init_dscrpt.contentEquals("null")) && i.moved()) {
 					dscrpt += " There is a " + i.getName() + " here.";
 				}
-					
+
 			}
 		}
 		return dscrpt;
 	}
-	
+
 	public String look() {
 		String dscrpt = this.description;
-			for (Item i : items) {
-				if (!(i.init_dscrpt.contentEquals("null"))) {
-					dscrpt += " " + i.init_dscrpt;
-				}
+		for (Item i : items) {
+			if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
+				dscrpt += " " + i.init_dscrpt;
+			} else if (!(i.init_dscrpt.contentEquals("null")) && i.moved()) {
+				dscrpt += " There is a " + i.getName() + " here.";
 			}
+		}
 		return dscrpt;
 	}
 

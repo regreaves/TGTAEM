@@ -24,9 +24,9 @@ public class Game {
 
 	boolean done = false;
 	boolean newGame = true;
-	
+
 	String command = "";
-	
+
 //	ArrayList<NPC> npcs = new ArrayList<>();
 //	ArrayList<Action> actionsTaken = new ArrayList<>();
 //	ArrayList<String> roomsVisited = new ArrayList<>();
@@ -46,8 +46,8 @@ public class Game {
 		db.placeItems(map, items);
 	}
 
-	//for use with jsp
-	
+	// for use with jsp
+
 	public boolean isDone() {
 		return done;
 	}
@@ -66,40 +66,38 @@ public class Game {
 		}
 		return s;
 	}
-	
-	public String getRoomOne()
-	{
+
+	public String getRoomOne() {
 		newGame = false;
 		return loadRoom("1");
-	}	
+	}
 
-	public String getCommand()
-	{
+	public String getCommand() {
 		return command;
 	}
-	
-	public void setCommand(String command)
-	{
+
+	public void setCommand(String command) {
 		this.command = command;
 	}
-	//called by proxy through above methods
-	//probably could change to private
-	
-	public Action parse(String input) {
-		Action a = parser.getAction(input);
-		return a;
+
+	public void setHere(String id) {
+		player.setLocation(id);
 	}
 
 	public String here() {
 		return player.getLocation();
 	}
 
-	public ArrayList<Item> itemsHere() {
-		return map.get(here()).getItems();
+	// called by proxy through above methods
+	// probably could change to private
+
+	public Action parse(String input) {
+		Action a = parser.getAction(input);
+		return a;
 	}
 
-	public void makeActions(String file) {
-
+	public ArrayList<Item> itemsHere() {
+		return map.get(here()).getItems();
 	}
 
 	public String performAction(Action a) {
@@ -180,6 +178,7 @@ public class Game {
 					player.get(i);
 					Room r = map.get(here());
 					r.removeItem(i);
+					db.takeItem(i.getID());
 					display = "You take the " + obj + ".";
 					return display;
 				} else {
@@ -198,6 +197,7 @@ public class Game {
 		Item i = player.getInventory().getItemByName(obj);
 		Room r = map.get(here());
 		r.addItem(player.drop(i));
+		db.dropItem(i.getID(), here());
 		display = "You drop the " + obj + ".";
 		return display;
 	}
