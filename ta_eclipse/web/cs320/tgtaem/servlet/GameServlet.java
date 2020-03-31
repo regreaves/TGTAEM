@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cs320.tgtaem.controller.NumbersController;
-import cs320.tgtaem.model.Numbers;
+import cs320.tgtaem.controller.GameController;
+import cs320.tgtaem.model.GameTempModel;
 
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -31,11 +31,11 @@ public class GameServlet extends HttpServlet {
 		
 		// create GuessingGame model - model does not persist between requests
 		// must recreate it each time a Post comes in 
-		Numbers model = new Numbers();
+		GameTempModel model = new GameTempModel();
 
 		// create GuessingGame controller - controller does not persist between requests
 		// must recreate it each time a Post comes in
-		NumbersController controller = new NumbersController();
+		GameController controller = new GameController();
 		
 		// assign model reference to controller so that controller can access model
 		controller.setModel(model);
@@ -49,11 +49,9 @@ public class GameServlet extends HttpServlet {
 		// decode POSTed form parameters and dispatch to controller
 		try {
 			Double first = getDoubleFromParameter(req.getParameter("first"));
-			Double second = getDoubleFromParameter(req.getParameter("second"));
-			Double third = getDoubleFromParameter(req.getParameter("third"));
 
 			// check for errors in the form data before using is in a calculation
-			if (first == null || second == null || third == null) {
+			if (first == null) {
 				errorMessage = "<i>More!</i> Give me <i>more!</i>";
 			}
 			// otherwise, data is good, do the calculation
@@ -63,9 +61,7 @@ public class GameServlet extends HttpServlet {
 			else {
 				//NumbersController controller = new NumbersController();
 				model.setFirst(first);
-				model.setSecond(second);
-				model.setThird(third);
-				controller.add(first, second, third);
+				controller.myMethod(first);
 			}
 		} catch (NumberFormatException e) {
 			errorMessage = "Oh, now you've really done it.";
@@ -77,8 +73,6 @@ public class GameServlet extends HttpServlet {
 		// they don't have to be named the same, but in this case, since we are passing them back
 		// and forth, it's a good idea
 		req.setAttribute("first", req.getParameter("first"));
-		req.setAttribute("second", req.getParameter("second"));
-		req.setAttribute("third", req.getParameter("third"));
 		
 		// add result objects as attributes
 		// this adds the errorMessage text and the result to the response

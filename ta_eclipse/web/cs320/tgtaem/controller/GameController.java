@@ -3,7 +3,7 @@ package cs320.tgtaem.controller;
 import cs320.tgtaem.model.GameTempModel;
 
 /**
- * Controller for numbers.
+ * Controller for game.
  */
 public class GameController {
 	private GameTempModel model;
@@ -17,11 +17,7 @@ public class GameController {
 		this.model = model;
 	}
 
-	public void add(double first, double second, double third) {
-		model.setResult(first + second + third);
-	}
-	
-	public void multiply(double first, double second, double third) {
-		model.setResult(first * second * third);
+	public void myMethod(double first) {
+		model.setResult(first);
 	}
 }

@@ -28,14 +28,6 @@
 					<td><input type="text" name="first" size="12" value="${surprise.first}" /></td>
 				</tr>
 				<tr>
-					<td class="label">Second number:</td>
-					<td><input type="text" name="second" size="12" value="${surprise.second}" /></td>
-				</tr>
-				<tr>
-					<td class="label">Third number:</td>
-					<td><input type="text" name="third" size="12" value="${surprise.third}" /></td>
-				</tr>
-				<tr>
 					<td class="label">Result:</td>
 					<td>${surprise.result}</td>
 				</tr>
