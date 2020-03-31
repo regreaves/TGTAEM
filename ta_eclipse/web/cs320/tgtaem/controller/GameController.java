@@ -18,6 +18,6 @@ public class GameController {
 	}
 
 	public void myMethod(String first) {
-		model.setResult("_ " + first);
+		model.setResult(first);
 	}
 }

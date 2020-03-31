@@ -12,10 +12,17 @@
 		<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
-		<textarea disabled style="width:10%; resize:none; border:none;">${surprise.result}</textarea>
-		<form class= "gameForm" onsubmit="${pageContext.servletContext.contextPath}/game" method="post">
-				
-				<input type="text" name="first" placeholder="Command" style="width:10%;"/>
+		
+		<div>${log}</div>
+		
+		<textarea disabled id="myTextarea" style="resize:none;">${log}&#10;</textarea>
+		
+		<form action="${pageContext.servletContext.contextPath}/game" method="post">
+			<input type="text" name="first" placeholder="Command" style="width:10%;"/>
 		</form>
 	</body>
+	
+	<script>
+
+	</script>
 </html>

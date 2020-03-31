@@ -12,7 +12,8 @@ import cs320.tgtaem.model.GameTempModel;
 
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private String log = "";
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -29,47 +30,27 @@ public class GameServlet extends HttpServlet {
 		
 		System.out.println("Game Servlet: doPost");
 		
-		// create GuessingGame model - model does not persist between requests
+		// create Game model - model does not persist between requests
 		// must recreate it each time a Post comes in 
 		GameTempModel model = new GameTempModel();
 
-		// create GuessingGame controller - controller does not persist between requests
+		// create Game controller - controller does not persist between requests
 		// must recreate it each time a Post comes in
 		GameController controller = new GameController();
 		
 		// assign model reference to controller so that controller can access model
 		controller.setModel(model);
 		
-		// holds the error message text, if there is any
-		String errorMessage = null;
-
-		// result of calculation goes here
-		Double result = null;
-		
 		// decode POSTed form parameters and dispatch to controller
-		try {
-			String first = req.getParameter("first");
 
-			// check for errors in the form data before using is in a calculation
-
-				// Do we really need to check if the input is empty?
+		String first = req.getParameter("first");
 			
-			/*if (first == null) {
-				errorMessage = "Empty input";
-			}*/
+		// must create the controller each time, since it doesn't persist between POSTs
+		// the view does not alter data, only controller methods should be used for that
+		// thus, always call a controller method to operate on the data
 			
-			// otherwise, data is good, do the calculation
-			// must create the controller each time, since it doesn't persist between POSTs
-			// the view does not alter data, only controller methods should be used for that
-			// thus, always call a controller method to operate on the data
-			
-			/*else {*/
-				model.setFirst(first);
-				controller.myMethod(first);
-			/*}*/
-		} catch (Exception e) {
-			errorMessage = "<i>This is some sort of exception.</i>";
-		}
+		model.setFirst(first);
+		controller.myMethod(first);
 		
 		// Add parameters as request attributes
 		// this creates attribute named "first" for the response, and grabs the
@@ -77,11 +58,8 @@ public class GameServlet extends HttpServlet {
 		// they don't have to be named the same, but in this case, since we are passing them back
 		// and forth, it's a good idea
 		req.setAttribute("first", req.getParameter("first"));
-		
-		// add result objects as attributes
-		// this adds the errorMessage text and the result to the response
-		req.setAttribute("errorMessage", errorMessage);
-		req.setAttribute("result", result);
+		log = log.concat(req.getParameter("first").concat("&#10;A response.&#10;"));
+		req.setAttribute("log", log);
 		req.setAttribute("surprise", model);
 
 		// Forward to view to render the result HTML document
