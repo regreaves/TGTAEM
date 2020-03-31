@@ -23,6 +23,17 @@ public class GameServlet extends HttpServlet {
 		System.out.println("Game Servlet: doGet");	
 		
 		// call JSP to generate empty form
+		Game model;
+		try {
+			model = new Game();
+			log = model.getRoomOne();
+			req.setAttribute("log", log);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 	
@@ -35,11 +46,12 @@ public class GameServlet extends HttpServlet {
 		// create Game model - model does not persist between requests
 		// must recreate it each time a Post comes in 
 		Game model = null;
-		try {
-			model = new Game();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+			try {
+				model = new Game();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		if(move == 0)
 		{
@@ -68,6 +80,7 @@ public class GameServlet extends HttpServlet {
 		// they don't have to be named the same, but in this case, since we are passing them back
 		// and forth, it's a good idea
 		req.setAttribute("command", req.getParameter("command"));
+		
 		log = log.concat("<br>").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
 		//log = log.concat(("_ ").concat(req.getParameter("first").concat("<br>This is a programmed response.<br>")));
 		req.setAttribute("log", log);
