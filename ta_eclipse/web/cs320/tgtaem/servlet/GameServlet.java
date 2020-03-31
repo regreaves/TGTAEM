@@ -82,7 +82,7 @@ public class GameServlet extends HttpServlet {
 		req.setAttribute("command", req.getParameter("command"));
 		
 		log = log.concat("<br>").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
-		//log = log.concat(("_ ").concat(req.getParameter("first").concat("<br>This is a programmed response.<br>")));
+		req.setAttribute("command", req.getParameter("command"));
 		req.setAttribute("log", log);
 		req.setAttribute("surprise", model);
 
