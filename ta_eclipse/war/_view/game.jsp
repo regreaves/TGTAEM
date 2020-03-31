@@ -16,7 +16,7 @@
 		<form action="${pageContext.servletContext.contextPath}/game" method="post">
 			<table>
 				<tr>
-					<td class="label">First number:</td>
+					<td class="label">Input:</td>
 					<td><input type="text" name="first" size="12" value="${surprise.first}" /></td>
 				</tr>
 				<tr>

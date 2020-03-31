@@ -52,19 +52,18 @@ public class GameServlet extends HttpServlet {
 
 			// check for errors in the form data before using is in a calculation
 			if (first == null) {
-				errorMessage = "<i>More!</i> Give me <i>more!</i>";
+				errorMessage = "getDoubleFromParameter error";
 			}
 			// otherwise, data is good, do the calculation
 			// must create the controller each time, since it doesn't persist between POSTs
 			// the view does not alter data, only controller methods should be used for that
 			// thus, always call a controller method to operate on the data
 			else {
-				//NumbersController controller = new NumbersController();
 				model.setFirst(first);
 				controller.myMethod(first);
 			}
 		} catch (NumberFormatException e) {
-			errorMessage = "Oh, now you've really done it.";
+			errorMessage = "<i>NumberFormatException</i>";
 		}
 		
 		// Add parameters as request attributes
