@@ -26,9 +26,13 @@ public class Room {
 		if (!visited) {
 			dscrpt += '\n' + this.description;
 			for (Item i : items) {
-				if (!(i.init_dscrpt.contentEquals("null"))) {
+				if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
 					dscrpt += " " + i.init_dscrpt;
 				}
+				else if(!(i.init_dscrpt.contentEquals("null")) && i.moved()) {
+					dscrpt += " There is a " + i.getName() + " here.";
+				}
+					
 			}
 		}
 		return dscrpt;
@@ -99,7 +103,7 @@ public class Room {
 		this.actions.addAll(item.getActions());
 	}
 
-	public Item removeItem(Item item, Inventory inventory) {
+	public Item removeItem(Item item) {
 		int x = this.items.indexOf(item);
 		actions.removeAll(item.getActions());
 		return this.items.remove(x);
