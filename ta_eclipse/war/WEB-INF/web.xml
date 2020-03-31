@@ -15,7 +15,10 @@
     <servlet-class>cs320.tgtaem.servlet.AddNumbersServlet</servlet-class>
   </servlet>
   
-  <!-- AJAX servlets. -->
+  <servlet>
+  	<servlet-name>GameServlet</servlet-name>
+  	<servlet-class>cs320.tgtaem.servlet.GameServlet</servlet-class>
+</servlet>
 
   <!-- Servlet mappings -->
   <servlet-mapping>
@@ -26,6 +29,8 @@
     <servlet-name>AddNumbersServlet</servlet-name>
     <url-pattern>/addNumbers</url-pattern>
   </servlet-mapping>
-  
-  <!--  AJAX servlet mappings. -->
+	<servlet-mapping>
+		<servlet-name>GameServlet</servlet-name>
+		<url-pattern>/game</url-pattern>
+	</servlet-mapping>
 </web-app>
