@@ -12,19 +12,10 @@
 		<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
-	
-		<form action="${pageContext.servletContext.contextPath}/game" method="post">
-			<table>
-				<tr>
-					<td class="label">Input:</td>
-					<td><input type="text" name="first" size="12" value="${surprise.first}" /></td>
-				</tr>
-				<tr>
-					<td class="label">Result:</td>
-					<td>${surprise.result}</td>
-				</tr>
-			</table>
-			<input type="Submit" name="submit" value="Game!">
+		<textarea disabled style="width:10%; resize:none; border:none;">${surprise.result}</textarea>
+		<form class= "gameForm" onsubmit="${pageContext.servletContext.contextPath}/game" method="post">
+				
+				<input type="text" name="first" placeholder="Command" style="width:10%;"/>
 		</form>
 	</body>
 </html>

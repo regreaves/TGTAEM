@@ -7,25 +7,25 @@ package cs320.tgtaem.model;
 // when the JSP specifies if(game.done), that gets converted to
 //    a call to model.isDone()
 public class GameTempModel {
-	private double first;
-	private double result;
+	private String first;
+	private String result;
 	
 	public GameTempModel() {
 	}
 	
-	public void setFirst(double first) {
+	public void setFirst(String first) {
 		this.first = first;
 	}
 	
-	public double getFirst() {
+	public String getFirst() {
 		return first;
 	}
 	
-	public void setResult(double result) {
+	public void setResult(String result) {
 		this.result = result;
 	}
 	
-	public double getResult() {
+	public String getResult() {
 		return result;
 	}
 }

@@ -48,27 +48,32 @@ public class GameServlet extends HttpServlet {
 		
 		// decode POSTed form parameters and dispatch to controller
 		try {
-			Double first = getDoubleFromParameter(req.getParameter("first"));
+			String first = req.getParameter("first");
 
 			// check for errors in the form data before using is in a calculation
-			if (first == null) {
-				errorMessage = "getDoubleFromParameter error";
-			}
+
+				// Do we really need to check if the input is empty?
+			
+			/*if (first == null) {
+				errorMessage = "Empty input";
+			}*/
+			
 			// otherwise, data is good, do the calculation
 			// must create the controller each time, since it doesn't persist between POSTs
 			// the view does not alter data, only controller methods should be used for that
 			// thus, always call a controller method to operate on the data
-			else {
+			
+			/*else {*/
 				model.setFirst(first);
 				controller.myMethod(first);
-			}
-		} catch (NumberFormatException e) {
-			errorMessage = "<i>NumberFormatException</i>";
+			/*}*/
+		} catch (Exception e) {
+			errorMessage = "<i>This is some sort of exception.</i>";
 		}
 		
 		// Add parameters as request attributes
-		// this creates attributes named "first" and "second for the response, and grabs the
-		// values that were originally assigned to the request attributes, also named "first" and "second"
+		// this creates attribute named "first" for the response, and grabs the
+		// value that was originally assigned to the request attributes, also named "first"
 		// they don't have to be named the same, but in this case, since we are passing them back
 		// and forth, it's a good idea
 		req.setAttribute("first", req.getParameter("first"));
@@ -81,14 +86,5 @@ public class GameServlet extends HttpServlet {
 
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
-	}
-
-	// gets double from the request with attribute named s
-	private Double getDoubleFromParameter(String s) {
-		if (s == null || s.equals("")) {
-			return null;
-		} else {
-			return Double.parseDouble(s);
-		}
 	}
 }

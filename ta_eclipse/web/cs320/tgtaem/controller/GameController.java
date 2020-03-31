@@ -17,7 +17,7 @@ public class GameController {
 		this.model = model;
 	}
 
-	public void myMethod(double first) {
-		model.setResult(first);
+	public void myMethod(String first) {
+		model.setResult("_ " + first);
 	}
 }
