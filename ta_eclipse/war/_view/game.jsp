@@ -21,7 +21,7 @@
 			<div class="error">${errorMessage}</div>
 		</c:if>
 	
-		<form action="${pageContext.servletContext.contextPath}/addNumbers" method="post">
+		<form action="${pageContext.servletContext.contextPath}/game" method="post">
 			<table>
 				<tr>
 					<td class="label">First number:</td>
@@ -40,7 +40,7 @@
 					<td>${surprise.result}</td>
 				</tr>
 			</table>
-			<input type="Submit" name="submit" value="Add Numbers!">
+			<input type="Submit" name="submit" value="Game!">
 		</form>
 	</body>
 </html>
