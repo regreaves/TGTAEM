@@ -5,15 +5,7 @@
 <html>
 	<head>
 		<title>Game</title>
-		<style type="text/css">
-		.error {
-			color: red;
-		}
-		
-		td.label {
-			text-align: right;
-		}
-		</style>
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/_view/stylesheet.css" />
 	</head>
 
 	<body>
