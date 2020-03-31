@@ -13,11 +13,11 @@
 			<form action="${pageContext.servletContext.contextPath}/game" method="post">
 				<div style="font-family:Helvetica; font-size:0.75em;
 					color:#a9a9a9; width:100%; padding:0.25em; margin:auto;">${log}</div>
-				<input type="text" name="first" placeholder="Command..." style="width:100%; margin:auto;" autofocus />
+				<input type="text" name="command" placeholder="Command..." style="width:100%; margin:auto;" autofocus />
 			</form>
 		</div>
 	</body>
-	
+
 	<script>
 
 	</script>
