@@ -58,7 +58,8 @@ public class GameServlet extends HttpServlet {
 		// they don't have to be named the same, but in this case, since we are passing them back
 		// and forth, it's a good idea
 		req.setAttribute("first", req.getParameter("first"));
-		log = log.concat(req.getParameter("first").concat("&#10;A response.&#10;"));
+		log = log.concat(req.getParameter("first").concat("<br>This is a programmed response.<br>"));
+		//log = log.concat(("_ ").concat(req.getParameter("first").concat("<br>This is a programmed response.<br>")));
 		req.setAttribute("log", log);
 		req.setAttribute("surprise", model);
 
