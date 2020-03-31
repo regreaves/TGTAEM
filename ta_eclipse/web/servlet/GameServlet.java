@@ -22,7 +22,15 @@ public class GameServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		System.out.println("Game Servlet: doGet");	
-		
+		Game model;
+		try {
+		model = new Game();
+		log = model.getRoomOne();
+		req.setAttribute("log", log);
+
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
@@ -42,10 +50,6 @@ public class GameServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		if(move == 0)
-		{
-			log = model.getRoomOne();
-		}
 		// create Game controller - controller does not persist between requests
 		// must recreate it each time a Post comes in
 		GameController controller = new GameController();

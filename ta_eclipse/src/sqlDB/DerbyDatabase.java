@@ -157,19 +157,11 @@ public class DerbyDatabase {
 				stmt.setString(1, itemID);
 				resultSet = stmt.executeQuery();
 
-				boolean found = false;
 				while (resultSet.next()) {
-					found = true;
 					String loc = resultSet.getString(1);
 					Room r = map.get(loc);
 					r.addItem(i);
 				}
-
-				// check if the title was found
-				if (!found) {
-					System.out.println("error in location table");
-				}
-
 			} finally {
 				DBUtil.closeQuietly(resultSet);
 				DBUtil.closeQuietly(stmt);
