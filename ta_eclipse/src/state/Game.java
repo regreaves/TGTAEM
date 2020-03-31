@@ -19,7 +19,6 @@ public class Game {
 	Parser parser;
 	DerbyDatabase db;
 
-
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
 
@@ -44,11 +43,19 @@ public class Game {
 		db.placeItems(map, items);
 	}
 
-	public String here()
-	{
+	public Action parse(String input) {
+		Action a = parser.getAction(input);
+		return a;
+	}
+
+	public String here() {
 		return player.getLocation();
 	}
-	
+
+	public ArrayList<Item> itemsHere() {
+		return map.get(here()).getItems();
+	}
+
 	public void makeActions(String file) {
 
 	}
@@ -74,8 +81,7 @@ public class Game {
 		return display;
 	}
 
-	private String go(Action a)
-	{
+	private String go(Action a) {
 		String display = "";
 		String id = "0";
 		String direction = a.noun();
@@ -121,37 +127,49 @@ public class Game {
 		}
 		return display;
 	}
-	
-	private String take(Action a)
-	{
+
+	private String take(Action a) {
 		String display = "";
 		String obj = a.noun();
-		
+		ArrayList<Item> roomItems = itemsHere();
+		for (Item i : roomItems) {
+			if (i.getName().equals(obj)) {
+				if (i.canTake()) {
+					player.get(i);
+					Room r = map.get(here());
+					r.removeItem(i);
+					display = "You take the " + obj + ".";
+					return display;
+				} else {
+					display = "You can't take that!";
+					return display;
+				}
+			}
+		}
+		display = "You can't do that.";
 		return display;
 	}
-	
-	private String drop(Action a)
-	{
-		String display = "";
-		return display;
-	}
-	
-	private String examine(Action a)
-	{
+
+	private String drop(Action a) {
 		String display = "";
 		String obj = a.noun();
-		if(obj.equals("room"))
-		{
+		Item i = player.getInventory().getItemByName(obj);
+		Room r = map.get(here());
+		r.addItem(player.drop(i));
+		display = "You drop the " + obj + ".";
+		return display;
+	}
+
+	private String examine(Action a) {
+		String display = "";
+		String obj = a.noun();
+		if (obj.equals("room")) {
 			display = map.get(here()).look();
 			return display;
-		}
-		else
-		{
-			ArrayList<Item> roomItems = map.get(here()).getItems();
-			for(Item i : roomItems)
-			{
-				if(i.getName().equals(obj))
-				{
+		} else {
+			ArrayList<Item> roomItems = itemsHere();
+			for (Item i : roomItems) {
+				if (i.getName().equals(obj)) {
 					display = i.getInventDscrpt();
 					return display;
 				}
@@ -160,7 +178,7 @@ public class Game {
 		display = "There's no " + obj + " for you to examine.";
 		return display;
 	}
-	
+
 	public String loadRoom(String id) {
 		Room r = map.get(id);
 		return r.loadRoom();
@@ -222,12 +240,11 @@ public class Game {
 
 		System.out.println(g.loadRoom("1"));
 		while (g.notDone) {
-
+			
 			String input = in.nextLine();
-			Action a = g.parser.getAction(input);
-
+			Action a = g.parse(input);
+			
 			if (a != null) {
-				
 				System.out.println(g.performAction(a));
 			} else {
 				System.out.println("I don't understand \"" + input + '\"' + " Please try something else.");

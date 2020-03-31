@@ -5,12 +5,11 @@ import java.util.ArrayList;
 public class Inventory {
 	int maxSize;
 	String id;
-  ArrayList<Item> items = new ArrayList<>();
+	ArrayList<Item> items = new ArrayList<>();
 
-	public Inventory(int maxSize, String id, ArrayList<Item> items) {
+	public Inventory(int maxSize, String id) {
 		this.maxSize = maxSize;
 		this.id = id;
-    this.items = items;
 	}
 
 	public int getSize() {
@@ -26,8 +25,7 @@ public class Inventory {
 		int x = items.size();
 		if (x < this.maxSize) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -41,12 +39,12 @@ public class Inventory {
 		return items;
 	}
 
-	public Item getItemName(String name) {
+	public Item getItemByName(String name) {
 		Item item;
 		int i = 0;
-		while(i < this.items.size()) {
+		while (i < this.items.size()) {
 			item = this.items.get(i);
-			if (name == item.getName()) {
+			if (name.equalsIgnoreCase(item.getName())) {
 				return item;
 			}
 			i++;
@@ -59,16 +57,24 @@ public class Inventory {
 		return;
 	}
 
+	public void addItem(Item i) {
+		this.items.add(i);
+		i.move();
+	}
+
 	public void addItems(ArrayList<Item> items) {
 		this.items.addAll(items);
+		for (Item i : items) {
+			i.move();
+		}
 		return;
 	}
 
 	public Item dropItem(Item item) {
-		//TODO
+		// TODO
 		int x = this.items.indexOf(item);
-		//item.setLocation(?);
-		//need to get player location
+		// item.setLocation(?);
+		// need to get player location
 		return this.items.remove(x);
 	}
 
@@ -81,7 +87,7 @@ public class Inventory {
 		int i = 0;
 		String inventory = null;
 		Item item;
-		while(i < this.items.size()) {
+		while (i < this.items.size()) {
 			item = this.items.get(i);
 			inventory += item.getName();
 		}

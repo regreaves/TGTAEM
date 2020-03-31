@@ -13,6 +13,7 @@ public class Item {
 	boolean isCritical;
 	boolean canTake;
 	boolean isHidden;
+	boolean moved = false;
 	
 	ArrayList<Item> subItems = new ArrayList<>();
 	ArrayList<Action> actions = new ArrayList<>();
@@ -108,6 +109,16 @@ public class Item {
 	public void setIsHidden(boolean isHidden) {
 		this.isHidden = isHidden;
 		return;
+	}
+	
+	public boolean moved()
+	{
+		return moved;
+	}
+	
+	public void move()
+	{
+		moved = true;
 	}
 
 	public ArrayList<Action> getActionsDone() {
