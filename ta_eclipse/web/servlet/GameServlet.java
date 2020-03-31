@@ -1,4 +1,4 @@
-package cs320.tgtaem.servlet;
+package servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -8,13 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cs320.tgtaem.controller.GameController;
+import controller.GameController;
 import state.Game;
 
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String log = "";
 	private int move = 0;
+	private String here = "1";
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -51,7 +52,7 @@ public class GameServlet extends HttpServlet {
 		
 		// assign model reference to controller so that controller can access model
 		controller.setModel(model);
-		
+		controller.setHere(here);
 		// decode POSTed form parameters and dispatch to controller
 
 		String command = req.getParameter("command");
@@ -75,6 +76,7 @@ public class GameServlet extends HttpServlet {
 
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+		here = model.here();
 		move++;
 	}
 }

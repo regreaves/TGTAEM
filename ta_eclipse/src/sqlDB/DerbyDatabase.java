@@ -234,18 +234,19 @@ public class DerbyDatabase {
 						String id = resultSet.getString(1);
 						String name = resultSet.getString(2);
 						String dscrpt = resultSet.getString(3);
+						boolean visited = resultSet.getBoolean(4);
 						ArrayList<String> c = new ArrayList<>();
-						c.add(resultSet.getString(4)); // north
-						c.add(resultSet.getString(5)); // northeast
-						c.add(resultSet.getString(6)); // east
-						c.add(resultSet.getString(7)); // southeast
-						c.add(resultSet.getString(8)); // south
-						c.add(resultSet.getString(9)); // southwest
-						c.add(resultSet.getString(10)); // west
-						c.add(resultSet.getString(11)); // northwest
-						c.add(resultSet.getString(12)); // up
-						c.add(resultSet.getString(13)); // down
-						Room r = new Room(id, name, dscrpt, c);
+						c.add(resultSet.getString(5)); // north
+						c.add(resultSet.getString(6)); // northeast
+						c.add(resultSet.getString(7)); // east
+						c.add(resultSet.getString(8)); // southeast
+						c.add(resultSet.getString(9)); // south
+						c.add(resultSet.getString(10)); // southwest
+						c.add(resultSet.getString(11)); // west
+						c.add(resultSet.getString(12)); // northwest
+						c.add(resultSet.getString(13)); // up
+						c.add(resultSet.getString(14)); // down
+						Room r = new Room(id, name, dscrpt, visited, c);
 						map.put(id, r);
 					}
 
@@ -311,6 +312,49 @@ public class DerbyDatabase {
 				} finally {
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
+				}
+
+				return id;
+			}
+		});
+	}
+
+	public String setVisited(String id) {
+		return executeTransaction(new Transaction<String>() {
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				try {
+					stmt = conn.prepareStatement("update rooms set visited = ? where id = ?");
+					stmt.setBoolean(1, true);
+					stmt.setString(2, id);
+					stmt.executeUpdate();
+				} finally {
+					DBUtil.closeQuietly(stmt);
+				}
+				return id;
+			}
+		});
+	}
+
+	public String getItemID(String itemName) {
+		return executeTransaction(new Transaction<String>() {
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				String id = "";
+
+				try {
+					stmt = conn.prepareStatement("select id from items where name = ?");
+					stmt.setString(1, itemName);
+					resultSet = stmt.executeQuery();
+
+					while (resultSet.next()) {
+						id = resultSet.getString(1);
+					}
+
+				} finally {
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
 				}
 
 				return id;
@@ -392,11 +436,12 @@ public class DerbyDatabase {
 							+ " verb varchar(42)," + " noun varchar(42)," + " method int " + ")");
 					stmt2.executeUpdate();
 
-					stmt3 = conn.prepareStatement("create table rooms (" + " id varchar(5) primary key,"
-							+ " name varchar(42)," + " description varchar(200)," + " north varchar(5), "
-							+ " northeast varchar(5), " + " east varchar(5), " + " southeast varchar(5), "
-							+ " south varchar(5), " + " southwest varchar(5), " + " west varchar(5), "
-							+ " northwest varchar(5), " + " up varchar(5), " + " down varchar(5)" + ")");
+					stmt3 = conn.prepareStatement(
+							"create table rooms (" + " id varchar(5) primary key," + " name varchar(42),"
+									+ " description varchar(200)," + "visited boolean," + " north varchar(5), "
+									+ " northeast varchar(5), " + " east varchar(5), " + " southeast varchar(5), "
+									+ " south varchar(5), " + " southwest varchar(5), " + " west varchar(5), "
+									+ " northwest varchar(5), " + " up varchar(5), " + " down varchar(5)" + ")");
 					stmt3.executeUpdate();
 
 					stmt4 = conn.prepareStatement("create table items (" + " id varchar(5) primary key,"
@@ -484,23 +529,25 @@ public class DerbyDatabase {
 					insertAction.executeBatch();
 
 					// populate rooms table
-					insertRoom = conn.prepareStatement("insert into rooms (id, name, description, north, northeast,"
-							+ " east, southeast, south, southwest, west, northwest, up, down)"
-							+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					insertRoom = conn
+							.prepareStatement("insert into rooms (id, name, description, visited, north, northeast,"
+									+ " east, southeast, south, southwest, west, northwest, up, down)"
+									+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 					for (Room room : roomList) {
 						insertRoom.setString(1, room.getID());
 						insertRoom.setString(2, room.getDisplayName());
 						insertRoom.setString(3, room.getDescription());
-						insertRoom.setString(4, room.getNorth());
-						insertRoom.setString(5, room.getNorthEast());
-						insertRoom.setString(6, room.getEast());
-						insertRoom.setString(7, room.getSouthEast());
-						insertRoom.setString(8, room.getSouth());
-						insertRoom.setString(9, room.getSouthWest());
-						insertRoom.setString(10, room.getWest());
-						insertRoom.setString(11, room.getNorthWest());
-						insertRoom.setString(12, room.getUp());
-						insertRoom.setString(13, room.getDown());
+						insertRoom.setBoolean(4, room.getVisited());
+						insertRoom.setString(5, room.getNorth());
+						insertRoom.setString(6, room.getNorthEast());
+						insertRoom.setString(7, room.getEast());
+						insertRoom.setString(8, room.getSouthEast());
+						insertRoom.setString(9, room.getSouth());
+						insertRoom.setString(10, room.getSouthWest());
+						insertRoom.setString(11, room.getWest());
+						insertRoom.setString(12, room.getNorthWest());
+						insertRoom.setString(13, room.getUp());
+						insertRoom.setString(14, room.getDown());
 						insertRoom.addBatch();
 					}
 					insertRoom.executeBatch();

@@ -1,4 +1,4 @@
-package cs320.tgtaem.controller;
+package controller;
 
 import state.Game;
 
@@ -20,6 +20,11 @@ public class GameController {
 	public void setCommand(String command)
 	{
 		this.model.setCommand(command);
+	}
+	
+	public void setHere(String id)
+	{
+		this.model.setHere(id);
 	}
 	//Not sure we need anything else tbh???? - kai
 
