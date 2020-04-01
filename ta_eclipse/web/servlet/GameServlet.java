@@ -32,7 +32,6 @@ public class GameServlet extends HttpServlet {
 		e.printStackTrace();
 		}
 		// call JSP to generate empty form
-		Game model;
 		try {
 			model = new Game();
 			log = model.getRoomOne();
