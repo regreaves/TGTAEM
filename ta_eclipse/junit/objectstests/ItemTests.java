@@ -20,6 +20,10 @@ public class ItemTests {
 		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", true, false, false);
 		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", true, false, false);
 		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", true, false, false);
+		
+		sword.setIsCritical(true);
+		axe.setIsCritical(true);
+		flower.setIsCritical(false);
 	}
 	
 	@Test
@@ -62,5 +66,85 @@ public class ItemTests {
 		assertFalse(sword.isHidden());
 		assertFalse(axe.isHidden());
 		assertFalse(flower.isHidden());
+	}
+	
+	@Test
+	public void testIsCritical() throws Exception {
+		assertTrue(sword.isCritical());
+		assertTrue(axe.isCritical());
+		assertFalse(flower.isCritical());
+	}
+	
+	@Test
+	public void testSetCritical() throws Exception {
+		sword.setIsCritical(true);
+		axe.setIsCritical(false);
+		flower.setIsCritical(true);
+		
+		assertTrue(sword.isCritical());
+		assertFalse(axe.isCritical());
+		assertTrue(flower.isCritical());
+	}
+	
+	@Test
+	public void testMoved() throws Exception {
+		assertFalse(sword.moved());
+		assertFalse(axe.moved());
+		assertFalse(flower.moved());
+	}
+	
+	@Test
+	public void testMove() throws Exception {
+		sword.move();
+		axe.move();
+		flower.move();
+		
+		assertTrue(sword.moved());
+		assertTrue(axe.moved());
+		assertTrue(flower.moved());
+	}
+	
+	@Test
+	public void testSetIsHidden() throws Exception {
+		sword.setIsHidden(true);
+		axe.setIsHidden(true);
+		flower.setIsHidden(true);
+		
+		assertTrue(sword.isHidden());
+		assertTrue(axe.isHidden());
+		assertTrue(flower.isHidden());
+	}
+	
+	@Test
+	public void testSetInitDscrpt() throws Exception {
+		sword.setInitDscrpt("A silver sword.");
+		axe.setInitDscrpt("An old axe.");
+		flower.setInitDscrpt("A bright red rose.");
+		
+		assertEquals("A silver sword.", sword.getInitDscrpt());
+		assertEquals("An old axe.", axe.getInitDscrpt());
+		assertEquals("A bright red rose.", flower.getInitDscrpt());
+	}
+	
+	@Test
+	public void testSetInventDscrpt() throws Exception {
+		sword.setInventDscrpt("A shiny sword.");
+		axe.setInventDscrpt("A heavy axe.");
+		flower.setInventDscrpt("It has thorns.");
+		
+		assertEquals("A shiny sword.", sword.getInventDscrpt());
+		assertEquals("A heavy axe.", axe.getInventDscrpt());
+		assertEquals("It has thorns.", flower.getInventDscrpt());
+	}
+	
+	@Test
+	public void testSetCanTake() throws Exception {
+		sword.setCanTake(false);
+		axe.setCanTake(false);
+		flower.setCanTake(false);
+		
+		assertFalse(sword.canTake());
+		assertFalse(axe.canTake());
+		assertFalse(flower.canTake());
 	}
 }
