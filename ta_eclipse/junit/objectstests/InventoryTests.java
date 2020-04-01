@@ -70,4 +70,38 @@ public class InventoryTests {
 		assertEquals(1, inv2.getNumberItems());
 		assertEquals(0, inv3.getNumberItems());
 	}
+	
+	@Test
+	public void testSetMaxSize() throws Exception {
+		inv1.setMaxSize(5);
+		inv2.setMaxSize(10);
+		inv3.setMaxSize(15);
+		
+		assertEquals(5, inv1.getSize());
+		assertEquals(10, inv2.getSize());
+		assertEquals(15, inv3.getSize());
+	}
+	
+	@Test
+	public void testGetItems() throws Exception {
+		assertEquals(items1, inv1.getItems());
+		assertEquals(items2, inv2.getItems());
+	}
+	
+	@Test
+	public void testGetItemByName() throws Exception {
+		assertEquals(sword, inv1.getItemByName("sword"));
+		assertEquals(flower, inv2.getItemByName("flower"));
+	}
+	
+	@Test
+	public void testAddItem() throws Exception {
+		inv1.addItem(flower);
+		inv2.addItem(axe);
+		inv3.addItem(sword);
+		
+		assertEquals(flower, inv1.getItemByName("flower"));
+		assertEquals(axe, inv2.getItemByName("axe"));
+		assertEquals(sword, inv3.getItemByName("sword"));
+	}
 }
