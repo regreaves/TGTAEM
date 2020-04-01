@@ -32,6 +32,16 @@ public class GameServlet extends HttpServlet {
 		e.printStackTrace();
 		}
 		// call JSP to generate empty form
+		try {
+			model = new Game();
+			log = model.getRoomOne();
+			req.setAttribute("log", log);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 	
@@ -44,11 +54,12 @@ public class GameServlet extends HttpServlet {
 		// create Game model - model does not persist between requests
 		// must recreate it each time a Post comes in 
 		Game model = null;
-		try {
-			model = new Game();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+			try {
+				model = new Game();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		// create Game controller - controller does not persist between requests
 		// must recreate it each time a Post comes in
@@ -73,6 +84,7 @@ public class GameServlet extends HttpServlet {
 		// they don't have to be named the same, but in this case, since we are passing them back
 		// and forth, it's a good idea
 		req.setAttribute("command", req.getParameter("command"));
+		
 		log = log.concat("<br>").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
 		req.setAttribute("command", req.getParameter("command"));
 		req.setAttribute("log", log);
