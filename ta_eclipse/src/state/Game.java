@@ -340,6 +340,7 @@ public class Game {
 	private String wear(Action a) {
 		String display = "";
 		String obj = a.noun();
+		take(a);
 		ArrayList<Item> roomItems = itemsHere();
 		if (roomItems.contains(roomItems.get(obj.indexOf("coat")))) {
 			display = "You take the coat and put it on. You feel warm and look very fashionable!";
