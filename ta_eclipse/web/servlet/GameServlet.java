@@ -14,7 +14,6 @@ import state.Game;
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String log = "";
-	private int move = 0;
 	private String here = "1";
 	
 	@Override
@@ -38,7 +37,6 @@ public class GameServlet extends HttpServlet {
 			req.setAttribute("log", log);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -57,7 +55,6 @@ public class GameServlet extends HttpServlet {
 			try {
 				model = new Game();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -93,6 +90,5 @@ public class GameServlet extends HttpServlet {
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 		here = model.here();
-		move++;
 	}
 }
