@@ -7,24 +7,22 @@ import objects.Room;
 
 public class NPC extends Actor
 {
-  ArrayList<String> loot = new ArrayList<>();
-  ArrayList<String> possibleActions = new ArrayList<>();
-  ArrayList<String> availableActions = new ArrayList<>();
-  String description;
-  String name;
-  boolean friend;
-  ArrayList<String> dialogueBank = new ArrayList<>();
+	String id;
+	String name;
+	int health;
+	int attack;
+	int defense;
+	String description;
 
-  public NPC(ArrayList<String> loot, ArrayList<String> possibleActions, ArrayList<String> availableActions, String description, String name, boolean friend, ArrayList<String> dialogueBank) {
-	this.loot = loot;
-    this.possibleActions = possibleActions;
-    this.availableActions = availableActions;
-    this.description = description;
+  public NPC(String id, String name, int health, int attack, int defense, String description) {
+	this.id = id;
     this.name = name;
-    this.friend = friend;
-    this.dialogueBank = dialogueBank;
+    this.health = health;
+    this.attack = attack;
+    this.defense = defense;
+    this.description = description;
   	}
-
+/*
   public void addActions(ArrayList<String> actions) {
    int x = 0;
    boolean canDo = false;
@@ -88,7 +86,16 @@ public class NPC extends Actor
 	//room.addItem(item);
     return;
   }
-
+*/
+  public void setID(String id) {
+		this.id = id;
+	    return;
+  }
+  
+  public String getID() {
+	    return this.id;
+  }
+  
   public void setDescription(String description) {
 	this.description = description;
     return;
@@ -110,7 +117,34 @@ public class NPC extends Actor
   public String getName() {
     return this.name;
   }
+  
+  public void setHealth(int health) {
+		this.health = health;
+	    return;
+  }
+  
+  public int getHealth() {
+	    return this.health;
+  }
+  
+  public void setAttack(int attack) {
+		this.attack = attack;
+	    return;
+  }
 
+  public int getAttack() {
+	    return this.attack;
+  }
+  public void setDefense(int defense) {
+		this.defense = defense;
+	    return;
+  }
+
+  public int getDefense() {
+	    return this.defense;
+  }
+  
+/*
   public void setFriendly(boolean friend) {
 	this.friend = friend;
     return;
@@ -119,5 +153,5 @@ public class NPC extends Actor
   public ArrayList<String> getDialogue() {
     return this.dialogueBank;
   }
-
+*/
 }

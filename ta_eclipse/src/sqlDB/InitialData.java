@@ -8,6 +8,7 @@ import java.util.List;
 import command.Action;
 import command.Word;
 import objects.Item;
+import objects.NPC;
 import objects.Room;
 
 public class InitialData {
@@ -135,6 +136,33 @@ public class InitialData {
 			readItems.close();
 		}
 	}
+	
+	public static List<NPC> getNPCs() throws IOException {
+		List<NPC> npcList = new ArrayList<NPC>();
+		ReadCSV readNPCs = new ReadCSV("npcs.csv");
+		try {
+			readNPCs.next(); // skip headings
+			while (true) {
+				List<String> tuple = readNPCs.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String id = i.next();
+				String name = i.next();
+				int health = Integer.parseInt(i.next());
+				int attack = Integer.parseInt(i.next());
+				int defense = Integer.parseInt(i.next());
+				String description = i.next();
+				NPC npc = new NPC(id, name, health, attack, defense, description);
+				npcList.add(npc);
+			}
+			return npcList;
+		} finally {
+			readNPCs.close();
+		}
+	}
+
 
 	public static List<Pair<String, String>> getItemLoc() throws IOException {
 		List<Pair<String, String>> itemMap = new ArrayList<>();
@@ -155,6 +183,28 @@ public class InitialData {
 			return itemMap;
 		} finally {
 			readItems.close();
+		}
+	}
+	
+	public static List<Pair<String, String>> getNPCLoc() throws IOException {
+		List<Pair<String, String>> npcMap = new ArrayList<>();
+		ReadCSV readNPCs = new ReadCSV("npcs_loc.csv");
+		try {
+			readNPCs.next(); // skip headings
+			while (true) {
+				List<String> tuple = readNPCs.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String id = i.next();
+				String loc = i.next();
+				Pair<String, String> p = new Pair<>(id, loc);
+				npcMap.add(p);
+			}
+			return npcMap;
+		} finally {
+			readNPCs.close();
 		}
 	}
 

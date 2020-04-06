@@ -13,6 +13,7 @@ import java.util.List;
 import command.Action;
 import command.Word;
 import objects.Item;
+import objects.NPC;
 import objects.Room;
 
 public class DerbyDatabase {
@@ -168,6 +169,31 @@ public class DerbyDatabase {
 			}
 		}
 	}
+	
+	public void placeNPCs(HashMap<String, Room> map, ArrayList<NPC> npcs) throws SQLException {
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		String npcID;
+
+		for (NPC n : npcs) {
+			npcID = n.getID();
+			try {
+				stmt = conn.prepareStatement("select location from npcLoc where id = ?");
+				stmt.setString(1, npcID);
+				resultSet = stmt.executeQuery();
+
+				while (resultSet.next()) {
+					String loc = resultSet.getString(1);
+					Room r = map.get(loc);
+					r.addNPC(n);
+				}
+			} finally {
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt);
+			}
+		}
+	}
 
 	public ArrayList<Item> getItems() {
 		return executeTransaction(new Transaction<ArrayList<Item>>() {
@@ -200,6 +226,44 @@ public class DerbyDatabase {
 						System.out.println("no items found");
 					}
 					return items;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public ArrayList<NPC> getNPCs() {
+		return executeTransaction(new Transaction<ArrayList<NPC>>() {
+			public ArrayList<NPC> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				ArrayList<NPC> npcs = new ArrayList<>();
+
+				try {
+					stmt = conn.prepareStatement("select * from npcs");
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+					Boolean found = false;
+					while (resultSet.next()) {
+						found = true;
+						String id = resultSet.getString(1);
+						String name = resultSet.getString(2);
+						int health = Integer.parseInt(resultSet.getString(3));
+						int attack = Integer.parseInt(resultSet.getString(4));
+						int defense = Integer.parseInt(resultSet.getString(5));
+						String description = resultSet.getString(6);
+						NPC n = new NPC(id, name, health, attack, defense, description);
+						npcs.add(n);
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("no npcs found");
+					}
+					return npcs;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);
@@ -418,6 +482,8 @@ public class DerbyDatabase {
 				PreparedStatement stmt5 = null;
 				PreparedStatement stmt6 = null;
 				PreparedStatement stmt7 = null;
+				PreparedStatement stmt8 = null;
+				PreparedStatement stmt9 = null;
 
 				try {
 					stmt1 = conn.prepareStatement(
@@ -451,6 +517,15 @@ public class DerbyDatabase {
 
 					stmt7 = conn.prepareStatement("create table invent ( id varchar(5))");
 					stmt7.executeUpdate();
+					
+					stmt8 = conn.prepareStatement("create table npcs (" + " id varchar(5) primary key,"
+							+ " name varchar(42)," + " health varchar(5)," + " attack varchar(5),"
+							+ " defense varchar(5)," + " description varchar(200)" + ")");
+					stmt8.executeUpdate();
+					
+					stmt9 = conn.prepareStatement(
+							"create table npcLoc (" + " id varchar(5) primary key," + " location varchar(5)" + ")");
+					stmt9.executeUpdate();
 
 					return true;
 				} finally {
@@ -461,6 +536,8 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt5);
 					DBUtil.closeQuietly(stmt6);
 					DBUtil.closeQuietly(stmt7);
+					DBUtil.closeQuietly(stmt8);
+					DBUtil.closeQuietly(stmt9);
 				}
 			}
 		});
@@ -475,7 +552,9 @@ public class DerbyDatabase {
 				List<Action> actionList;
 				List<Room> roomList;
 				List<Item> itemList;
+				List<NPC> npcList;
 				List<Pair<String, String>> itemLoc;
+				List<Pair<String, String>> npcLoc;
 				List<Pair<String, String>> itemAction;
 
 				try {
@@ -483,7 +562,9 @@ public class DerbyDatabase {
 					actionList = InitialData.getActions();
 					roomList = InitialData.getRooms();
 					itemList = InitialData.getItems();
+					npcList = InitialData.getNPCs();
 					itemLoc = InitialData.getItemLoc();
+					npcLoc = InitialData.getNPCLoc();
 					itemAction = InitialData.getItemActions();
 
 				} catch (IOException e) {
@@ -494,7 +575,9 @@ public class DerbyDatabase {
 				PreparedStatement insertAction = null;
 				PreparedStatement insertRoom = null;
 				PreparedStatement insertItem = null;
+				PreparedStatement insertNPC = null;
 				PreparedStatement insertItemLoc = null;
+				PreparedStatement insertNPCLoc = null;
 				PreparedStatement insertItemAction = null;
 
 				try {
@@ -559,6 +642,21 @@ public class DerbyDatabase {
 						insertItem.addBatch();
 					}
 					insertItem.executeBatch();
+					
+					// populate NPCs table
+					insertNPC = conn.prepareStatement(
+							"insert into npcs (id, name, health, attack, defense, description)"
+									+ " values (?, ?, ?, ?, ?, ?)");
+					for (NPC npc : npcList) {
+						insertNPC.setString(1, npc.getID());
+						insertNPC.setString(2, npc.getName());
+						insertNPC.setInt(3, npc.getHealth());
+						insertNPC.setInt(4, npc.getAttack());
+						insertNPC.setInt(5, npc.getDefense());
+						insertNPC.setString(6, npc.getDescription());
+						insertNPC.addBatch();
+					}
+					insertNPC.executeBatch();
 
 					// populate item location table
 					insertItemLoc = conn.prepareStatement("insert into itemLoc (id, location)" + " values (?, ?)");
@@ -568,6 +666,15 @@ public class DerbyDatabase {
 						insertItemLoc.addBatch();
 					}
 					insertItemLoc.executeBatch();
+					
+					// populate NPC location table
+					insertNPCLoc = conn.prepareStatement("insert into npcLoc (id, location)" + " values (?, ?)");
+					for (Pair<String, String> p : npcLoc) {
+						insertNPCLoc.setString(1, p.getLeft());
+						insertNPCLoc.setString(2, p.getRight());
+						insertNPCLoc.addBatch();
+					}
+					insertNPCLoc.executeBatch();
 
 					// populate item action table
 					insertItemAction = conn.prepareStatement("insert into itemAct (id, action)" + " values (?, ?)");
@@ -584,7 +691,9 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertWord);
 					DBUtil.closeQuietly(insertRoom);
 					DBUtil.closeQuietly(insertItem);
+					DBUtil.closeQuietly(insertNPC);
 					DBUtil.closeQuietly(insertItemLoc);
+					DBUtil.closeQuietly(insertNPCLoc);
 					DBUtil.closeQuietly(insertItemAction);
 				}
 			}
