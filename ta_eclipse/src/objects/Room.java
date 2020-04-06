@@ -32,7 +32,11 @@ public class Room {
 				} else if (!(i.init_dscrpt.contentEquals("null")) && i.moved()) {
 					dscrpt += " There is a " + i.getName() + " here.";
 				}
-
+			}
+			for (NPC n : npcs) {
+				if (!(n.description.contentEquals("null"))) {
+					dscrpt += " " + n.description;
+			}
 			}
 		}
 		return dscrpt;
@@ -117,7 +121,6 @@ public class Room {
 
 	public void addNPC(NPC npc) {
 		this.npcs.add(npc);
-		return;
 	}
 
 	public void removeNPC(NPC npc) {

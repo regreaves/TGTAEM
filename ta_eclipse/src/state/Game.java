@@ -8,6 +8,7 @@ import java.util.Scanner;
 import command.Action;
 import command.Parser;
 import objects.Item;
+import objects.NPC;
 import objects.Player;
 import objects.Room;
 import sqlDB.DatabaseProvider;
@@ -21,13 +22,13 @@ public class Game {
 
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
+	ArrayList<NPC> npcs = new ArrayList<>();
 
 	boolean done = false;
 	boolean newGame = true;
 
 	String command = "";
 
-//	ArrayList<NPC> npcs = new ArrayList<>();
 //	ArrayList<Action> actionsTaken = new ArrayList<>();
 //	ArrayList<String> roomsVisited = new ArrayList<>();
 //	int playerDeaths = 0;
@@ -43,7 +44,9 @@ public class Game {
 		this.parser = new Parser(db);
 		map = db.getMap();
 		items = db.getItems();
+		npcs = db.getNPCs();
 		db.placeItems(map, items);
+		db.placeNPCs(map, npcs);
 	}
 
 	// for use with jsp
