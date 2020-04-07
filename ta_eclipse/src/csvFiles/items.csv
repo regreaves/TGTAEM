@@ -1,8 +1,8 @@
-id|name|init_dscrpt|invent_dscrpt|canTake|hidden
-i01|table|There is a round table with a table cloth in the middle of the room.|A round table. The table cloth has a checkered blue and white print.|0|0
-i02|vase|In the middle of the table, there are flowers in a vase.|It is a plain glass vase.|1|0
-i03|flowers|They are daffodils.|Bright yellow daffodils. They make you happy.|1|0
-i04|coat|There is a coat hanging in the closet. It looks warm.|A warm coat with pockets.|1|0
-i05|coins|null|Gold coins. Might be worth something.|1|1
-i06|flashlight|There is a flashlight on a shelf.|A solid flashlight. Probably would hurt if you were hit with it.|1|0
-i07|bed|There is a large comfy-looking bed.|It's calling to you. You feel your eyes getting heavy.|0|0
+id|name|init_dscrpt|invent_dscrpt|hidden|moved|vowel|plural|itemWeight
+i01|table|There is a round table with a table cloth in the middle of the room.|A round table. The table cloth has a checkered blue and white print.|0|0|0|0|40
+i02|vase|In the middle of the table, there is a vase.|It is a plain glass vase.|0|0|0|0|3
+i03|flowers|In the vase are daffodils.|Bright yellow daffodils. They make you happy.|0|0|0|1|2
+i04|coat|There is a coat hanging in the closet. It looks warm.|A warm coat with pockets.|0|0|0|0|3
+i05|coins|null|Gold coins. Might be worth something.|1|0|0|1|1
+i06|flashlight|There is a flashlight on a shelf.|A solid flashlight. Probably would hurt if you were hit with it.|0|0|0|0|2
+i07|bed|There is a large comfy-looking bed.|It's calling to you. You feel your eyes getting heavy.|0|0|0|0|60

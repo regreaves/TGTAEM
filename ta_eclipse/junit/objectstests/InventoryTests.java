@@ -19,7 +19,6 @@ public class InventoryTests {
 	
 	private ArrayList<Item> items1 = new ArrayList<>();
 	private ArrayList<Item> items2 = new ArrayList<>();
-	private ArrayList<Item> items3 = new ArrayList<>();
 	
 	private Item sword;
 	private Item axe;
@@ -27,18 +26,21 @@ public class InventoryTests {
 	
 	@Before
 	public void setUp() {
-		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", true, false);
-		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", true, false);
-		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", true, false);
+		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", false, false, false, false, 10);
+		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", false, false, true, false, 20);
+		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", false, false, false, false, 5);
 		
 		items1.add(sword);
 		items1.add(axe);
 		
 		items2.add(flower);
 		
-		inv1 = new Inventory(10, "inventory one", items1);
-		inv2 = new Inventory(1, "inventory two", items2);
-		inv3 = new Inventory(5, "inventory three", items3);
+		inv1 = new Inventory(10, "inventory one");
+		inv2 = new Inventory(1, "inventory two");
+		inv3 = new Inventory(5, "inventory three");
+		
+		inv1.setItems(items1);
+		inv2.setItems(items2);
 	}
 	
 	@Test
@@ -67,5 +69,39 @@ public class InventoryTests {
 		assertEquals(2, inv1.getNumberItems());
 		assertEquals(1, inv2.getNumberItems());
 		assertEquals(0, inv3.getNumberItems());
+	}
+	
+	@Test
+	public void testSetMaxSize() throws Exception {
+		inv1.setMaxSize(5);
+		inv2.setMaxSize(10);
+		inv3.setMaxSize(15);
+		
+		assertEquals(5, inv1.getSize());
+		assertEquals(10, inv2.getSize());
+		assertEquals(15, inv3.getSize());
+	}
+	
+	@Test
+	public void testGetItems() throws Exception {
+		assertEquals(items1, inv1.getItems());
+		assertEquals(items2, inv2.getItems());
+	}
+	
+	@Test
+	public void testGetItemByName() throws Exception {
+		assertEquals(sword, inv1.getItemByName("sword"));
+		assertEquals(flower, inv2.getItemByName("flower"));
+	}
+	
+	@Test
+	public void testAddItem() throws Exception {
+		inv1.addItem(flower);
+		inv2.addItem(axe);
+		inv3.addItem(sword);
+		
+		assertEquals(flower, inv1.getItemByName("flower"));
+		assertEquals(axe, inv2.getItemByName("axe"));
+		assertEquals(sword, inv3.getItemByName("sword"));
 	}
 }

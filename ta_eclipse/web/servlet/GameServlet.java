@@ -1,40 +1,37 @@
-package cs320.tgtaem.servlet;
+package servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cs320.tgtaem.controller.GameController;
+import controller.GameController;
 import state.Game;
 
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String log = "";
 	private String here = "1";
-
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		System.out.println("Game Servlet: doGet");	
-		
-		Game model;
 
-		// call JSP to generate empty form
+		Game model;
+		
 		try {
-			model = new Game();
-			if (model.isNewGame()) {
-				
-			}
-			log = model.getRoomOne();
-			req.setAttribute("log", log);
+		model = new Game();
+		log = model.getRoomOne();
+		req.setAttribute("log", log);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+		e.printStackTrace();
 		}
-
+		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 
@@ -74,6 +71,7 @@ public class GameServlet extends HttpServlet {
 
 		log = log.concat("<br><br>> ").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
 		req.setAttribute("command", req.getParameter("command"));
+
 		req.setAttribute("log", log);
 		req.setAttribute("surprise", model);
 

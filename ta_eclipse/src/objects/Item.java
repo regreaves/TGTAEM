@@ -11,21 +11,27 @@ public class Item {
 	String invent_dscrpt;
 
 	boolean isCritical;
-	boolean canTake;
 	boolean isHidden;
-	boolean moved = false;
+	boolean moved;
+	boolean vowel;
+	boolean plural;
+	
+	int itemWeight;
 	
 	ArrayList<Item> subItems = new ArrayList<>();
 	ArrayList<Action> actions = new ArrayList<>();
 	ArrayList<Action> actionsDone = new ArrayList<>();
 
-	public Item(String id, String name, String init_dscrpt, String invent_dscrpt, boolean canTake, boolean isHidden) {
+	public Item(String id, String name, String init_dscrpt, String invent_dscrpt, boolean isHidden, boolean moved, boolean vowel, boolean plural, int itemWeight) {
 		this.name = name;
 		this.id = id;
 		this.init_dscrpt = init_dscrpt;
 		this.invent_dscrpt = invent_dscrpt;
-		this.canTake = canTake;
 		this.isHidden = isHidden;
+		this.moved = moved;
+		this.vowel = vowel;
+		this.plural = plural;
+		this.itemWeight = itemWeight;
 	}
 	
 	public String getID() {
@@ -85,15 +91,6 @@ public class Item {
 		return;
 	}
 
-	public boolean canTake() {
-		return canTake;
-	}
-
-	public void setCanTake(boolean canTake) {
-		this.canTake = canTake;
-		return;
-	}
-
 	public void addItem(Item i) {
 		subItems.add(i);
 	}
@@ -127,6 +124,33 @@ public class Item {
 
 	public void addActionDone(Action actionDone) {
 		this.actionsDone.add(actionDone);
+		return;
+	}
+	
+	public boolean vowel() {
+		return vowel;
+	}
+	
+	public void setVowel(boolean vowel) {
+		this.vowel = vowel;
+		return;
+	}
+	
+	public boolean plural() {
+		return plural;
+	}
+	
+	public void setPlural(boolean plural) {
+		this.plural = plural;
+		return;
+	}
+	
+	public int getItemWeight() {
+		return itemWeight;
+	}
+	
+	public void setItemWeight(int itemWeight) {
+		this.itemWeight = itemWeight;
 		return;
 	}
 

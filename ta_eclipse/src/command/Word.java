@@ -50,7 +50,7 @@ public class Word {
 	}
 
 	public boolean isPrime() {
-		return isPrime();
+		return isPrime;
 	}
 
 }
