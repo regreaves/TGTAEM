@@ -1,24 +1,43 @@
 <!DOCTYPE html>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <html>
-	<head>
-		<title>Game</title>
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/_view/stylesheet.css" />
-	</head>
+<head>
+<title>Game</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/_view/stylesheet.css" />
+</head>
 
-	<body>
-		<div style="width:30%; height:30%; margin:auto;">
-			<form action="${pageContext.servletContext.contextPath}/game" method="post">
-				<div style="font-family:Helvetica; font-size:0.75em;
-					color:#a9a9a9; width:100%; padding:0.25em; margin:auto;">${log}</div>
-				<input type="text" name="first" placeholder="Command..." style="width:100%; margin:auto;" autofocus />
+<body>
+	<div id="outer">
+		<div id="output">
+			${log} ${username}
+			<form id="myForm"
+				action="${pageContext.servletContext.contextPath}/game"
+				method="post">
+				<br>
+				<textarea id="input" class="input" name="command" rows="1"
+					placeholder="command?" autofocus></textarea>
 			</form>
 		</div>
-	</body>
-	
-	<script>
+	</div>
 
-	</script>
+</body>
+<script>
+	window.onload = function() {
+		var myDiv = document.getElementById('output');
+		var myInput = document.getElementById('input');
+		myDiv.scrollTop = myDiv.scrollHeight;
+		input.scrollTop = myDiv.scrollHeight;
+
+		input.onkeydown = function(ev) {
+
+			var k = ev.which || ev.keyCode;
+			if (k == 13) {
+				document.getElementById("myForm").submit();
+			}
+		}
+	};
+</script>
 </html>
