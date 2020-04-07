@@ -29,7 +29,7 @@ public class Room {
 			for (Item i : items) {
 				if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
 					dscrpt += " " + i.init_dscrpt;
-				} else if (!(i.init_dscrpt.contentEquals("null")) && i.moved()) {
+				} else if (i.moved()) {
 					dscrpt += " There is a " + i.getName() + " here.";
 				}
 			}
@@ -47,7 +47,7 @@ public class Room {
 		for (Item i : items) {
 			if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
 				dscrpt += " " + i.init_dscrpt;
-			} else if (!(i.init_dscrpt.contentEquals("null")) && i.moved()) {
+			} else if (i.moved()) {
 				dscrpt += " There is a " + i.getName() + " here.";
 			}
 		}
