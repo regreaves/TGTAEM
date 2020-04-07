@@ -113,14 +113,11 @@ public class InitialData {
 				String name = i.next();
 				String init_dscrpt = i.next();
 				String invent_dscrpt = i.next();
-				boolean canTake = false;
 				boolean isHidden = false;
 				boolean moved = false;
+				boolean vowel = false;
+				boolean plural = false;
 				int x = Integer.parseInt(i.next());
-				if (x == 1) {
-					canTake = true;
-				}
-				x = Integer.parseInt(i.next());
 				if (x == 1) {
 					isHidden = true;
 				}
@@ -128,7 +125,16 @@ public class InitialData {
 				if (x == 1) {
 					moved = true;
 				}
-				Item item = new Item(id, name, init_dscrpt, invent_dscrpt, canTake, isHidden, moved);
+				x = Integer.parseInt(i.next());
+				if (x == 1) {
+					vowel = true;
+				}
+				x = Integer.parseInt(i.next());
+				if (x == 1) {
+					plural = true;
+				}
+				int itemWeight = Integer.parseInt(i.next());
+				Item item = new Item(id, name, init_dscrpt, invent_dscrpt, isHidden, moved, vowel, plural, itemWeight);
 				itemList.add(item);
 			}
 			return itemList;

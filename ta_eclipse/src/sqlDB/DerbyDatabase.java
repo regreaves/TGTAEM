@@ -214,10 +214,12 @@ public class DerbyDatabase {
 						String name = resultSet.getString(2);
 						String init_dscrpt = resultSet.getString(3);
 						String invent_dscrpt = resultSet.getString(4);
-						boolean canTake = resultSet.getBoolean(5);
-						boolean isHidden = resultSet.getBoolean(6);
-						boolean moved = resultSet.getBoolean(7);
-						Item i = new Item(id, name, init_dscrpt, invent_dscrpt, canTake, isHidden, moved);
+						boolean isHidden = resultSet.getBoolean(5);
+						boolean moved = resultSet.getBoolean(6);
+						boolean vowel = resultSet.getBoolean(7);
+						boolean plural = resultSet.getBoolean(8);
+						int itemWeight = resultSet.getInt(9);
+						Item i = new Item(id, name, init_dscrpt, invent_dscrpt, isHidden, moved, vowel, plural, itemWeight);
 						items.add(i);
 					}
 
@@ -504,7 +506,8 @@ public class DerbyDatabase {
 
 					stmt4 = conn.prepareStatement("create table items (" + " id varchar(5) primary key,"
 							+ " name varchar(42)," + " init_dscrpt varchar(200)," + " invent_dscrpt varchar(200),"
-							+ " canTake boolean," + " isHidden boolean," + "moved boolean" + ")");
+							+ " canTake boolean," + " isHidden boolean," + " moved boolean" + " vowel boolean" 
+							+ " plural boolean" + " itemWeight int" + ")");
 					stmt4.executeUpdate();
 
 					stmt5 = conn.prepareStatement(
@@ -629,16 +632,18 @@ public class DerbyDatabase {
 
 					// populate items table
 					insertItem = conn.prepareStatement(
-							"insert into items (id, name, init_dscrpt, invent_dscrpt, canTake, isHidden, moved)"
-									+ " values (?, ?, ?, ?, ?, ?, ?)");
+							"insert into items (id, name, init_dscrpt, invent_dscrpt, isHidden, moved, vowel, plural, itemWeight)"
+									+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 					for (Item item : itemList) {
 						insertItem.setString(1, item.getID());
 						insertItem.setString(2, item.getName());
 						insertItem.setString(3, item.getInitDscrpt());
 						insertItem.setString(4, item.getInventDscrpt());
-						insertItem.setBoolean(5, item.canTake());
-						insertItem.setBoolean(6, item.isHidden());
-						insertItem.setBoolean(7, item.moved());
+						insertItem.setBoolean(5, item.isHidden());
+						insertItem.setBoolean(6, item.moved());
+						insertItem.setBoolean(7, item.vowel());
+						insertItem.setBoolean(8, item.plural());
+						insertItem.setInt(9, item.getItemWeight());
 						insertItem.addBatch();
 					}
 					insertItem.executeBatch();

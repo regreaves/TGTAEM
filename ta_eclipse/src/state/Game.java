@@ -217,7 +217,7 @@ public class Game {
 		ArrayList<Item> roomItems = itemsHere();
 		for (Item i : roomItems) {
 			if (i.getName().equals(obj)) {
-				if (i.canTake()) {
+				if (i.getItemWeight() < 30) { //TODO - hardcoded maxSize but this would be found in the player table in the future
 //					player.get(i);
 //					Room r = map.get(here());
 //					r.removeItem(i);

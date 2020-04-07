@@ -17,9 +17,9 @@ public class ItemTests {
 	
 	@Before
 	public void setUp() {
-		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", true, false, false);
-		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", true, false, false);
-		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", true, false, false);
+		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", false, false, false, false, 10);
+		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", false, false, true, false, 20);
+		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", false, false, false, false, 5);
 		
 		sword.setIsCritical(true);
 		axe.setIsCritical(true);
@@ -52,13 +52,6 @@ public class ItemTests {
 		assertEquals("A sword that is light.", sword.getInventDscrpt());
 		assertEquals("An iron axe that is heavy.", axe.getInventDscrpt());
 		assertEquals("The thorns are sharp.", flower.getInventDscrpt());
-	}
-	
-	@Test
-	public void testCanTake() throws Exception {
-		assertTrue(sword.canTake());
-		assertTrue(axe.canTake());
-		assertTrue(flower.canTake());
 	}
 	
 	@Test
@@ -138,13 +131,57 @@ public class ItemTests {
 	}
 	
 	@Test
-	public void testSetCanTake() throws Exception {
-		sword.setCanTake(false);
-		axe.setCanTake(false);
-		flower.setCanTake(false);
-		
-		assertFalse(sword.canTake());
-		assertFalse(axe.canTake());
-		assertFalse(flower.canTake());
+	public void testVowel() throws Exception {
+		assertFalse(sword.vowel());
+		assertTrue(axe.vowel());
+		assertFalse(flower.vowel());
 	}
+	
+	@Test
+	public void testSetVowel() throws Exception {
+		sword.setVowel(true);
+		axe.setVowel(true);
+		flower.setVowel(true);
+		
+		assertTrue(sword.vowel());
+		assertTrue(axe.vowel());
+		assertTrue(flower.vowel());
+	}
+	
+	@Test
+	public void testPlural() throws Exception {
+		assertFalse(sword.plural());
+		assertFalse(axe.plural());
+		assertFalse(flower.plural());
+	}
+	
+	@Test
+	public void testSetPlural() throws Exception {
+		sword.setPlural(true);
+		axe.setPlural(true);
+		flower.setPlural(true);
+		
+		assertTrue(sword.plural());
+		assertTrue(axe.plural());
+		assertTrue(flower.plural());
+	}
+	
+	@Test
+	public void testGetItemWeight() throws Exception {
+		assertEquals(10, sword.getItemWeight());
+		assertEquals(20, axe.getItemWeight());
+		assertEquals(5, flower.getItemWeight());
+	}
+	
+	@Test
+	public void testSetItemWeight() throws Exception {
+		sword.setItemWeight(5);
+		axe.setItemWeight(10);
+		flower.setItemWeight(15);
+		
+		assertEquals(5, sword.getItemWeight());
+		assertEquals(10, axe.getItemWeight());
+		assertEquals(15, flower.getItemWeight());
+	}
+	
 }
