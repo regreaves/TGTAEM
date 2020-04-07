@@ -93,6 +93,17 @@ public class Game {
 
 	// called by proxy through above methods
 	// probably could change to private
+	
+	public void remake() throws SQLException
+	{
+		this.parser = new Parser(db);
+		map = db.getMap();
+		items = db.getItems();
+		npcs = db.getNPCs();
+		db.placeItems(map, items);
+		db.placeNPCs(map, npcs);
+	}
+
 
 	public Action parse(String input) {
 		Action a = parser.getAction(input);
@@ -225,7 +236,7 @@ public class Game {
 					display = "You take the " + obj + ".";
 					return display;
 				} else {
-					display = "You can't take that!";
+					display = "You can't take that, it's too heavy!";
 					return display;
 				}
 			}
@@ -476,13 +487,23 @@ public class Game {
 //		User u = new User("user", "user");
 //		Player p = new Player();
 		Game g = new Game();
-
+		
 		Scanner in = new Scanner(System.in);
 
+		System.out.println("New Game? Y/N");
+		String response = in.nextLine();
+		if(response.equalsIgnoreCase("y"))
+		{
+			g.db.clearAll();
+			g.db.fillAll();
+			g.remake();
+		}
+		
 		System.out.println(g.loadRoom("1"));
 		while (!g.done) {
 			g.setCommand(in.nextLine());
 			System.out.println(g.getAction());
+			g.remake();
 		}
 		in.close();
 	}

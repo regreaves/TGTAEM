@@ -328,6 +328,7 @@ public class DerbyDatabase {
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt3 = null;
 
+
 				try {
 					stmt1 = conn.prepareStatement("insert into invent (id) values (?)");
 					stmt1.setString(1, id);
@@ -341,6 +342,7 @@ public class DerbyDatabase {
 					stmt3.setBoolean(1, true);
 					stmt3.setString(2, id);
 					stmt3.executeUpdate();
+					
 				} finally {
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
@@ -506,8 +508,8 @@ public class DerbyDatabase {
 
 					stmt4 = conn.prepareStatement("create table items (" + " id varchar(5) primary key,"
 							+ " name varchar(42)," + " init_dscrpt varchar(200)," + " invent_dscrpt varchar(200),"
-							+ " canTake boolean," + " isHidden boolean," + " moved boolean" + " vowel boolean" 
-							+ " plural boolean" + " itemWeight int" + ")");
+							+ " canTake boolean," + " isHidden boolean," + " moved boolean," + " vowel boolean," 
+							+ " plural boolean," + " itemWeight int" + ")");
 					stmt4.executeUpdate();
 
 					stmt5 = conn.prepareStatement(
@@ -705,6 +707,74 @@ public class DerbyDatabase {
 		});
 	}
 
+	public void clearAll() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement tblWord = null;
+				PreparedStatement tblAct = null;
+				PreparedStatement tblRoom = null;
+				PreparedStatement tblItem = null;
+				PreparedStatement tblItemLoc = null;
+				PreparedStatement tblItemAct = null;
+				PreparedStatement tblNpcs = null;
+				PreparedStatement tblNpcLoc = null;
+				PreparedStatement tblInvent = null;
+
+
+
+				try {					
+					tblWord = conn.prepareStatement("truncate table words");
+					tblWord.execute();
+					
+					tblAct = conn.prepareStatement("truncate table actions");
+					tblAct.execute();
+					
+					tblRoom = conn.prepareStatement("truncate table rooms");
+					tblRoom.execute();
+					
+					tblItem = conn.prepareStatement("truncate table items");
+					tblItem.execute();
+					
+					tblItemLoc = conn.prepareStatement("truncate table itemLoc");
+					tblItemLoc.execute();
+					
+					tblItemAct = conn.prepareStatement("truncate table itemAct");
+					tblItemAct.execute();
+					
+					tblNpcs = conn.prepareStatement("truncate table npcs");
+					tblNpcs.execute();
+					
+					tblNpcLoc = conn.prepareStatement("truncate table npcLoc");
+					tblNpcLoc.execute();
+					
+					tblInvent = conn.prepareStatement("truncate table invent");
+					tblInvent.execute();
+				
+					System.out.println("Tables cleared!");
+				
+				return true;
+				} finally {
+					DBUtil.closeQuietly(tblWord);
+					DBUtil.closeQuietly(tblAct);
+					DBUtil.closeQuietly(tblRoom);
+					DBUtil.closeQuietly(tblItem);
+					DBUtil.closeQuietly(tblItemLoc);
+					DBUtil.closeQuietly(tblItemAct);
+					DBUtil.closeQuietly(tblNpcs);
+					DBUtil.closeQuietly(tblNpcLoc);
+					DBUtil.closeQuietly(tblInvent);
+				}
+			}
+		});
+	}
+	
+	public void fillAll()
+	{
+		loadInitialData();
+		System.out.println("Tables made!");
+	}
+	
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");
