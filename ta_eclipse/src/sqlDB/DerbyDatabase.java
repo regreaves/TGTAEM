@@ -153,6 +153,7 @@ public class DerbyDatabase {
 
 		for (Item i : items) {
 			itemID = i.getID();
+			
 			try {
 				stmt = conn.prepareStatement("select location from itemLoc where id = ?");
 				stmt.setString(1, itemID);
@@ -210,16 +211,16 @@ public class DerbyDatabase {
 					Boolean found = false;
 					while (resultSet.next()) {
 						found = true;
-						String id = resultSet.getString(1);
-						String name = resultSet.getString(2);
-						String init_dscrpt = resultSet.getString(3);
-						String invent_dscrpt = resultSet.getString(4);
-						boolean isHidden = resultSet.getBoolean(5);
-						boolean moved = resultSet.getBoolean(6);
-						boolean vowel = resultSet.getBoolean(7);
-						boolean plural = resultSet.getBoolean(8);
-						int itemWeight = resultSet.getInt(9);
-						Item i = new Item(id, name, init_dscrpt, invent_dscrpt, isHidden, moved, vowel, plural, itemWeight);
+						String id = resultSet.getString("id");
+						String name = resultSet.getString("name");
+						String init_dscrpt = resultSet.getString("init_dscrpt");
+						String invent_dscrpt = resultSet.getString("invent_dscrpt");
+						boolean hidden = resultSet.getBoolean("hidden");
+						boolean moved = resultSet.getBoolean("moved");
+						boolean vowel = resultSet.getBoolean("vowel");
+						boolean plural = resultSet.getBoolean("plural");
+						int itemWeight = resultSet.getInt("itemWeight");
+						Item i = new Item(id, name, init_dscrpt, invent_dscrpt, hidden, moved, vowel, plural, itemWeight);
 						items.add(i);
 					}
 
@@ -508,7 +509,7 @@ public class DerbyDatabase {
 
 					stmt4 = conn.prepareStatement("create table items (" + " id varchar(5) primary key,"
 							+ " name varchar(42)," + " init_dscrpt varchar(200)," + " invent_dscrpt varchar(200),"
-							+ " canTake boolean," + " isHidden boolean," + " moved boolean," + " vowel boolean," 
+							+ " hidden boolean," + " moved boolean," + " vowel boolean," 
 							+ " plural boolean," + " itemWeight int" + ")");
 					stmt4.executeUpdate();
 
@@ -634,7 +635,7 @@ public class DerbyDatabase {
 
 					// populate items table
 					insertItem = conn.prepareStatement(
-							"insert into items (id, name, init_dscrpt, invent_dscrpt, isHidden, moved, vowel, plural, itemWeight)"
+							"insert into items (id, name, init_dscrpt, invent_dscrpt, hidden, moved, vowel, plural, itemWeight)"
 									+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 					for (Item item : itemList) {
 						insertItem.setString(1, item.getID());
