@@ -29,8 +29,12 @@ public class Room {
 			for (Item i : items) {
 				if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
 					dscrpt += " " + i.init_dscrpt;
-				} else if (i.moved()) {
+				} else if (i.moved() && !(i.vowel()) && !(i.plural())) {
 					dscrpt += " There is a " + i.getName() + " here.";
+				} else if (i.moved() && i.vowel() && !(i.plural())) {
+					dscrpt += " There is an " + i.getName() + " here.";
+				} else if (i.moved() && i.plural()) {
+					dscrpt += " There are " + i.getName() + " here.";
 				}
 			}
 			for (NPC n : npcs) {
@@ -47,8 +51,12 @@ public class Room {
 		for (Item i : items) {
 			if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
 				dscrpt += " " + i.init_dscrpt;
-			} else if (i.moved()) {
+			} else if (i.moved() && !(i.vowel()) && !(i.plural())) {
 				dscrpt += " There is a " + i.getName() + " here.";
+			} else if (i.moved() && i.vowel() && !(i.plural())) {
+				dscrpt += " There is an " + i.getName() + " here.";
+			} else if (i.moved() && i.plural()) {
+				dscrpt += " There are " + i.getName() + " here.";
 			}
 		}
 		return dscrpt;
