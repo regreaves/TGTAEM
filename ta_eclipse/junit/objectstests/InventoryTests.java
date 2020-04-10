@@ -35,33 +35,33 @@ public class InventoryTests {
 		
 		items2.add(flower);
 		
-		inv1 = new Inventory(10, "inventory one");
-		inv2 = new Inventory(1, "inventory two");
-		inv3 = new Inventory(5, "inventory three");
+		inv1 = new Inventory(0, 40, "inventory one");
+		inv2 = new Inventory(0, 5, "inventory two");
+		inv3 = new Inventory(0, 30, "inventory three");
 		
 		inv1.setItems(items1);
 		inv2.setItems(items2);
 	}
 	
 	@Test
-	public void testGetSize() throws Exception {
-		assertEquals(10, inv1.getSize());
-		assertEquals(1, inv2.getSize());
-		assertEquals(5, inv3.getSize());
+	public void testGetCurrentWeight() throws Exception {
+		assertEquals(30, inv1.getCurrentWeight());
+		assertEquals(5, inv2.getCurrentWeight());
+		assertEquals(0, inv3.getCurrentWeight());
 	}
 	
 	@Test
-	public void testCheckSize() throws Exception {
-		assertTrue(inv1.checkSize());
-		assertFalse(inv2.checkSize());
-		assertTrue(inv3.checkSize());
+	public void testCheckWeight() throws Exception {
+		assertTrue(inv1.checkWeight(flower));
+		assertFalse(inv2.checkWeight(sword));
+		assertTrue(inv3.checkWeight(flower));
 	}
 	
 	@Test
-	public void testGetCurrentSize() throws Exception {
-		assertEquals(8, inv1.getCurrentSize());
-		assertEquals(0, inv2.getCurrentSize());
-		assertEquals(5, inv3.getCurrentSize());
+	public void testGetMaxTotalWeight() throws Exception {
+		assertEquals(40, inv1.getMaxTotalWeight());
+		assertEquals(5, inv2.getMaxTotalWeight());
+		assertEquals(30, inv3.getMaxTotalWeight());
 	}
 	
 	@Test
@@ -73,13 +73,13 @@ public class InventoryTests {
 	
 	@Test
 	public void testSetMaxSize() throws Exception {
-		inv1.setMaxSize(5);
-		inv2.setMaxSize(10);
-		inv3.setMaxSize(15);
+		inv1.setMaxTotalWeight(5);
+		inv2.setMaxTotalWeight(10);
+		inv3.setMaxTotalWeight(15);
 		
-		assertEquals(5, inv1.getSize());
-		assertEquals(10, inv2.getSize());
-		assertEquals(15, inv3.getSize());
+		assertEquals(5, inv1.getMaxTotalWeight());
+		assertEquals(10, inv2.getMaxTotalWeight());
+		assertEquals(15, inv3.getMaxTotalWeight());
 	}
 	
 	@Test
@@ -92,16 +92,5 @@ public class InventoryTests {
 	public void testGetItemByName() throws Exception {
 		assertEquals(sword, inv1.getItemByName("sword"));
 		assertEquals(flower, inv2.getItemByName("flower"));
-	}
-	
-	@Test
-	public void testAddItem() throws Exception {
-		inv1.addItem(flower);
-		inv2.addItem(axe);
-		inv3.addItem(sword);
-		
-		assertEquals(flower, inv1.getItemByName("flower"));
-		assertEquals(axe, inv2.getItemByName("axe"));
-		assertEquals(sword, inv3.getItemByName("sword"));
 	}
 }

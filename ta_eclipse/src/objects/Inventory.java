@@ -3,36 +3,41 @@ package objects;
 import java.util.ArrayList;
 
 public class Inventory {
-	int maxSize;
+	int currentWeight;
+	int maxTotalWeight;
 	String id;
 	ArrayList<Item> items = new ArrayList<>();
 
-	public Inventory(int maxSize, String id) {
-		this.maxSize = maxSize;
+	public Inventory(int currentWeight, int maxTotalWeight, String id) {
+		this.currentWeight = currentWeight;
+		this.maxTotalWeight = maxTotalWeight;
 		this.id = id;
 	}
 
-	public int getSize() {
-		return maxSize;
+	public int getMaxTotalWeight() {
+		return maxTotalWeight;
 	}
 
-	public void setMaxSize(int maxSize) {
-		this.maxSize = maxSize;
+	public void setMaxTotalWeight(int maxTotalWeight) {
+		this.maxTotalWeight = maxTotalWeight;
 		return;
 	}
 
-	public boolean checkSize() {
-		int x = items.size();
-		if (x < this.maxSize) {
+	public boolean checkWeight(Item item) {
+		int x = getCurrentWeight();
+		if (x + item.getItemWeight() < this.maxTotalWeight) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public int getCurrentSize() {
-		int currentSize = this.maxSize - this.items.size();
-		return currentSize;
+	public int getCurrentWeight() {
+		int currentWeight = 0;
+		for(Item i : items) {
+			currentWeight += i.getItemWeight();
+		}
+		return currentWeight;
 	}
 
 	public ArrayList<Item> getItems() {
@@ -58,23 +63,27 @@ public class Inventory {
 	}
 
 	public void addItem(Item i) {
-		this.items.add(i);
-		i.move();
+		int x = currentWeight + i.getItemWeight();
+		if(x <= maxTotalWeight) {
+			this.items.add(i);
+			currentWeight += i.getItemWeight();
+			i.move();
+		}
+		
 	}
 
 	public void addItems(ArrayList<Item> items) {
 		this.items.addAll(items);
 		for (Item i : items) {
+			currentWeight += i.getItemWeight();
 			i.move();
 		}
 		return;
 	}
 
 	public Item dropItem(Item item) {
-		// TODO
 		int x = this.items.indexOf(item);
-		// item.setLocation(?);
-		// need to get player location
+		currentWeight -= item.getItemWeight();
 		return this.items.remove(x);
 	}
 

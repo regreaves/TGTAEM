@@ -6,7 +6,7 @@ public class Player extends Actor {
 	Inventory inventory;
 
 	public Player() {
-		this.inventory = new Inventory(0, "in1");
+		this.inventory = new Inventory(0, 20, "in1");
 		this.location = "1";
 	}
 
