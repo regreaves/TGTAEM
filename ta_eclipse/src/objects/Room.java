@@ -59,6 +59,9 @@ public class Room {
 				dscrpt += " There are " + i.getName() + " here.";
 			}
 		}
+		for (NPC n : npcs) {
+			dscrpt += " There is a " + n.getName() + " here.";
+		}
 		return dscrpt;
 	}
 
