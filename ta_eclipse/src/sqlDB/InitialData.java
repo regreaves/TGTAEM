@@ -109,17 +109,20 @@ public class InitialData {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-				String id = i.next();
-				String name = i.next();
-				String init_dscrpt = i.next();
-				String invent_dscrpt = i.next();
-				boolean isHidden = false;
+				
+				Item item = new Item();
+				
+				item.setID(i.next());
+				item.setName(i.next());
+				item.setInitDscrpt(i.next());
+				item.setInventDscrpt(i.next());				
+				boolean hidden = false;
 				boolean moved = false;
 				boolean vowel = false;
 				boolean plural = false;
 				int x = Integer.parseInt(i.next());
 				if (x == 1) {
-					isHidden = true;
+					hidden = true;
 				}
 				x = Integer.parseInt(i.next());
 				if (x == 1) {
@@ -133,8 +136,11 @@ public class InitialData {
 				if (x == 1) {
 					plural = true;
 				}
-				int itemWeight = Integer.parseInt(i.next());
-				Item item = new Item(id, name, init_dscrpt, invent_dscrpt, isHidden, moved, vowel, plural, itemWeight);
+				item.setHidden(hidden);
+				item.setMoved(moved);
+				item.setVowel(vowel);
+				item.setPlural(plural);
+				item.setWeight(Integer.parseInt(i.next()));
 				itemList.add(item);
 			}
 			return itemList;
