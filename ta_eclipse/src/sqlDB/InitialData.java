@@ -176,7 +176,7 @@ public class InitialData {
 	}
 
 
-	public static List<Pair<String, String>> getItemLoc() throws IOException {
+	public static List<Pair<String, String>> getItemMap() throws IOException {
 		List<Pair<String, String>> itemMap = new ArrayList<>();
 		ReadCSV readItems = new ReadCSV("items_loc.csv");
 		try {
@@ -198,7 +198,7 @@ public class InitialData {
 		}
 	}
 	
-	public static List<Pair<String, String>> getNPCLoc() throws IOException {
+	public static List<Pair<String, String>> getNPCMap() throws IOException {
 		List<Pair<String, String>> npcMap = new ArrayList<>();
 		ReadCSV readNPCs = new ReadCSV("npcs_loc.csv");
 		try {
