@@ -25,7 +25,7 @@ public class Inventory {
 
 	public boolean checkWeight(Item item) {
 		int x = getCurrentWeight();
-		if (x + item.getItemWeight() < this.maxTotalWeight) {
+		if (x + item.getWeight() < this.maxTotalWeight) {
 			return true;
 		} else {
 			return false;
@@ -35,7 +35,7 @@ public class Inventory {
 	public int getCurrentWeight() {
 		int currentWeight = 0;
 		for(Item i : items) {
-			currentWeight += i.getItemWeight();
+			currentWeight += i.getWeight();
 		}
 		return currentWeight;
 	}
@@ -63,10 +63,10 @@ public class Inventory {
 	}
 
 	public void addItem(Item i) {
-		int x = currentWeight + i.getItemWeight();
+		int x = currentWeight + i.getWeight();
 		if(x <= maxTotalWeight) {
 			this.items.add(i);
-			currentWeight += i.getItemWeight();
+			currentWeight += i.getWeight();
 			i.move();
 		}
 		
@@ -75,7 +75,7 @@ public class Inventory {
 	public void addItems(ArrayList<Item> items) {
 		this.items.addAll(items);
 		for (Item i : items) {
-			currentWeight += i.getItemWeight();
+			currentWeight += i.getWeight();
 			i.move();
 		}
 		return;
@@ -83,7 +83,7 @@ public class Inventory {
 
 	public Item dropItem(Item item) {
 		int x = this.items.indexOf(item);
-		currentWeight -= item.getItemWeight();
+		currentWeight -= item.getWeight();
 		return this.items.remove(x);
 	}
 
