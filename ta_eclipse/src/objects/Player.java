@@ -9,15 +9,9 @@ public class Player extends Actor {
 		this.inventory = new Inventory(0, 20, "in1");
 		this.location = "1";
 	}
-
 	
 	public void move(String roomID) {
 		location = roomID;
-	}
-
-	public void changeStats() {
-		modifyStats(stats);
-		return;
 	}
 
 	public void checkInventory() {
@@ -45,7 +39,21 @@ public class Player extends Actor {
 		return i;
 	}
 
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
+		return;
+	}
+	
 	public Inventory getInventory() {
 		return inventory;
+	}
+	
+	public void setLocation(String location) {
+		this.location = location;
+		return;
+	}
+	
+	public String getLocation() {
+		return this.location;
 	}
 }

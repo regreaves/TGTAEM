@@ -7,18 +7,17 @@ import java.util.ArrayList;
 
 public class Actor
 {
-  ArrayList<String> stats;
   String location;
   String id;
+  int health;
+  int attack;
+  int defense;
   boolean alive;
 
   public Actor() {
-	stats = new ArrayList<>();
-	location = "0";
-	id = "0";
-	alive = true;
-  }
 	
+  }
+/*	
   private void setActor(String file) {
 	BufferedReader reader = null;
     try
@@ -54,20 +53,35 @@ public class Actor
 
     }
   }
-
-  public void setStats(ArrayList<String> stats) {
-    this.stats = stats;
+*/
+  
+  public void setHealth(int health) {
+    this.health = health;
 	return;
   }
-
-  public void modifyStats(ArrayList<String> stats) {
-    return;
+  
+  public int getHealth() {
+	return this.health;
   }
-
-  public ArrayList<String> getStats() {
-    return this.stats;
+  
+  public void setAttack(int attack) {
+	this.attack = attack;
+	return;
   }
-
+	  
+  public int getAttack() {
+	return this.attack;
+  }
+  
+  public void setDefense(int defense) {
+	this.defense = defense;
+	return;
+  }
+		  
+  public int getDefense() {
+	return this.defense;
+  }
+  
   public boolean checkAlive() {
     if(this.alive == true){
 		return true;
