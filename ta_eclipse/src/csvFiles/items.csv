@@ -1,4 +1,4 @@
-id|name|init_dscrpt|invent_dscrpt|hidden|moved|vowel|plural|itemWeight
+vid|name|init_dscrpt|invent_dscrpt|hidden|moved|vowel|plural|itemWeight
 i01|table|There is a round table with a table cloth in the middle of the room.|A round table. The table cloth has a checkered blue and white print.|0|0|0|0|40
 i02|vase|In the middle of the table, there is a vase.|It is a plain glass vase.|0|0|0|0|3
 i03|flowers|In the vase are daffodils.|Bright yellow daffodils. They make you happy.|0|0|0|1|2
