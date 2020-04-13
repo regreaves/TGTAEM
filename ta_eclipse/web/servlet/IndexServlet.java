@@ -44,6 +44,6 @@ public class IndexServlet extends HttpServlet {
 		//controller.setPassword(req.getParameter("terminalInputTwo"));
 		req.setAttribute("password", model.getPassword());
 		
-		req.getRequestDispatcher("/_view/index.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 }
