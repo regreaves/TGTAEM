@@ -15,7 +15,7 @@ import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 
 public class Game {
-	User user;
+	//User user;
 	Player player;
 	Parser parser;
 	DerbyDatabase db;
