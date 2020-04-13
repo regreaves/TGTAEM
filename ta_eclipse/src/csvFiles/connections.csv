@@ -1,0 +1,14 @@
+room|id
+room|1
+go north|2
+go east|3
+go south|4
+go west|5
+room|2
+go south|1
+room|3
+go west|1
+room|4
+go north|1
+room|5
+go east|1
