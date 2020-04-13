@@ -8,7 +8,7 @@ import org.junit.Test;
 import state.User;
 
 public class UserTests {
-	private User user;
+	private static User user;
 	
 	@Before
 	public void setUp() {
