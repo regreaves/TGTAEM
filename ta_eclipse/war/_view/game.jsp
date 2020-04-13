@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<!--
+    [!] Are the following two taglibs necessary for game.jsp?
+        Removing doesn't seem to affect operations. -R
+ -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
@@ -11,19 +15,18 @@
 
 <body>
 	<div id="outer">
-		<div id="output">
-			${log} ${username}
+	<div id="output">
+			<p>${log}</p>
 			<form id="myForm"
 				action="${pageContext.servletContext.contextPath}/game"
 				method="post">
-				<br>
 				<textarea id="input" class="input" name="command" rows="1"
 					placeholder="command?" autofocus></textarea>
 			</form>
 		</div>
 	</div>
-
 </body>
+
 <script>
 	window.onload = function() {
 		var myDiv = document.getElementById('output');

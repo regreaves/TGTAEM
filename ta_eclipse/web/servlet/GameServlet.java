@@ -69,10 +69,17 @@ public class GameServlet extends HttpServlet {
 
 		req.setAttribute("command", req.getParameter("command"));
 
-		log = log.concat("<br><br>> ").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
+		log = log.concat("<br>> ").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
 		req.setAttribute("command", req.getParameter("command"));
 
 		req.setAttribute("log", log);
+		
+/*
+ *	[!]	10 April 2020
+ *
+ *		Is "req.setAttribute("surprise", model);" necessary for our model?
+ *		Removing doesn't seem to affect operations. -R
+ */
 		req.setAttribute("surprise", model);
 
 		// Forward to view to render the result HTML document
