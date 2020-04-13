@@ -14,6 +14,7 @@ import command.Action;
 import command.Word;
 import objects.Item;
 import objects.NPC;
+import objects.Player;
 import objects.Room;
 
 public class DerbyDatabase {
@@ -100,6 +101,8 @@ public class DerbyDatabase {
 				PreparedStatement stmt7 = null;
 				PreparedStatement stmt8 = null;
 				PreparedStatement stmt9 = null;
+				PreparedStatement stmt10 = null;
+				PreparedStatement stmt11 = null;
 
 				try {
 					stmt1 = conn.prepareStatement( // words table
@@ -146,6 +149,16 @@ public class DerbyDatabase {
 					stmt9 = conn.prepareStatement( // npcMap table
 							"create table npcMap (" + " id varchar(5) primary key," + " location varchar(5)" + ")");
 					stmt9.executeUpdate();
+					
+					stmt10 = conn.prepareStatement( // player table
+							"create table players (" + " id varchar(5) primary key," + " health varchar(5),"  
+									+ " attack varchar(5)," + " defense varchar(5)" + ")");
+					stmt10.executeUpdate();
+					
+					stmt11 = conn.prepareStatement( // playerMap table
+							"create table playerMap (" + " id varchar(5) primary key," + " location varchar(5)" + ")");
+					stmt11.executeUpdate();
+					
 
 					return true;
 				} finally { // close the things
@@ -158,6 +171,8 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt7);
 					DBUtil.closeQuietly(stmt8);
 					DBUtil.closeQuietly(stmt9);
+					DBUtil.closeQuietly(stmt10);
+					DBUtil.closeQuietly(stmt11);
 				}
 			}
 		});
@@ -173,9 +188,12 @@ public class DerbyDatabase {
 				List<Room> roomList;
 				List<Item> itemList;
 				List<NPC> npcList;
+				List<Player> playerList;
 				List<Pair<String, String>> itemMap;
 				List<Pair<String, String>> npcMap;
+				List<Pair<String, String>> playerMap;
 				List<Pair<String, String>> itemAction;
+				
 
 				try { // get info from csvs
 					wordList = InitialData.getWords();
@@ -183,10 +201,11 @@ public class DerbyDatabase {
 					roomList = InitialData.getRooms();
 					itemList = InitialData.getItems();
 					npcList = InitialData.getNPCs();
+					playerList = InitialData.getPlayers();
 					itemMap = InitialData.getItemMap();
 					npcMap = InitialData.getNPCMap();
+					playerMap = InitialData.getPlayerMap();
 					itemAction = InitialData.getItemActions();
-
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -196,8 +215,10 @@ public class DerbyDatabase {
 				PreparedStatement insertRoom = null;
 				PreparedStatement insertItem = null;
 				PreparedStatement insertNPC = null;
+				PreparedStatement insertPlayer = null;
 				PreparedStatement insertItemMap = null;
 				PreparedStatement insertNpcMap = null;
+				PreparedStatement insertPlayerMap = null;
 				PreparedStatement insertItemAction = null;
 
 				try {
@@ -249,7 +270,7 @@ public class DerbyDatabase {
 
 					// populate items table
 					insertItem = conn.prepareStatement(
-							"insert into items (id, name, init_dscrpt, invent_dscrpt, hidden, moved, vowel, plural, itemWeight)"
+							"insert into items (id, name, init_dscrpt, invent_dscrpt, hidden, moved, vowel, plural, weight)"
 									+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 					for (Item item : itemList) {
 						insertItem.setString(1, item.getID());
@@ -279,6 +300,19 @@ public class DerbyDatabase {
 						insertNPC.addBatch();
 					}
 					insertNPC.executeBatch();
+					
+					// populate players table
+					insertPlayer = conn
+							.prepareStatement("insert into players (id, health, attack, defense)"
+									+ " values (?, ?, ?, ?)");
+					for (Player player : playerList) {
+						insertPlayer.setString(1, player.getID());
+						insertPlayer.setInt(2, player.getHealth());
+						insertPlayer.setInt(3, player.getAttack());
+						insertPlayer.setInt(4, player.getDefense());
+						insertPlayer.addBatch();
+					}
+					insertPlayer.executeBatch();
 
 					// populate item location table
 					insertItemMap = conn.prepareStatement("insert into itemMap (id, location)" + " values (?, ?)");
@@ -297,6 +331,15 @@ public class DerbyDatabase {
 						insertNpcMap.addBatch();
 					}
 					insertNpcMap.executeBatch();
+					
+					// populate player location table
+					insertPlayerMap = conn.prepareStatement("insert into playerMap (id, location)" + " values (?, ?)");
+					for (Pair<String, String> p : playerMap) {
+						insertPlayerMap.setString(1, p.getLeft());
+						insertPlayerMap.setString(2, p.getRight());
+						insertPlayerMap.addBatch();
+					}
+					insertPlayerMap.executeBatch();
 
 					// populate item action table
 					insertItemAction = conn.prepareStatement("insert into itemAct (id, action)" + " values (?, ?)");
@@ -314,8 +357,10 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertRoom);
 					DBUtil.closeQuietly(insertItem);
 					DBUtil.closeQuietly(insertNPC);
+					DBUtil.closeQuietly(insertPlayer);
 					DBUtil.closeQuietly(insertItemMap);
 					DBUtil.closeQuietly(insertNpcMap);
+					DBUtil.closeQuietly(insertPlayerMap);
 					DBUtil.closeQuietly(insertItemAction);
 				}
 			}
@@ -333,7 +378,9 @@ public class DerbyDatabase {
 				PreparedStatement tblItemMap = null;
 				PreparedStatement tblItemAct = null;
 				PreparedStatement tblNpcs = null;
+				PreparedStatement tblPlayers = null;
 				PreparedStatement tblNpcMap = null;
+				PreparedStatement tblPlayerMap = null;
 				PreparedStatement tblInvent = null;
 
 				try { // truncating because words did not want to be deleted??
@@ -357,9 +404,15 @@ public class DerbyDatabase {
 
 					tblNpcs = conn.prepareStatement("truncate table npcs");
 					tblNpcs.execute();
+					
+					tblPlayers = conn.prepareStatement("truncate table players");
+					tblPlayers.execute();
 
 					tblNpcMap = conn.prepareStatement("truncate table npcMap");
 					tblNpcMap.execute();
+					
+					tblPlayerMap = conn.prepareStatement("truncate table playerMap");
+					tblPlayerMap.execute();
 
 					tblInvent = conn.prepareStatement("truncate table invent");
 					tblInvent.execute();
@@ -375,7 +428,9 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblItemMap);
 					DBUtil.closeQuietly(tblItemAct);
 					DBUtil.closeQuietly(tblNpcs);
+					DBUtil.closeQuietly(tblPlayers);
 					DBUtil.closeQuietly(tblNpcMap);
+					DBUtil.closeQuietly(tblPlayerMap);
 					DBUtil.closeQuietly(tblInvent);
 				}
 			}
@@ -745,13 +800,14 @@ public class DerbyDatabase {
 					Boolean found = false;
 					while (resultSet.next()) {
 						found = true;
-						String id = resultSet.getString("id");
-						String name = resultSet.getString("name");
-						int health = Integer.parseInt(resultSet.getString("health"));
-						int attack = Integer.parseInt(resultSet.getString("attack"));
-						int defense = Integer.parseInt(resultSet.getString("defense"));
-						String description = resultSet.getString("description");
-						NPC n = new NPC(id, name, health, attack, defense, description);
+						NPC n = new NPC();
+						n.setID(resultSet.getString("id"));
+						n.setName(resultSet.getString("name"));
+						n.setHealth(Integer.parseInt(resultSet.getString("health")));;
+						n.setAttack(Integer.parseInt(resultSet.getString("attack")));;
+						n.setDefense(Integer.parseInt(resultSet.getString("defense")));;
+						n.setDescription(resultSet.getString("description"));;
+						
 						npcs.add(n);
 					}
 
@@ -792,7 +848,70 @@ public class DerbyDatabase {
 			}
 		}
 	}
+	
+	// Player Functions
+	public ArrayList<Player> getPlayers() { // get all npcs
+		return executeTransaction(new Transaction<ArrayList<Player>>() {
+			public ArrayList<Player> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				ArrayList<Player> players = new ArrayList<>();
 
+				try { // get all the info from Player table
+					stmt = conn.prepareStatement("select * from players");
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+					Boolean found = false;
+					while (resultSet.next()) {
+						found = true;
+						Player p = new Player();
+						p.setID(resultSet.getString("id"));
+						p.setHealth(Integer.parseInt(resultSet.getString("health")));;
+						p.setAttack(Integer.parseInt(resultSet.getString("attack")));;
+						p.setDefense(Integer.parseInt(resultSet.getString("defense")));;
+							
+						players.add(p);
+					}
+
+					// check if no players found
+					if (!found) {
+						System.out.println("no players found");
+					}
+					return players;
+				} finally { // close the things
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+
+	public void placePlayers(HashMap<String, Room> map, ArrayList<Player> players) throws SQLException { // place players in map
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		String playerID;
+
+		for (Player p : players) {
+			playerID = p.getID(); // get the players id
+			try { //get location for the given id
+				stmt = conn.prepareStatement("select location from playerMap where id = ?");
+				stmt.setString(1, playerID); // set blank to id
+				resultSet = stmt.executeQuery();
+
+				while (resultSet.next()) {
+					String loc = resultSet.getString("location"); //get the location id from the result
+					Room r = map.get(loc); //retrieve the room related to the id
+					r.addPlayer(p); // add the npc to the room
+				}
+			} finally { // close the things
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt);
+			}
+		}
+	}
+	
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");

@@ -11,6 +11,7 @@ public class Room {
 	ArrayList<String> connections = new ArrayList<>();
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
+	ArrayList<Player> players = new ArrayList<>();
 	ArrayList<Action> actions = new ArrayList<>();
 	boolean visited;
 
@@ -139,6 +140,14 @@ public class Room {
 		this.npcs.remove(x);
 		return;
 	}
+	
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+
+	public void addPlayer(Player player) {
+		this.players.add(player);
+	}
 
 	public ArrayList<Action> getActions() {
 		return actions;
@@ -201,6 +210,7 @@ public class Room {
 	public String getDown() {
 		return connections.get(9);
 	}
+
 
 	// TODO add NPC based methods
 }

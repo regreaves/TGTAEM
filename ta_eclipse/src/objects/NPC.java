@@ -14,13 +14,8 @@ public class NPC extends Actor
 	int defense;
 	String description;
 
-  public NPC(String id, String name, int health, int attack, int defense, String description) {
-	this.id = id;
-    this.name = name;
-    this.health = health;
-    this.attack = attack;
-    this.defense = defense;
-    this.description = description;
+  public NPC() {
+
   	}
 /*
   public void addActions(ArrayList<String> actions) {

@@ -9,6 +9,7 @@ import command.Action;
 import command.Word;
 import objects.Item;
 import objects.NPC;
+import objects.Player;
 import objects.Room;
 
 public class InitialData {
@@ -160,13 +161,14 @@ public class InitialData {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-				String id = i.next();
-				String name = i.next();
-				int health = Integer.parseInt(i.next());
-				int attack = Integer.parseInt(i.next());
-				int defense = Integer.parseInt(i.next());
-				String description = i.next();
-				NPC npc = new NPC(id, name, health, attack, defense, description);
+				NPC npc = new NPC();
+				npc.setID(i.next());
+				npc.setName(i.next());
+				npc.setHealth(Integer.parseInt(i.next()));
+				npc.setAttack(Integer.parseInt(i.next()));
+				npc.setDefense(Integer.parseInt(i.next()));
+				npc.setDescription(i.next());
+				
 				npcList.add(npc);
 			}
 			return npcList;
@@ -241,5 +243,51 @@ public class InitialData {
 			readItems.close();
 		}
 	}
-
+	
+	public static List<Player> getPlayers() throws IOException {
+		List<Player> playerList = new ArrayList<Player>();
+		ReadCSV readPlayers = new ReadCSV("player.csv");
+		try {
+			readPlayers.next(); // skip headings
+			while (true) {
+				List<String> tuple = readPlayers.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				Player player = new Player();
+				player.setID(i.next());
+				player.setHealth(Integer.parseInt(i.next()));
+				player.setAttack(Integer.parseInt(i.next()));
+				player.setDefense(Integer.parseInt(i.next()));
+				
+				playerList.add(player);
+			}
+			return playerList;
+		} finally {
+			readPlayers.close();
+		}
+	}
+	
+	public static List<Pair<String, String>> getPlayerMap() throws IOException {
+		List<Pair<String, String>> playerMap = new ArrayList<>();
+		ReadCSV readPlayers = new ReadCSV("player_loc.csv");
+		try {
+			readPlayers.next(); // skip headings
+			while (true) {
+				List<String> tuple = readPlayers.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String id = i.next();
+				String loc = i.next();
+				Pair<String, String> p = new Pair<>(id, loc);
+				playerMap.add(p);
+			}
+			return playerMap;
+		} finally {
+			readPlayers.close();
+		}
+	}
 }
