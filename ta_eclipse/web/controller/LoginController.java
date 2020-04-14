@@ -16,4 +16,8 @@ public class LoginController {
 	public boolean validateCredentials(String name, String pw) {
 		return model.validatePW(name, pw);
 	}
+	
+	/*
+	 * Get saved Game here...?
+	 */
 }
