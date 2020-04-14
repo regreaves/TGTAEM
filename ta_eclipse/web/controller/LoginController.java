@@ -1,7 +1,7 @@
 package controller;
 
 /**
- * Controller for User.
+ * Controller for Login.
  */
 public class LoginController {
 	
