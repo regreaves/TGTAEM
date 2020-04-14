@@ -34,6 +34,7 @@ public class LoginServlet extends HttpServlet {
 		String name         = null;
 		String pw           = null;
 		boolean validLogin  = false;
+		boolean validUsername  = false;
 
 		// Decode form parameters and dispatch to controller
 		name = req.getParameter("username");
@@ -46,10 +47,14 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			model      = new Library();
 			controller = new LoginController(model);
+			validUsername = controller.checkUserName(name);
 			validLogin = controller.validateCredentials(name, pw);
-
-			if (!validLogin) {
-				errorMessage = "Username and/or password invalid";
+/**/
+			if (!validUsername) {
+				errorMessage = "Username invalid";
+			} else if (!validLogin) {
+//				errorMessage = "Username and/or password invalid";
+				errorMessage = "Password invalid";
 			}
 		}
 
