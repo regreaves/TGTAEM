@@ -5,15 +5,6 @@
 <html>
 	<head>
 		<title>Login</title>
-		<style type="text/css">
-		.error {
-			color: red;
-		}
-		
-		td.label {
-			text-align: right;
-		}
-		</style>
 	</head>
 
 	<body>

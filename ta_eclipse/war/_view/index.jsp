@@ -22,7 +22,7 @@
 </head>
 
 <body>
-	<div id="myUsername">${username}</div>
+	<div id="myUsername">${user}</div>
 	<!-- <p>${password}</p> -->
 
 	<form id="myForm"
