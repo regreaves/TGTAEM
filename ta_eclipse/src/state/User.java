@@ -24,4 +24,15 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;		
 	}
+	
+/*
+ *	public void getGame() {
+ *		return game;
+ *	}
+ *
+ *	public void setGame() {
+ *		this.game = game;	
+ *	}
+ */
+	
 }
