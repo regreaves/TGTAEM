@@ -49,6 +49,7 @@ public class UserServlet extends HttpServlet {
 		controller.setModel(model);
 
 		String i = req.getParameter("input");
+		
 		if (i.equalsIgnoreCase("n")) {
 			try {
 				model.resetGame();
@@ -57,25 +58,23 @@ public class UserServlet extends HttpServlet {
 			}
 			String log = (String) req.getSession().getAttribute("log");
 			log += i + "<br> Loading new game... <br>";
+			log += model.getGame().loadRoom("1") + "<br>";
 			req.getSession().setAttribute("log", log);
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
-		}
-		else if (i.equalsIgnoreCase("l")) {
+			return;
+		} else if (i.equalsIgnoreCase("l")) {
 			String log = (String) req.getSession().getAttribute("log");
 			log += i + "<br> Loading saved game... <br>";
+			log += "<br>" + model.getGame().loadRoom(model.getGame().here()) + "<br>";
 			req.getSession().setAttribute("log", log);
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
-
+			return;
 		}
-		else {
-			String log = (String) req.getSession().getAttribute("log");
-			log += i + "<br>Input \"n\" for new game and \"l\" for load game.<br>";
-			req.getSession().setAttribute("log", log);
-			req.getRequestDispatcher("/_view/user.jsp").forward(req, resp);
-
-		}
-
-		// Forward to view to render the result HTML document
+		
+		String log = (String) req.getSession().getAttribute("log");
+		log += i + "<br>Input \"n\" for new game and \"l\" for load game.<br>";
+		req.getSession().setAttribute("log", log);
 		req.getRequestDispatcher("/_view/user.jsp").forward(req, resp);
+
 	}
 }

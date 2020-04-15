@@ -15,7 +15,6 @@ public class GameServlet extends HttpServlet {
 	
 	private static Game model = new Game();
 	private static GameController controller = new GameController();
-	private static String log = model.loadRoom(model.here());
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -23,7 +22,9 @@ public class GameServlet extends HttpServlet {
 
 		System.out.println("\nGameServlet: doGet");
 		
-		req.setAttribute("log", log);
+		String log = (String) req.getSession().getAttribute("log");
+		log += model.loadRoom(model.here());
+		req.getSession().setAttribute("log", log);
 		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
@@ -40,8 +41,9 @@ public class GameServlet extends HttpServlet {
 		controller.setCommand(command);
 		req.setAttribute("command", req.getParameter("command"));
 
+		String log = (String) req.getSession().getAttribute("log");
 		log = log.concat("<br>> ").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
-		req.setAttribute("log", log);
+		req.getSession().setAttribute("log", log);
 
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
