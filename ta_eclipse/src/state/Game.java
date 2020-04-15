@@ -25,7 +25,7 @@ public class Game {
 	ArrayList<NPC> npcs = new ArrayList<>();
 
 	boolean done = false;
-	boolean newGame = true;
+	int startRoom = 1;
 
 	String command = "";
 
@@ -36,17 +36,21 @@ public class Game {
 //	ArrayList<Checkpoint> checkpoints = new ArrayList<>();
 
 	// not done here yet
-	public Game() throws SQLException {
+	public Game() {
 		DatabaseProvider.setInstance(new DerbyDatabase());
-//		this.user = user;
 		this.player = new Player();
 		this.db = DatabaseProvider.getInstance();
 		this.parser = new Parser(db);
 		map = db.getMap();
 		items = db.getItems();
 		npcs = db.getNPCs();
-		db.placeItems(map, items);
-		db.placeNPCs(map, npcs);
+		try {
+			db.placeItems(map, items);		db.placeNPCs(map, npcs);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	// for use with jsp
@@ -56,7 +60,7 @@ public class Game {
 	}
 
 	public boolean isNewGame() {
-		return newGame;
+		return true;
 	}
 
 	public String getAction() {
@@ -70,10 +74,10 @@ public class Game {
 		return s;
 	}
 
-	public String getRoomOne() {
-		newGame = false;
-		return loadRoom("1");
-	}
+//	public String getRoomOne() {
+//		newGame = false;
+//		return loadRoom("1");
+//	}
 
 	public String getCommand() {
 		return command;
