@@ -1,38 +1,33 @@
 package state;
 
+import java.sql.SQLException;
+
 public class User {
-	private String username;
-	private String password;
+	String name;
+	Game game;
+	
 	
 	public User() {
-		setUsername("defaultUsername");
-		setPassword("defaultPassword");
+		this.game = new Game();
 	}
 
-	public String getUsername() {
-		return username;
+	public String getName() {
+		return name;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;		
-	}
-	
-	public String getPassword() {
-		return password;		
+	public void setName(String username) {
+		this.name = username;		
 	}
 
-	public void setPassword(String password) {
-		this.password = password;		
+ 	public Game getGame() {
+ 		return game;
+ 	}
+ 
+ 	public void setGame(Game game) {
+ 		this.game = game;	
+ 	}
+ 
+	public void resetGame() throws SQLException {
+		this.game.reset();
 	}
-	
-/*
- *	public void getGame() {
- *		return game;
- *	}
- *
- *	public void setGame() {
- *		this.game = game;	
- *	}
- */
-	
 }

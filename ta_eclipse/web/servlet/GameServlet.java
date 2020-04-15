@@ -25,7 +25,7 @@ public class GameServlet extends HttpServlet {
 		
 		req.setAttribute("log", log);
 		
-		req.getRequestDispatcher("/_view/index.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 
 	@Override

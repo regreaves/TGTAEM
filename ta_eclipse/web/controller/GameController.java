@@ -14,9 +14,6 @@ public class GameController {
 	 * @param model the model to set
 	 */
 	
-	/*
-	 * Set the Game model from pass of Login or Index
-	 */
 	public void setModel(Game model) {
 		this.model = model;
 	}

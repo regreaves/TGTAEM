@@ -14,47 +14,43 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Library model;
 	private LoginController controller;
+	private String log = "Welcome to TGTAEM. Please login.\n";
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		System.out.println("\nLoginServlet: doGet");
-
+		req.getSession().setAttribute("log", log);
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		System.out.println("\nLoginServlet: doPost");
 
 		String errorMessage = null;
-		String name         = null;
-		String pw           = null;
-		boolean validLogin  = false;
-		boolean validUsername  = false;
+		String name = null;
+		String pw = null;
+		boolean validLogin = false;
+		boolean validUsername = false;
 
 		// Decode form parameters and dispatch to controller
 		name = req.getParameter("username");
-		pw   = req.getParameter("password");
+		pw = req.getParameter("password");
 
-		System.out.println("   Name: <" + name + "> PW: <" + pw + ">");			
+		System.out.println("   Name: <" + name + "> PW: <" + pw + ">");
 
 		if (name == null || pw == null || name.equals("") || pw.equals("")) {
 			errorMessage = "Please specify both user name and password";
 		} else {
-			model      = new Library();
+			model = new Library();
 			controller = new LoginController(model);
 			validUsername = controller.checkUserName(name);
 			validLogin = controller.validateCredentials(name, pw);
-/**/
-			if (!validUsername) {
-				errorMessage = "Username invalid";
-			} else if (!validLogin) {
-//				errorMessage = "Username and/or password invalid";
-				errorMessage = "Password invalid";
+
+			if (!validUsername || !validLogin) {
+				errorMessage = "Username and/or password invalid";
 			}
 		}
 
@@ -64,17 +60,17 @@ public class LoginServlet extends HttpServlet {
 
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
-		req.setAttribute("login",        validLogin);
+		req.setAttribute("login", validLogin);
 
 		// if login is valid, start a session
 		if (validLogin) {
-			System.out.println("   Valid login - starting session, redirecting to /index");
+			System.out.println("   Valid login - starting session, redirecting to /user");
 
 			// store user object in session
 			req.getSession().setAttribute("user", name);
 
-			// redirect to /index page
-			resp.sendRedirect(req.getContextPath() + "/index");
+			// redirect to /user page
+			resp.sendRedirect(req.getContextPath() + "/user");
 
 			return;
 		}

@@ -15,7 +15,6 @@ import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 
 public class Game {
-	//User user;
 	Player player;
 	Parser parser;
 	DerbyDatabase db;
@@ -39,7 +38,6 @@ public class Game {
 	// not done here yet
 	public Game() {
 		DatabaseProvider.setInstance(new DerbyDatabase());
-//		this.user = user;
 		this.player = new Player();
 		this.db = DatabaseProvider.getInstance();
 		this.parser = new Parser(db);
@@ -51,7 +49,6 @@ public class Game {
 			db.placeNPCs(map, npcs);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -102,6 +99,13 @@ public class Game {
 
 	// called by proxy through above methods
 	// probably could change to private
+	
+	public void reset() throws SQLException
+	{
+		db.clearAll();
+		db.fillAll();
+		remake();
+	}
 	
 	public void remake() throws SQLException
 	{
@@ -503,9 +507,7 @@ public class Game {
 		String response = in.nextLine();
 		if(response.equalsIgnoreCase("y"))
 		{
-			g.db.clearAll();
-			g.db.fillAll();
-			g.remake();
+			g.reset();
 		}
 		
 		System.out.println(g.loadRoom("1"));
