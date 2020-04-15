@@ -39,6 +39,6 @@ public class IndexServlet extends HttpServlet {
 		System.out.println("\nIndexServlet: doPost");		
 		
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/index.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}	
 }
