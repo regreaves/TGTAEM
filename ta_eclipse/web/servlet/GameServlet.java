@@ -15,15 +15,15 @@ public class GameServlet extends HttpServlet {
 	
 	private static Game model = new Game();
 	private static GameController controller = new GameController();
+	private static String log = model.loadRoom(model.here());
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
 		System.out.println("\nGameServlet: doGet");
-
-// FOR TESTING
-		System.out.println(model.here());
+		
+		req.setAttribute("log", log);
 		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
@@ -33,12 +33,16 @@ public class GameServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		System.out.println("\nGameServlet: doPost");
-
-// FOR TESTING
-		model.setHere("2");
-		System.out.println(model.here());
 		
-		// Forward to view to render the result HTML document
+		controller.setModel(model);
+		
+		String command = req.getParameter("command");
+		controller.setCommand(command);
+		req.setAttribute("command", req.getParameter("command"));
+
+		log = log.concat("<br>> ").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
+		req.setAttribute("log", log);
+
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 }
