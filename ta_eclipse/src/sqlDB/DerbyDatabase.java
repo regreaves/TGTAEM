@@ -757,6 +757,8 @@ public class DerbyDatabase {
 		});
 	}
 
+	//TODO Add location bind? 
+	//currently only used in drop, can bind with inventory instead
 	public String getItemID(String itemName) { // get item id from item name
 		return executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
