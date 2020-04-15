@@ -13,77 +13,75 @@ import state.Game;
 
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private String log = "";
-	private String here = "1";
-	
+	private Game model;
+	private GameController controller;
+
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 
-		System.out.println("Game Servlet: doGet");	
+		System.out.println("\nGameServlet: doGet");
 
-		Game model;
-		
-		try {
-		model = new Game();
-		log = model.getRoomOne();
-		req.setAttribute("log", log);
-
-		} catch (SQLException e) {
-		e.printStackTrace();
-		}
-		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 
+
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 
-		System.out.println("Game Servlet: doPost");
+		System.out.println("\nGameServlet: doPost");
 
-		// create Game model - model does not persist between requests
-		// must recreate it each time a Post comes in 
-		Game model = null;
-		try {
-			model = new Game();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		String errorMessage = null;
+		String name         = null;
+		String pw           = null;
+		boolean validLogin  = false;
+		boolean validUsername  = false;
+
+		// Decode form parameters and dispatch to controller
+		name = req.getParameter("username");
+		pw   = req.getParameter("password");
+
+		System.out.println("   Name: <" + name + "> PW: <" + pw + ">");			
+
+		if (name == null || pw == null || name.equals("") || pw.equals("")) {
+			errorMessage = "Please specify both user name and password";
+		} else {
+			model      = new Game();
+			controller = new GameController();
+
+//			if (!validUsername) {
+//				errorMessage = "Username invalid";
+//			} else if (!validLogin) {
+////				errorMessage = "Username and/or password invalid";
+//				errorMessage = "Password invalid";
+//			}
 		}
 
-		// create Game controller - controller does not persist between requests
-		// must recreate it each time a Post comes in
-		GameController controller = new GameController();
+		// Add parameters as request attributes
+//		req.setAttribute("username", req.getParameter("username"));
+//		req.setAttribute("password", req.getParameter("password"));
 
-		// assign model reference to controller so that controller can access model
-		controller.setModel(model);
-		controller.setHere(here);
+		// Add result objects as request attributes
+//		req.setAttribute("errorMessage", errorMessage);
+//		req.setAttribute("login",        validLogin);
 
-		// decode POSTed form parameters and dispatch to controller
+		// if login is valid, start a session
+//		if (validLogin) {
+//			System.out.println("   Valid login - starting session, redirecting to /index");
+//
+//			// store user object in session
+//			req.getSession().setAttribute("user", name);
+//
+//			// redirect to /index page
+//			resp.sendRedirect(req.getContextPath() + "/index");
+//
+//			return;
+//		}
 
-		String command = req.getParameter("command");
-
-		// must create the controller each time, since it doesn't persist between POSTs
-		// the view does not alter data, only controller methods should be used for that
-		// thus, always call a controller method to operate on the data
-
-		controller.setCommand(command);
-
-		req.setAttribute("command", req.getParameter("command"));
-
-		log = log.concat("<br>> ").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
-		req.setAttribute("command", req.getParameter("command"));
-
-		req.setAttribute("log", log);
-		
-/*
- *	[!]	10 April 2020
- *
- *		Is "req.setAttribute("surprise", model);" necessary for our model?
- *		Removing doesn't seem to affect operations. -R
- */
-		req.setAttribute("surprise", model);
+//		System.out.println("   Invalid login - returning to /Login");
 
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
-		here = model.here();
+		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 	}
 }
