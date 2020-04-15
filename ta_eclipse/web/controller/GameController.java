@@ -16,14 +16,12 @@ public class GameController {
 	public void setModel(Game model) {
 		this.model = model;
 	}
-	
-	public void setCommand(String command)
-	{
+
+	public void setCommand(String command) {
 		this.model.setCommand(command);
 	}
-	
-	public void setHere(String id)
-	{
+
+	public void setHere(String id) {
 		this.model.setHere(id);
 	}
 }
