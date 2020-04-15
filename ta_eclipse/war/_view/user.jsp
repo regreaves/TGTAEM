@@ -15,20 +15,18 @@ uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
     <div id="outer">
       <div id="output">
         <p>${log}</p>
+
         <form
           id="myForm"
-          action="${pageContext.servletContext.contextPath}/login"
+          action="${pageContext.servletContext.contextPath}/user"
           method="post"
         >
-          <input name="username" placeholder="Username:" autofocus />
-          <input name="password" placeholder="Password:" />
+          <input name="input" placeholder="command?" autofocus />
           <button type="submit" style="visibility: hidden;"></button>
         </form>
-
 				<c:if test="${! empty errorMessage}">
           <div class="error">${errorMessage}</div>
         </c:if>
-
       </div>
     </div>
   </body>

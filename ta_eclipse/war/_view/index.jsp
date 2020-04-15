@@ -1,34 +1,25 @@
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <html>
-<head>
-<title>Index</title>
+	<head>
+		<title>Index</title>
+	</head>
 
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/_view/stylesheet.css" />
-
-<script>
-	window.onload = function() {
-
-		input.onkeydown = function(ev) {
-			var k = (ev.which || ev.keyCode);
-
-			if (k == 13) {
-				document.getElementById("myForm").submit();
-			}
-		}
-	};
-</script>
-</head>
-
-<body>
-	<div id="myUsername">${user}</div>
-	<!-- <p>${password}</p> -->
-
-	<form id="myForm"
-		action="${pageContext.servletContext.contextPath}/index" method="post">
-		<textarea id="input" class="input" name="terminalInput" rows="1"
-			placeholder="terminalInput" autofocus></textarea>
-	</form>
-</body>
+	<body>
+		<c:if test="${! empty errorMessage}">
+			<div class="error">${errorMessage}</div>
+		</c:if>
+	
+		<form action="${pageContext.servletContext.contextPath}/index" method="post">
+			<table>
+				<tr>
+					<td class="label">Game:</td>
+					<td><input type="text" name="game" size="12" value="${game}" /></td>
+				</tr>
+			</table>
+			<input type="Submit" name="submit" value="Index">
+		</form>
+	</body>
 </html>
