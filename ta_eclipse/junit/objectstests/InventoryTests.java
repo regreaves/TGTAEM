@@ -26,9 +26,49 @@ public class InventoryTests {
 	
 	@Before
 	public void setUp() {
-		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", false, false, false, false, 10);
-		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", false, false, true, false, 20);
-		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", false, false, false, false, 5);
+		sword = new Item();
+		axe = new Item();
+		flower = new Item();
+		
+		sword.setID("1");
+		axe.setID("2");
+		flower.setID("3");
+		
+		sword.setName("sword");
+		axe.setName("axe");
+		flower.setName("flower");
+		
+		sword.setInitDscrpt("A steel sword.");
+		axe.setInitDscrpt("An iron axe.");
+		flower.setInitDscrpt("A red rose.");
+		
+		sword.setInventDscrpt("A sword that is light.");
+		axe.setInventDscrpt("An iron axe that is heavy.");
+		flower.setInventDscrpt("The thorns are sharp.");
+		
+		sword.setHidden(false);
+		axe.setHidden(false);
+		flower.setHidden(false);
+		
+		sword.setCritical(true);
+		axe.setCritical(true);
+		flower.setCritical(false);
+		
+		sword.setMoved(false);
+		axe.setMoved(false);
+		flower.setMoved(false);
+		
+		sword.setVowel(false);
+		axe.setVowel(true);
+		flower.setVowel(false);
+		
+		sword.setPlural(false);
+		axe.setPlural(false);
+		flower.setPlural(false);
+		
+		sword.setWeight(10);
+		axe.setWeight(20);
+		flower.setWeight(5);
 		
 		items1.add(sword);
 		items1.add(axe);
