@@ -8,19 +8,15 @@ public class Room {
 	String ID;
 	String displayName;
 	String description;
-	ArrayList<String> connections = new ArrayList<>();
+	Connections connections = new Connections();
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
 	ArrayList<Player> players = new ArrayList<>();
 	ArrayList<Action> actions = new ArrayList<>();
 	boolean visited;
 
-	public Room(String ID, String displayName, String description, boolean visited, ArrayList<String> connections) {
-		this.ID = ID;
-		this.displayName = displayName;
-		this.description = description;
-		this.visited = visited;
-		this.connections = connections;
+	public Room() {
+
 	}
 
 	public String loadRoom() {
@@ -98,11 +94,11 @@ public class Room {
 		return;
 	}
 
-	public ArrayList<String> getConnections() {
+	public Connections getConnections() {
 		return connections;
 	}
 
-	public void setConnections(ArrayList<String> connections) {
+	public void setConnections(Connections connections) {
 		this.connections = connections;
 		return;
 	}
@@ -114,11 +110,13 @@ public class Room {
 	public void addItems(ArrayList<Item> items) {
 		items.forEach(this::addItem);
 		// #swag
+		return;
 	}
 
 	public void addItem(Item item) {
 		this.items.add(item);
 		this.actions.addAll(item.getActions());
+		return;
 	}
 
 	public Item removeItem(Item item) {
@@ -133,6 +131,7 @@ public class Room {
 
 	public void addNPC(NPC npc) {
 		this.npcs.add(npc);
+		return;
 	}
 
 	public void removeNPC(NPC npc) {
@@ -147,6 +146,7 @@ public class Room {
 
 	public void addPlayer(Player player) {
 		this.players.add(player);
+		return;
 	}
 
 	public ArrayList<Action> getActions() {
@@ -155,11 +155,12 @@ public class Room {
 
 	public void addActions(ArrayList<Action> newActions) {
 		actions.addAll(newActions);
+		return;
 	}
 
 	public void removeActions(ArrayList<Action> newActions) {
 		actions.removeAll(newActions);
-
+		return;
 	}
 
 	public boolean getVisited() {
@@ -169,46 +170,6 @@ public class Room {
 	public void setVisited(boolean visited) {
 		this.visited = visited;
 		return;
-	}
-
-	public String getNorth() {
-		return connections.get(0);
-	}
-
-	public String getNorthEast() {
-		return connections.get(1);
-	}
-
-	public String getEast() {
-		return connections.get(2);
-	}
-
-	public String getSouthEast() {
-		return connections.get(3);
-	}
-
-	public String getSouth() {
-		return connections.get(4);
-	}
-
-	public String getSouthWest() {
-		return connections.get(5);
-	}
-
-	public String getWest() {
-		return connections.get(6);
-	}
-
-	public String getNorthWest() {
-		return connections.get(7);
-	}
-
-	public String getUp() {
-		return connections.get(8);
-	}
-
-	public String getDown() {
-		return connections.get(9);
 	}
 
 
