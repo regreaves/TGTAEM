@@ -17,13 +17,49 @@ public class ItemTests {
 	
 	@Before
 	public void setUp() {
-		sword = new Item("1", "sword", "A steel sword.", "A sword that is light.", false, false, false, false, 10);
-		axe = new Item("2", "axe", "An iron axe.", "An iron axe that is heavy.", false, false, true, false, 20);
-		flower = new Item("3", "flower", "A red rose.", "The thorns are sharp.", false, false, false, false, 5);
+		sword = new Item();
+		axe = new Item();
+		flower = new Item();
 		
-		sword.setIsCritical(true);
-		axe.setIsCritical(true);
-		flower.setIsCritical(false);
+		sword.setID("1");
+		axe.setID("2");
+		flower.setID("3");
+		
+		sword.setName("sword");
+		axe.setName("axe");
+		flower.setName("flower");
+		
+		sword.setInitDscrpt("A steel sword.");
+		axe.setInitDscrpt("An iron axe.");
+		flower.setInitDscrpt("A red rose.");
+		
+		sword.setInventDscrpt("A sword that is light.");
+		axe.setInventDscrpt("An iron axe that is heavy.");
+		flower.setInventDscrpt("The thorns are sharp.");
+		
+		sword.setHidden(false);
+		axe.setHidden(false);
+		flower.setHidden(false);
+		
+		sword.setCritical(true);
+		axe.setCritical(true);
+		flower.setCritical(false);
+		
+		sword.setMoved(false);
+		axe.setMoved(false);
+		flower.setMoved(false);
+		
+		sword.setVowel(false);
+		axe.setVowel(true);
+		flower.setVowel(false);
+		
+		sword.setPlural(false);
+		axe.setPlural(false);
+		flower.setPlural(false);
+		
+		sword.setWeight(10);
+		axe.setWeight(20);
+		flower.setWeight(5);
 	}
 	
 	@Test
@@ -55,28 +91,28 @@ public class ItemTests {
 	}
 	
 	@Test
-	public void testIsHidden() throws Exception {
-		assertFalse(sword.isHidden());
-		assertFalse(axe.isHidden());
-		assertFalse(flower.isHidden());
+	public void testHidden() throws Exception {
+		assertFalse(sword.hidden());
+		assertFalse(axe.hidden());
+		assertFalse(flower.hidden());
 	}
 	
 	@Test
-	public void testIsCritical() throws Exception {
-		assertTrue(sword.isCritical());
-		assertTrue(axe.isCritical());
-		assertFalse(flower.isCritical());
+	public void testCritical() throws Exception {
+		assertTrue(sword.critical());
+		assertTrue(axe.critical());
+		assertFalse(flower.critical());
 	}
 	
 	@Test
 	public void testSetCritical() throws Exception {
-		sword.setIsCritical(true);
-		axe.setIsCritical(false);
-		flower.setIsCritical(true);
+		sword.setCritical(true);
+		axe.setCritical(false);
+		flower.setCritical(true);
 		
-		assertTrue(sword.isCritical());
-		assertFalse(axe.isCritical());
-		assertTrue(flower.isCritical());
+		assertTrue(sword.critical());
+		assertFalse(axe.critical());
+		assertTrue(flower.critical());
 	}
 	
 	@Test
@@ -98,14 +134,14 @@ public class ItemTests {
 	}
 	
 	@Test
-	public void testSetIsHidden() throws Exception {
-		sword.setIsHidden(true);
-		axe.setIsHidden(true);
-		flower.setIsHidden(true);
+	public void testSetHidden() throws Exception {
+		sword.setHidden(true);
+		axe.setHidden(true);
+		flower.setHidden(true);
 		
-		assertTrue(sword.isHidden());
-		assertTrue(axe.isHidden());
-		assertTrue(flower.isHidden());
+		assertTrue(sword.hidden());
+		assertTrue(axe.hidden());
+		assertTrue(flower.hidden());
 	}
 	
 	@Test
@@ -168,20 +204,20 @@ public class ItemTests {
 	
 	@Test
 	public void testGetItemWeight() throws Exception {
-		assertEquals(10, sword.getItemWeight());
-		assertEquals(20, axe.getItemWeight());
-		assertEquals(5, flower.getItemWeight());
+		assertEquals(10, sword.getWeight());
+		assertEquals(20, axe.getWeight());
+		assertEquals(5, flower.getWeight());
 	}
 	
 	@Test
 	public void testSetItemWeight() throws Exception {
-		sword.setItemWeight(5);
-		axe.setItemWeight(10);
-		flower.setItemWeight(15);
+		sword.setWeight(5);
+		axe.setWeight(10);
+		flower.setWeight(15);
 		
-		assertEquals(5, sword.getItemWeight());
-		assertEquals(10, axe.getItemWeight());
-		assertEquals(15, flower.getItemWeight());
+		assertEquals(5, sword.getWeight());
+		assertEquals(10, axe.getWeight());
+		assertEquals(15, flower.getWeight());
 	}
 	
 }

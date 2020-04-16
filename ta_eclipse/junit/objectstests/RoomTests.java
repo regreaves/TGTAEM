@@ -4,13 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import objects.Inventory;
-import objects.Item;
+import objects.Connections;
 import objects.Room;
 
 public class RoomTests {
@@ -18,15 +15,35 @@ public class RoomTests {
 	private Room room2;
 	private Room room3;
 	
-	private ArrayList<String> conn1 = new ArrayList<>();
-	private ArrayList<String> conn2 = new ArrayList<>();
-	private ArrayList<String> conn3 = new ArrayList<>();
+	private Connections conn1 = new Connections();
+	private Connections conn2 = new Connections();
+	private Connections conn3 = new Connections();
 	
 	@Before
 	public void setUp() {
-		room1 = new Room("r1", "room one", "A small room.", false, conn1);
-		room2 = new Room("r2", "room two", "A medium room.", false, conn2);
-		room3 = new Room("r3", "room three", "A large room.", true, conn3);
+		room1 = new Room();
+		room2 = new Room();
+		room3 = new Room();
+		
+		room1.setID("r1");
+		room2.setID("r2");
+		room3.setID("r3");
+		
+		room1.setDisplayName("room one");
+		room2.setDisplayName("room two");
+		room3.setDisplayName("room three");
+		
+		room1.setDescription("A small room.");
+		room2.setDescription("A medium room.");
+		room3.setDescription("A large room.");
+		
+		room1.setVisited(false);
+		room2.setVisited(false);
+		room3.setVisited(true);
+		
+		room1.setConnections(conn1);
+		room2.setConnections(conn2);
+		room3.setConnections(conn3);
 	}
 	
 	@Test
