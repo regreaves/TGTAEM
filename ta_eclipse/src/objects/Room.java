@@ -176,6 +176,11 @@ public class Room {
 		this.connections.put(action, destination);
 		return;
 	}
+	
+	public String getDestination(Action action)
+	{
+		return this.connections.getDestination(action);
+	}
 
 
 	// TODO add NPC based methods
