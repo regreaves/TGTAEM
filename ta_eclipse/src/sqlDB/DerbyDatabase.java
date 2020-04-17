@@ -12,6 +12,7 @@ import java.util.List;
 
 import command.Action;
 import command.Word;
+import objects.Connections;
 import objects.Item;
 import objects.NPC;
 import objects.Player;
@@ -103,6 +104,7 @@ public class DerbyDatabase {
 				PreparedStatement stmt9 = null;
 				PreparedStatement stmt10 = null;
 				PreparedStatement stmt11 = null;
+				PreparedStatement stmt12 = null;
 
 				try {
 					stmt1 = conn.prepareStatement( // words table
@@ -116,10 +118,7 @@ public class DerbyDatabase {
 
 					stmt3 = conn.prepareStatement( // rooms table
 							"create table rooms (" + " id varchar(5) primary key," + " name varchar(42),"
-									+ " description varchar(200)," + "visited boolean," + " north varchar(5), "
-									+ " northeast varchar(5), " + " east varchar(5), " + " southeast varchar(5), "
-									+ " south varchar(5), " + " southwest varchar(5), " + " west varchar(5), "
-									+ " northwest varchar(5), " + " up varchar(5), " + " down varchar(5)" + ")");
+									+ " description varchar(200)," + "visited boolean" + ")");
 					stmt3.executeUpdate();
 
 					stmt4 = conn.prepareStatement( // items table
@@ -159,6 +158,10 @@ public class DerbyDatabase {
 							"create table playerMap (" + " id varchar(5) primary key," + " location varchar(5)" + ")");
 					stmt11.executeUpdate();
 					
+					stmt12 = conn.prepareStatement( //connections table
+							"create table connections (" + " action varchar(42)," + " origin varchar(5)," + " destination varchar(5)" + ")");
+					stmt12.executeUpdate();
+					
 
 					return true;
 				} finally { // close the things
@@ -173,6 +176,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt9);
 					DBUtil.closeQuietly(stmt10);
 					DBUtil.closeQuietly(stmt11);
+					DBUtil.closeQuietly(stmt12);
 				}
 			}
 		});
@@ -193,6 +197,7 @@ public class DerbyDatabase {
 				List<Pair<String, String>> npcMap;
 				List<Pair<String, String>> playerMap;
 				List<Pair<String, String>> itemAction;
+				List<Pair<String, Pair<String, String>>> connections;
 				
 
 				try { // get info from csvs
@@ -206,6 +211,7 @@ public class DerbyDatabase {
 					npcMap = InitialData.getNPCMap();
 					playerMap = InitialData.getPlayerMap();
 					itemAction = InitialData.getItemActions();
+					connections = InitialData.getConnections();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -220,6 +226,7 @@ public class DerbyDatabase {
 				PreparedStatement insertNpcMap = null;
 				PreparedStatement insertPlayerMap = null;
 				PreparedStatement insertItemAction = null;
+				PreparedStatement insertConnection = null;
 
 				try {
 					// populate words table
@@ -246,24 +253,13 @@ public class DerbyDatabase {
 
 					// populate rooms table
 					insertRoom = conn
-							.prepareStatement("insert into rooms (id, name, description, visited, north, northeast,"
-									+ " east, southeast, south, southwest, west, northwest, up, down)"
-									+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+							.prepareStatement("insert into rooms (id, name, description, visited)"
+									+ " values (?, ?, ?, ?)");
 					for (Room room : roomList) {
 						insertRoom.setString(1, room.getID());
 						insertRoom.setString(2, room.getDisplayName());
 						insertRoom.setString(3, room.getDescription());
 						insertRoom.setBoolean(4, room.getVisited());
-						insertRoom.setString(5, room.getNorth());
-						insertRoom.setString(6, room.getNorthEast());
-						insertRoom.setString(7, room.getEast());
-						insertRoom.setString(8, room.getSouthEast());
-						insertRoom.setString(9, room.getSouth());
-						insertRoom.setString(10, room.getSouthWest());
-						insertRoom.setString(11, room.getWest());
-						insertRoom.setString(12, room.getNorthWest());
-						insertRoom.setString(13, room.getUp());
-						insertRoom.setString(14, room.getDown());
 						insertRoom.addBatch();
 					}
 					insertRoom.executeBatch();
@@ -349,7 +345,17 @@ public class DerbyDatabase {
 						insertItemAction.addBatch();
 					}
 					insertItemAction.executeBatch();
-
+					
+					//populate connections table
+					insertConnection = conn.prepareStatement("insert into connections (action, origin, destination)" + " values (?, ?, ?)");
+					for (Pair<String, Pair<String, String>> p : connections) {
+						insertConnection.setString(1, p.getRight().getLeft());
+						insertConnection.setString(2, p.getLeft());
+						insertConnection.setString(3, p.getRight().getRight());
+						insertConnection.addBatch();
+					}
+					insertConnection.executeBatch();
+					
 					return true;
 				} finally { // close the things
 					DBUtil.closeQuietly(insertAction);
@@ -362,6 +368,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertNpcMap);
 					DBUtil.closeQuietly(insertPlayerMap);
 					DBUtil.closeQuietly(insertItemAction);
+					DBUtil.closeQuietly(insertConnection);
 				}
 			}
 		});
@@ -382,6 +389,7 @@ public class DerbyDatabase {
 				PreparedStatement tblNpcMap = null;
 				PreparedStatement tblPlayerMap = null;
 				PreparedStatement tblInvent = null;
+				PreparedStatement tblConnections = null;
 
 				try { // truncating because words did not want to be deleted??
 					tblWord = conn.prepareStatement("truncate table words");
@@ -416,6 +424,9 @@ public class DerbyDatabase {
 
 					tblInvent = conn.prepareStatement("truncate table invent");
 					tblInvent.execute();
+					
+					tblConnections = conn.prepareStatement("truncate table connections");
+					tblConnections.execute();
 
 					System.out.println("Tables cleared!"); // messages are good
 
@@ -432,6 +443,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblNpcMap);
 					DBUtil.closeQuietly(tblPlayerMap);
 					DBUtil.closeQuietly(tblInvent);
+					DBUtil.closeQuietly(tblConnections);
 				}
 			}
 		});
@@ -582,18 +594,11 @@ public class DerbyDatabase {
 						String name = resultSet.getString("name");
 						String dscrpt = resultSet.getString("description");
 						boolean visited = resultSet.getBoolean("visited");
-						ArrayList<String> c = new ArrayList<>();
-						c.add(resultSet.getString(5)); // north
-						c.add(resultSet.getString(6)); // northeast
-						c.add(resultSet.getString(7)); // east
-						c.add(resultSet.getString(8)); // southeast
-						c.add(resultSet.getString(9)); // south
-						c.add(resultSet.getString(10)); // southwest
-						c.add(resultSet.getString(11)); // west
-						c.add(resultSet.getString(12)); // northwest
-						c.add(resultSet.getString(13)); // up
-						c.add(resultSet.getString(14)); // down
-						Room r = new Room(id, name, dscrpt, visited, c);
+						Room r = new Room();
+						r.setID(id);
+						r.setDisplayName(name);
+						r.setDescription(dscrpt);
+						r.setVisited(visited);
 						map.put(id, r);
 					}
 
@@ -910,6 +915,55 @@ public class DerbyDatabase {
 				DBUtil.closeQuietly(stmt);
 			}
 		}
+	}
+	
+	public void addConnectionsToRoom(HashMap<String, Room> map) throws SQLException { // add connections to room
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		PreparedStatement stmt2 = null;
+		ResultSet resultSet = null;
+		ResultSet resultSet2 = null;
+		Action action = null;
+
+			try { 
+				stmt = conn.prepareStatement("select * from connections");
+				resultSet = stmt.executeQuery();
+				while (resultSet.next()) {
+					String origin = resultSet.getString("origin"); //get the origin from the result
+					String actionName = resultSet.getString("action"); //get the action from the result
+					String destination = resultSet.getString("destination"); //get the destination
+					Room r = map.get(origin);
+					
+					stmt2 = conn.prepareStatement("select verb, noun, method from actions where name = ?");
+					stmt2.setString(1, actionName);
+					resultSet2 = stmt2.executeQuery();
+					while (resultSet2.next()) {
+						String name = resultSet2.getString(1);
+						Word verb = Word.makeWord(resultSet2.getString(2), 1);
+						Word noun = Word.makeWord(resultSet2.getString(3), 2);
+						int method = resultSet2.getInt(4);
+						action = new Action(name, verb, noun, method);
+						
+						String v = action.getVerb().getName();
+						String n = action.getNoun().getName();
+						ArrayList<String> verbSyn = getVerbs(v);
+						ArrayList<String> nounSyn = getNouns(n);
+
+						for (String vs : verbSyn) {
+							for (String ns : nounSyn) {
+								String alt = vs + " " + ns;
+								action.addAltName(alt);
+							}
+						}
+					}
+					r.addConnection(action, destination);
+				}
+			} finally { // close the things
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(resultSet2);
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2);
+			}
 	}
 	
 	// The main method creates the database tables and loads the initial data.
