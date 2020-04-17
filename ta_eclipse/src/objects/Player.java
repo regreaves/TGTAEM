@@ -56,4 +56,10 @@ public class Player extends Actor {
 	public String getLocation() {
 		return this.location;
 	}
+	
+	public String toString()
+	{
+		String out = "Player: id - " + id + " location - " + location;
+		return out;
+	}
 }

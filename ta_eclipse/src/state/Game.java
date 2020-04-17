@@ -41,6 +41,7 @@ public class Game {
 			db.placePlayer(map, player);
 			db.placeItems(map, items);
 			db.placeNPCs(map, npcs);
+			db.addConnections(map);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -98,6 +99,7 @@ public class Game {
 		db.placePlayer(map, player);
 		db.placeItems(map, items);
 		db.placeNPCs(map, npcs);
+		db.addConnections(map);
 	}
 
 	public Action parse(String input) {
@@ -175,7 +177,8 @@ public class Game {
 
 	private String go(Action a) throws SQLException {
 		String display = "";
-		String id = room().getDestination(a);
+		String id = room().getDestination(a.getName());
+		System.out.println(id);
 		if (id.equals("0")) {
 			display = "You can't go that way.";
 		} else {

@@ -373,37 +373,37 @@ public class DerbyDatabase {
 				PreparedStatement tblConnections = null;
 
 				try { // truncating because words did not want to be deleted??
-					tblWord = conn.prepareStatement("truncate table words");
+					tblWord = conn.prepareStatement("drop table words");
 					tblWord.execute();
 
-					tblAct = conn.prepareStatement("truncate table actions");
+					tblAct = conn.prepareStatement("drop table actions");
 					tblAct.execute();
 
-					tblRoom = conn.prepareStatement("truncate table rooms");
+					tblRoom = conn.prepareStatement("drop table rooms");
 					tblRoom.execute();
 
-					tblItem = conn.prepareStatement("truncate table items");
+					tblItem = conn.prepareStatement("drop table items");
 					tblItem.execute();
 
-					tblItemMap = conn.prepareStatement("truncate table itemMap");
+					tblItemMap = conn.prepareStatement("drop table itemMap");
 					tblItemMap.execute();
 
-					tblItemAct = conn.prepareStatement("truncate table itemAct");
+					tblItemAct = conn.prepareStatement("drop table itemAct");
 					tblItemAct.execute();
 
-					tblNpcs = conn.prepareStatement("truncate table npcs");
+					tblNpcs = conn.prepareStatement("drop table npcs");
 					tblNpcs.execute();
 
-					tblPlayers = conn.prepareStatement("truncate table player");
+					tblPlayers = conn.prepareStatement("drop table player");
 					tblPlayers.execute();
 
-					tblNpcMap = conn.prepareStatement("truncate table npcMap");
+					tblNpcMap = conn.prepareStatement("drop table npcMap");
 					tblNpcMap.execute();
 
-					tblInvent = conn.prepareStatement("truncate table invent");
+					tblInvent = conn.prepareStatement("drop table invent");
 					tblInvent.execute();
 
-					tblConnections = conn.prepareStatement("truncate table connections");
+					tblConnections = conn.prepareStatement("drop table connections");
 					tblConnections.execute();
 
 					System.out.println("Tables cleared!"); // messages are good
@@ -427,6 +427,7 @@ public class DerbyDatabase {
 	}
 
 	public void fillAll() { // refill tables
+		createTables();
 		loadInitialData(); // don't judge me
 		System.out.println("Tables made!"); // messages are good
 	}
@@ -845,7 +846,7 @@ public class DerbyDatabase {
 		Player p = new Player();
 
 		try { // get all the info from Player table
-			stmt = conn.prepareStatement("select * from players");
+			stmt = conn.prepareStatement("select * from player");
 			resultSet = stmt.executeQuery();
 
 			// for testing that a result was returned
@@ -871,8 +872,8 @@ public class DerbyDatabase {
 		}
 	}
 
-	//place player in map
-	public void placePlayer(HashMap<String, Room> map, Player p) throws SQLException {																					// in map
+	// place player in map
+	public void placePlayer(HashMap<String, Room> map, Player p) throws SQLException { // in map
 		Connection conn = connect();
 		PreparedStatement stmt = null;
 		ResultSet resultSet = null;
@@ -892,31 +893,30 @@ public class DerbyDatabase {
 			DBUtil.closeQuietly(stmt);
 		}
 	}
-	
-	//move player to new room id
-	public void movePlayer(String id, Player p) throws SQLException {																					// in map
+
+	// move player to new room id
+	public void movePlayer(String id, Player p) throws SQLException { // in map
 		Connection conn = connect();
 		PreparedStatement stmt = null;
 		String playerID = p.getID(); // get the players id
 		try { // get location for the given id
 			stmt = conn.prepareStatement("update player set location = ? where id = ?");
-			stmt.setString(1, id); //set location to roomId
+			stmt.setString(1, id); // set location to roomId
 			stmt.setString(2, playerID); // set blank to playerID
 			stmt.executeUpdate();
-			
+
 		} finally { // close the things
 			DBUtil.closeQuietly(stmt);
 		}
 	}
 
-	//connections functions
-	public void addConnectionsToRoom(HashMap<String, Room> map) throws SQLException { // add connections to room
+	// connections functions
+	public void addConnections(HashMap<String, Room> map) throws SQLException { // add connections to room
 		Connection conn = connect();
 		PreparedStatement stmt = null;
 		PreparedStatement stmt2 = null;
 		ResultSet resultSet = null;
 		ResultSet resultSet2 = null;
-		Action action = null;
 
 		try {
 			stmt = conn.prepareStatement("select * from connections");
@@ -926,30 +926,8 @@ public class DerbyDatabase {
 				String actionName = resultSet.getString("action"); // get the action from the result
 				String destination = resultSet.getString("destination"); // get the destination
 				Room r = map.get(origin);
-
-				stmt2 = conn.prepareStatement("select verb, noun, method from actions where name = ?");
-				stmt2.setString(1, actionName);
-				resultSet2 = stmt2.executeQuery();
-				while (resultSet2.next()) {
-					String name = resultSet2.getString(1);
-					Word verb = Word.makeWord(resultSet2.getString(2), 1);
-					Word noun = Word.makeWord(resultSet2.getString(3), 2);
-					int method = resultSet2.getInt(4);
-					action = new Action(name, verb, noun, method);
-
-					String v = action.getVerb().getName();
-					String n = action.getNoun().getName();
-					ArrayList<String> verbSyn = getVerbs(v);
-					ArrayList<String> nounSyn = getNouns(n);
-
-					for (String vs : verbSyn) {
-						for (String ns : nounSyn) {
-							String alt = vs + " " + ns;
-							action.addAltName(alt);
-						}
-					}
-				}
-				r.addConnection(action, destination);
+				
+				r.addConnection(actionName, destination);
 			}
 		} finally { // close the things
 			DBUtil.closeQuietly(resultSet);

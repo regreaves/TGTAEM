@@ -21,8 +21,4 @@ public class GameController {
 	public void setCommand(String command) {
 		this.model.setCommand(command);
 	}
-
-	public void setHere(String id) {
-		this.model.setHere(id);
-	}
 }

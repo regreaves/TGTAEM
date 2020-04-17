@@ -55,6 +55,8 @@ public class UserServlet extends HttpServlet {
 				model.resetGame();
 			} catch (SQLException e) {
 				System.out.println("SQLException thrown");
+				e.printStackTrace();
+
 			}
 			String log = (String) req.getSession().getAttribute("log");
 			log += i + "<br> Loading new game... <br>";

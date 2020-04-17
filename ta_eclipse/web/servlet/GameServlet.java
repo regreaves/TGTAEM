@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -42,7 +43,11 @@ public class GameServlet extends HttpServlet {
 		req.setAttribute("command", req.getParameter("command"));
 
 		String log = (String) req.getSession().getAttribute("log");
-		log = log.concat("<br>> ").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
+		try {
+			log = log.concat("<br>>").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		req.getSession().setAttribute("log", log);
 
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
