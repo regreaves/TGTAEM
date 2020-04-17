@@ -148,17 +148,16 @@ public class DerbyDatabase {
 					stmt9 = conn.prepareStatement( // npcMap table
 							"create table npcMap (" + " id varchar(5) primary key," + " location varchar(5)" + ")");
 					stmt9.executeUpdate();
-					
+
 					stmt10 = conn.prepareStatement( // player table
-							"create table players (" + " id varchar(5) primary key," + " location varchar(5)," 
-							+ " health varchar(5)," + " attack varchar(5)," + " defense varchar(5)" + ")");
+							"create table players (" + " id varchar(5) primary key," + " location varchar(5),"
+									+ " health varchar(5)," + " attack varchar(5)," + " defense varchar(5)" + ")");
 					stmt10.executeUpdate();
 
-					
-					stmt12 = conn.prepareStatement( //connections table
-							"create table connections (" + " action varchar(42)," + " origin varchar(5)," + " destination varchar(5)" + ")");
+					stmt12 = conn.prepareStatement( // connections table
+							"create table connections (" + " action varchar(42)," + " origin varchar(5),"
+									+ " destination varchar(5)" + ")");
 					stmt12.executeUpdate();
-					
 
 					return true;
 				} finally { // close the things
@@ -194,7 +193,6 @@ public class DerbyDatabase {
 				List<Pair<String, String>> npcMap;
 				List<Pair<String, String>> itemAction;
 				List<Pair<String, Pair<String, String>>> connections;
-				
 
 				try { // get info from csvs
 					wordList = InitialData.getWords();
@@ -246,9 +244,8 @@ public class DerbyDatabase {
 					insertAction.executeBatch();
 
 					// populate rooms table
-					insertRoom = conn
-							.prepareStatement("insert into rooms (id, name, description, visited)"
-									+ " values (?, ?, ?, ?)");
+					insertRoom = conn.prepareStatement(
+							"insert into rooms (id, name, description, visited)" + " values (?, ?, ?, ?)");
 					for (Room room : roomList) {
 						insertRoom.setString(1, room.getID());
 						insertRoom.setString(2, room.getDisplayName());
@@ -290,11 +287,10 @@ public class DerbyDatabase {
 						insertNPC.addBatch();
 					}
 					insertNPC.executeBatch();
-					
+
 					// populate players table
-					insertPlayer = conn
-							.prepareStatement("insert into players (id, location, health, attack, defense)"
-									+ " values (?, ?, ?, ?, ?)");
+					insertPlayer = conn.prepareStatement(
+							"insert into players (id, location, health, attack, defense)" + " values (?, ?, ?, ?, ?)");
 					for (Player player : playerList) {
 						insertPlayer.setString(1, player.getID());
 						insertPlayer.setString(2, player.getLocation());
@@ -331,9 +327,10 @@ public class DerbyDatabase {
 						insertItemAction.addBatch();
 					}
 					insertItemAction.executeBatch();
-					
-					//populate connections table
-					insertConnection = conn.prepareStatement("insert into connections (action, origin, destination)" + " values (?, ?, ?)");
+
+					// populate connections table
+					insertConnection = conn.prepareStatement(
+							"insert into connections (action, origin, destination)" + " values (?, ?, ?)");
 					for (Pair<String, Pair<String, String>> p : connections) {
 						insertConnection.setString(1, p.getRight().getLeft());
 						insertConnection.setString(2, p.getLeft());
@@ -341,7 +338,7 @@ public class DerbyDatabase {
 						insertConnection.addBatch();
 					}
 					insertConnection.executeBatch();
-					
+
 					return true;
 				} finally { // close the things
 					DBUtil.closeQuietly(insertAction);
@@ -396,7 +393,7 @@ public class DerbyDatabase {
 
 					tblNpcs = conn.prepareStatement("truncate table npcs");
 					tblNpcs.execute();
-					
+
 					tblPlayers = conn.prepareStatement("truncate table players");
 					tblPlayers.execute();
 
@@ -405,7 +402,7 @@ public class DerbyDatabase {
 
 					tblInvent = conn.prepareStatement("truncate table invent");
 					tblInvent.execute();
-					
+
 					tblConnections = conn.prepareStatement("truncate table connections");
 					tblConnections.execute();
 
@@ -742,8 +739,8 @@ public class DerbyDatabase {
 		});
 	}
 
-	//TODO Add location bind? 
-	//currently only used in drop, can bind with inventory instead
+	// TODO Add location bind?
+	// currently only used in drop, can bind with inventory instead
 	public String getItemID(String itemName) { // get item id from item name
 		return executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
@@ -790,11 +787,15 @@ public class DerbyDatabase {
 						NPC n = new NPC();
 						n.setID(resultSet.getString("id"));
 						n.setName(resultSet.getString("name"));
-						n.setHealth(Integer.parseInt(resultSet.getString("health")));;
-						n.setAttack(Integer.parseInt(resultSet.getString("attack")));;
-						n.setDefense(Integer.parseInt(resultSet.getString("defense")));;
-						n.setDescription(resultSet.getString("description"));;
-						
+						n.setHealth(Integer.parseInt(resultSet.getString("health")));
+						;
+						n.setAttack(Integer.parseInt(resultSet.getString("attack")));
+						;
+						n.setDefense(Integer.parseInt(resultSet.getString("defense")));
+						;
+						n.setDescription(resultSet.getString("description"));
+						;
+
 						npcs.add(n);
 					}
 
@@ -819,14 +820,14 @@ public class DerbyDatabase {
 
 		for (NPC n : npcs) {
 			npcID = n.getID(); // get the npc id
-			try { //get location for the given id
+			try { // get location for the given id
 				stmt = conn.prepareStatement("select location from npcMap where id = ?");
 				stmt.setString(1, npcID); // set blank to id
 				resultSet = stmt.executeQuery();
 
 				while (resultSet.next()) {
-					String loc = resultSet.getString("location"); //get the location id from the result
-					Room r = map.get(loc); //retrieve the room related to the id
+					String loc = resultSet.getString("location"); // get the location id from the result
+					Room r = map.get(loc); // retrieve the room related to the id
 					r.addNPC(n); // add the npc to the room
 				}
 			} finally { // close the things
@@ -835,71 +836,65 @@ public class DerbyDatabase {
 			}
 		}
 	}
-	
+
 	// Player Functions
-	public ArrayList<Player> getPlayers() { // get all players
-		return executeTransaction(new Transaction<ArrayList<Player>>() {
-			public ArrayList<Player> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				ArrayList<Player> players = new ArrayList<>();
-
-				try { // get all the info from Player table
-					stmt = conn.prepareStatement("select * from players");
-					resultSet = stmt.executeQuery();
-
-					// for testing that a result was returned
-					Boolean found = false;
-					while (resultSet.next()) {
-						found = true;
-						Player p = new Player();
-						p.setID(resultSet.getString("id"));
-						p.setLocation(resultSet.getString("location"));
-						p.setHealth(Integer.parseInt(resultSet.getString("health")));
-						p.setAttack(Integer.parseInt(resultSet.getString("attack")));
-						p.setDefense(Integer.parseInt(resultSet.getString("defense")));
-							
-						players.add(p);
-					}
-
-					// check if no players found
-					if (!found) {
-						System.out.println("no players found");
-					}
-					return players;
-				} finally { // close the things
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-	}
-
-	public void placePlayers(HashMap<String, Room> map, ArrayList<Player> players) throws SQLException { // place players in map
+	public Player getPlayer() throws SQLException { // get the player character
 		Connection conn = connect();
 		PreparedStatement stmt = null;
 		ResultSet resultSet = null;
-		String playerID;
+		Player p = new Player();
 
-		for (Player p : players) {
-			playerID = p.getID(); // get the players id
-			try { //get location for the given id
-				stmt = conn.prepareStatement("select location from player where id = ?");
-				stmt.setString(1, playerID); // set blank to id
-				resultSet = stmt.executeQuery();
+		try { // get all the info from Player table
+			stmt = conn.prepareStatement("select * from players");
+			resultSet = stmt.executeQuery();
 
-				while (resultSet.next()) {
-					String loc = resultSet.getString("location"); //get the location id from the result
-					Room r = map.get(loc); //retrieve the room related to the id
-					r.addPlayer(p); // add the player to the room
-				}
-			} finally { // close the things
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
+			// for testing that a result was returned
+			Boolean found = false;
+			while (resultSet.next()) {
+				found = true;
+				p.setID(resultSet.getString("id"));
+				p.setLocation(resultSet.getString("location"));
+				p.setHealth(Integer.parseInt(resultSet.getString("health")));
+				p.setAttack(Integer.parseInt(resultSet.getString("attack")));
+				p.setDefense(Integer.parseInt(resultSet.getString("defense")));
+
 			}
+
+			// check if no player found
+			if (!found) {
+				System.out.println("no player found");
+			}
+			return p;
+		} finally { // close the things
+			DBUtil.closeQuietly(resultSet);
+			DBUtil.closeQuietly(stmt);
 		}
 	}
-	
+
+	public void placePlayer(HashMap<String, Room> map, Player p) throws SQLException { // place
+																							// players
+																							// in map
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		String playerID = p.getID(); // get the players id
+		try { // get location for the given id
+			stmt = conn.prepareStatement("select location from player where id = ?");
+			stmt.setString(1, playerID); // set blank to id
+			resultSet = stmt.executeQuery();
+
+			while (resultSet.next()) {
+				String loc = resultSet.getString("location"); // get the location id from the result
+				Room r = map.get(loc); // retrieve the room related to the id
+				r.addPlayer(p); // add the player to the room
+			}
+		} finally { // close the things
+			DBUtil.closeQuietly(resultSet);
+			DBUtil.closeQuietly(stmt);
+		}
+	}
+
+
 	public void addConnectionsToRoom(HashMap<String, Room> map) throws SQLException { // add connections to room
 		Connection conn = connect();
 		PreparedStatement stmt = null;
@@ -908,47 +903,47 @@ public class DerbyDatabase {
 		ResultSet resultSet2 = null;
 		Action action = null;
 
-			try { 
-				stmt = conn.prepareStatement("select * from connections");
-				resultSet = stmt.executeQuery();
-				while (resultSet.next()) {
-					String origin = resultSet.getString("origin"); //get the origin from the result
-					String actionName = resultSet.getString("action"); //get the action from the result
-					String destination = resultSet.getString("destination"); //get the destination
-					Room r = map.get(origin);
-					
-					stmt2 = conn.prepareStatement("select verb, noun, method from actions where name = ?");
-					stmt2.setString(1, actionName);
-					resultSet2 = stmt2.executeQuery();
-					while (resultSet2.next()) {
-						String name = resultSet2.getString(1);
-						Word verb = Word.makeWord(resultSet2.getString(2), 1);
-						Word noun = Word.makeWord(resultSet2.getString(3), 2);
-						int method = resultSet2.getInt(4);
-						action = new Action(name, verb, noun, method);
-						
-						String v = action.getVerb().getName();
-						String n = action.getNoun().getName();
-						ArrayList<String> verbSyn = getVerbs(v);
-						ArrayList<String> nounSyn = getNouns(n);
+		try {
+			stmt = conn.prepareStatement("select * from connections");
+			resultSet = stmt.executeQuery();
+			while (resultSet.next()) {
+				String origin = resultSet.getString("origin"); // get the origin from the result
+				String actionName = resultSet.getString("action"); // get the action from the result
+				String destination = resultSet.getString("destination"); // get the destination
+				Room r = map.get(origin);
 
-						for (String vs : verbSyn) {
-							for (String ns : nounSyn) {
-								String alt = vs + " " + ns;
-								action.addAltName(alt);
-							}
+				stmt2 = conn.prepareStatement("select verb, noun, method from actions where name = ?");
+				stmt2.setString(1, actionName);
+				resultSet2 = stmt2.executeQuery();
+				while (resultSet2.next()) {
+					String name = resultSet2.getString(1);
+					Word verb = Word.makeWord(resultSet2.getString(2), 1);
+					Word noun = Word.makeWord(resultSet2.getString(3), 2);
+					int method = resultSet2.getInt(4);
+					action = new Action(name, verb, noun, method);
+
+					String v = action.getVerb().getName();
+					String n = action.getNoun().getName();
+					ArrayList<String> verbSyn = getVerbs(v);
+					ArrayList<String> nounSyn = getNouns(n);
+
+					for (String vs : verbSyn) {
+						for (String ns : nounSyn) {
+							String alt = vs + " " + ns;
+							action.addAltName(alt);
 						}
 					}
-					r.addConnection(action, destination);
 				}
-			} finally { // close the things
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(resultSet2);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(stmt2);
+				r.addConnection(action, destination);
 			}
+		} finally { // close the things
+			DBUtil.closeQuietly(resultSet);
+			DBUtil.closeQuietly(resultSet2);
+			DBUtil.closeQuietly(stmt);
+			DBUtil.closeQuietly(stmt2);
+		}
 	}
-	
+
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");
