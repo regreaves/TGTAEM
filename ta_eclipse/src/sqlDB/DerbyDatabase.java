@@ -150,7 +150,7 @@ public class DerbyDatabase {
 					stmt9.executeUpdate();
 
 					stmt10 = conn.prepareStatement( // player table
-							"create table players (" + " id varchar(5) primary key," + " location varchar(5),"
+							"create table player (" + " id varchar(5) primary key," + " location varchar(5),"
 									+ " health varchar(5)," + " attack varchar(5)," + " defense varchar(5)" + ")");
 					stmt10.executeUpdate();
 
@@ -290,7 +290,7 @@ public class DerbyDatabase {
 
 					// populate players table
 					insertPlayer = conn.prepareStatement(
-							"insert into players (id, location, health, attack, defense)" + " values (?, ?, ?, ?, ?)");
+							"insert into player (id, location, health, attack, defense)" + " values (?, ?, ?, ?, ?)");
 					for (Player player : playerList) {
 						insertPlayer.setString(1, player.getID());
 						insertPlayer.setString(2, player.getLocation());
@@ -394,7 +394,7 @@ public class DerbyDatabase {
 					tblNpcs = conn.prepareStatement("truncate table npcs");
 					tblNpcs.execute();
 
-					tblPlayers = conn.prepareStatement("truncate table players");
+					tblPlayers = conn.prepareStatement("truncate table player");
 					tblPlayers.execute();
 
 					tblNpcMap = conn.prepareStatement("truncate table npcMap");
@@ -871,9 +871,8 @@ public class DerbyDatabase {
 		}
 	}
 
-	public void placePlayer(HashMap<String, Room> map, Player p) throws SQLException { // place
-																							// players
-																							// in map
+	//place player in map
+	public void placePlayer(HashMap<String, Room> map, Player p) throws SQLException {																					// in map
 		Connection conn = connect();
 		PreparedStatement stmt = null;
 		ResultSet resultSet = null;
@@ -893,8 +892,24 @@ public class DerbyDatabase {
 			DBUtil.closeQuietly(stmt);
 		}
 	}
+	
+	//move player to new room id
+	public void movePlayer(String id, Player p) throws SQLException {																					// in map
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		String playerID = p.getID(); // get the players id
+		try { // get location for the given id
+			stmt = conn.prepareStatement("update player set location = ? where id = ?");
+			stmt.setString(1, id); //set location to roomId
+			stmt.setString(2, playerID); // set blank to playerID
+			stmt.executeUpdate();
+			
+		} finally { // close the things
+			DBUtil.closeQuietly(stmt);
+		}
+	}
 
-
+	//connections functions
 	public void addConnectionsToRoom(HashMap<String, Room> map) throws SQLException { // add connections to room
 		Connection conn = connect();
 		PreparedStatement stmt = null;
