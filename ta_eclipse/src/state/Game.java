@@ -20,6 +20,8 @@ public class Game {
 	Parser parser;
 	DerbyDatabase db;
 
+	//R
+	HashMap<String, Action> shortcuts = new HashMap<>();
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
@@ -47,6 +49,7 @@ public class Game {
 		npcs = db.getNPCs();
 		db.placeItems(map, items);
 		db.placeNPCs(map, npcs);
+		db.getShortcuts();
 	}
 
 	// for use with jsp
@@ -102,9 +105,12 @@ public class Game {
 		npcs = db.getNPCs();
 		db.placeItems(map, items);
 		db.placeNPCs(map, npcs);
+		//R
+		db.getShortcuts();
 	}
 
 
+	//R
 	public Action parse(String input) {
 		Action a = parser.getAction(input);
 		return a;

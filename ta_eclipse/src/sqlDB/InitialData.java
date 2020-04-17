@@ -13,6 +13,30 @@ import objects.Player;
 import objects.Room;
 
 public class InitialData {
+	
+	//R
+	public static List<Pair<String, String>> getShortcuts() throws IOException {
+		List<Pair<String, String>> shortcutList = new ArrayList<>();
+		ReadCSV readShortcuts = new ReadCSV("shortcuts.csv");
+		try {
+			readShortcuts.next(); // skip headings
+			while (true) {
+				List<String> tuple = readShortcuts.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String shortcut = i.next();
+				String action = i.next();
+				Pair<String, String> p = new Pair<>(shortcut, action);
+				shortcutList.add(p);
+			}
+			return shortcutList;
+		} finally {
+			readShortcuts.close();
+		}
+	}
+	
 	public static List<Word> getWords() throws IOException {
 		List<Word> wordList = new ArrayList<Word>();
 		ReadCSV readWords = new ReadCSV("words.csv");

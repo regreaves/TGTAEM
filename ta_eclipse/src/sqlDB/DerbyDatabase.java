@@ -102,6 +102,8 @@ public class DerbyDatabase {
 				PreparedStatement stmt8 = null;
 				PreparedStatement stmt9 = null;
 				PreparedStatement stmt10 = null;
+				//R
+				PreparedStatement stmt11 = null;
 
 				try {
 					stmt1 = conn.prepareStatement( // words table
@@ -154,7 +156,10 @@ public class DerbyDatabase {
 							+ " health varchar(5)," + " attack varchar(5)," + " defense varchar(5)" + ")");
 					stmt10.executeUpdate();
 
-					
+					//R
+					stmt11 = conn.prepareStatement(
+							"create table shortcuts (" + " shortcut varchar(5)," + " action varchar(42)" + ")");
+					stmt11.executeUpdate();
 
 					return true;
 				} finally { // close the things
@@ -168,10 +173,11 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt8);
 					DBUtil.closeQuietly(stmt9);
 					DBUtil.closeQuietly(stmt10);
+					//R
+					DBUtil.closeQuietly(stmt11);
 				}
 			}
 		});
-
 	}
 
 	public void loadInitialData() { // load data into tables
@@ -187,7 +193,8 @@ public class DerbyDatabase {
 				List<Pair<String, String>> itemMap;
 				List<Pair<String, String>> npcMap;
 				List<Pair<String, String>> itemAction;
-				
+				//R
+				List<Pair<String, String>> shortcutList;
 
 				try { // get info from csvs
 					wordList = InitialData.getWords();
@@ -199,6 +206,8 @@ public class DerbyDatabase {
 					itemMap = InitialData.getItemMap();
 					npcMap = InitialData.getNPCMap();
 					itemAction = InitialData.getItemActions();
+					//R
+					shortcutList = InitialData.getShortcuts();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -212,6 +221,8 @@ public class DerbyDatabase {
 				PreparedStatement insertItemMap = null;
 				PreparedStatement insertNpcMap = null;
 				PreparedStatement insertItemAction = null;
+				//R
+				PreparedStatement insertShortcut = null;
 
 				try {
 					// populate words table
@@ -333,6 +344,18 @@ public class DerbyDatabase {
 						insertItemAction.addBatch();
 					}
 					insertItemAction.executeBatch();
+					
+					//R
+					// populate shortcut table
+					insertShortcut = conn.prepareStatement(
+							"insert into shortcuts (shortcut, name)"
+									+ " values (?, ?)");
+					for (Pair<String, String> p : shortcutList) {
+						insertShortcut.setString(1, p.getLeft());
+						insertShortcut.setString(2, p.getRight());
+						insertShortcut.addBatch();
+					}
+					insertItemAction.executeBatch();
 
 					return true;
 				} finally { // close the things
@@ -345,6 +368,8 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertItemMap);
 					DBUtil.closeQuietly(insertNpcMap);
 					DBUtil.closeQuietly(insertItemAction);
+					//R
+					DBUtil.closeQuietly(insertShortcut);
 				}
 			}
 		});
@@ -364,6 +389,8 @@ public class DerbyDatabase {
 				PreparedStatement tblPlayers = null;
 				PreparedStatement tblNpcMap = null;
 				PreparedStatement tblInvent = null;
+				//R
+				PreparedStatement tblShortcut = null;
 
 				try { // truncating because words did not want to be deleted??
 					tblWord = conn.prepareStatement("truncate table words");
@@ -395,6 +422,10 @@ public class DerbyDatabase {
 
 					tblInvent = conn.prepareStatement("truncate table invent");
 					tblInvent.execute();
+					
+					//R
+					tblShortcut = conn.prepareStatement("truncate table shortcuts");
+					tblShortcut.execute();
 
 					System.out.println("Tables cleared!"); // messages are good
 
@@ -410,6 +441,8 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblPlayers);
 					DBUtil.closeQuietly(tblNpcMap);
 					DBUtil.closeQuietly(tblInvent);
+					//R
+					DBUtil.closeQuietly(tblShortcut);
 				}
 			}
 		});
@@ -420,6 +453,74 @@ public class DerbyDatabase {
 		System.out.println("Tables made!"); // messages are good
 	}
 
+	//R
+	public HashMap<String, Action> getShortcuts() {
+		return executeTransaction(new Transaction<HashMap<String, Action>>() {
+			public HashMap<String, Action> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				HashMap<String, Action> shortcuts = new HashMap<>();
+
+				try {
+					stmt = conn.prepareStatement("select * from shortcuts");
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+					Boolean found = false;
+					while (resultSet.next()) {
+						found = true;
+						String shortcut = resultSet.getString("shortcut");
+						String actionName = resultSet.getString("name");
+//						ArrayList<String> c = new ArrayList<>();
+//						c.add(resultSet.getString(5)); // north
+//						c.add(resultSet.getString(6)); // northeast
+//						c.add(resultSet.getString(7)); // east
+						Action action = new Action(actionName, null, null, 0);
+						shortcuts.put(shortcut, action);
+					}
+
+					// check if no shortcuts were found
+					if (!found) {
+						System.out.println("error in shortcuts table");
+					}
+					return shortcuts; // return the map
+				} finally { // close the things
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	/*
+	 * 	public void placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException { // place items in map
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		String itemID;
+
+		for (Item i : items) {
+			itemID = i.getID(); // get the item id
+
+			try { // get the location for the given id
+				stmt = conn.prepareStatement("select location from itemMap where id = ?");
+				stmt.setString(1, itemID); // set the blank as the id
+				resultSet = stmt.executeQuery();
+
+				while (resultSet.next()) {
+					String loc = resultSet.getString("location"); // get the location id from the result
+					Room r = map.get(loc); // retrieve the room related to the id
+					r.addItem(i); // add the item to the room
+				}
+			} finally { // close the things
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt);
+			}
+		}
+	}
+	 */
+	 
+	
 	// Word/Action Functions
 	public ArrayList<Action> getActions() { // create all action objects available
 		return executeTransaction(new Transaction<ArrayList<Action>>() {
