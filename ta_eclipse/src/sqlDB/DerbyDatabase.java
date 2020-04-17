@@ -150,13 +150,10 @@ public class DerbyDatabase {
 					stmt9.executeUpdate();
 					
 					stmt10 = conn.prepareStatement( // player table
-							"create table players (" + " id varchar(5) primary key," + " health varchar(5),"  
-									+ " attack varchar(5)," + " defense varchar(5)" + ")");
+							"create table players (" + " id varchar(5) primary key," + " location varchar(5)," 
+							+ " health varchar(5)," + " attack varchar(5)," + " defense varchar(5)" + ")");
 					stmt10.executeUpdate();
-					
-					stmt11 = conn.prepareStatement( // playerMap table
-							"create table playerMap (" + " id varchar(5) primary key," + " location varchar(5)" + ")");
-					stmt11.executeUpdate();
+
 					
 					stmt12 = conn.prepareStatement( //connections table
 							"create table connections (" + " action varchar(42)," + " origin varchar(5)," + " destination varchar(5)" + ")");
@@ -195,7 +192,6 @@ public class DerbyDatabase {
 				List<Player> playerList;
 				List<Pair<String, String>> itemMap;
 				List<Pair<String, String>> npcMap;
-				List<Pair<String, String>> playerMap;
 				List<Pair<String, String>> itemAction;
 				List<Pair<String, Pair<String, String>>> connections;
 				
@@ -209,7 +205,6 @@ public class DerbyDatabase {
 					playerList = InitialData.getPlayers();
 					itemMap = InitialData.getItemMap();
 					npcMap = InitialData.getNPCMap();
-					playerMap = InitialData.getPlayerMap();
 					itemAction = InitialData.getItemActions();
 					connections = InitialData.getConnections();
 				} catch (IOException e) {
@@ -224,7 +219,6 @@ public class DerbyDatabase {
 				PreparedStatement insertPlayer = null;
 				PreparedStatement insertItemMap = null;
 				PreparedStatement insertNpcMap = null;
-				PreparedStatement insertPlayerMap = null;
 				PreparedStatement insertItemAction = null;
 				PreparedStatement insertConnection = null;
 
@@ -299,13 +293,14 @@ public class DerbyDatabase {
 					
 					// populate players table
 					insertPlayer = conn
-							.prepareStatement("insert into players (id, health, attack, defense)"
-									+ " values (?, ?, ?, ?)");
+							.prepareStatement("insert into players (id, location, health, attack, defense)"
+									+ " values (?, ?, ?, ?, ?)");
 					for (Player player : playerList) {
 						insertPlayer.setString(1, player.getID());
-						insertPlayer.setInt(2, player.getHealth());
-						insertPlayer.setInt(3, player.getAttack());
-						insertPlayer.setInt(4, player.getDefense());
+						insertPlayer.setString(2, player.getLocation());
+						insertPlayer.setInt(3, player.getHealth());
+						insertPlayer.setInt(4, player.getAttack());
+						insertPlayer.setInt(5, player.getDefense());
 						insertPlayer.addBatch();
 					}
 					insertPlayer.executeBatch();
@@ -327,15 +322,6 @@ public class DerbyDatabase {
 						insertNpcMap.addBatch();
 					}
 					insertNpcMap.executeBatch();
-					
-					// populate player location table
-					insertPlayerMap = conn.prepareStatement("insert into playerMap (id, location)" + " values (?, ?)");
-					for (Pair<String, String> p : playerMap) {
-						insertPlayerMap.setString(1, p.getLeft());
-						insertPlayerMap.setString(2, p.getRight());
-						insertPlayerMap.addBatch();
-					}
-					insertPlayerMap.executeBatch();
 
 					// populate item action table
 					insertItemAction = conn.prepareStatement("insert into itemAct (id, action)" + " values (?, ?)");
@@ -366,7 +352,6 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertPlayer);
 					DBUtil.closeQuietly(insertItemMap);
 					DBUtil.closeQuietly(insertNpcMap);
-					DBUtil.closeQuietly(insertPlayerMap);
 					DBUtil.closeQuietly(insertItemAction);
 					DBUtil.closeQuietly(insertConnection);
 				}
@@ -387,7 +372,6 @@ public class DerbyDatabase {
 				PreparedStatement tblNpcs = null;
 				PreparedStatement tblPlayers = null;
 				PreparedStatement tblNpcMap = null;
-				PreparedStatement tblPlayerMap = null;
 				PreparedStatement tblInvent = null;
 				PreparedStatement tblConnections = null;
 
@@ -418,9 +402,6 @@ public class DerbyDatabase {
 
 					tblNpcMap = conn.prepareStatement("truncate table npcMap");
 					tblNpcMap.execute();
-					
-					tblPlayerMap = conn.prepareStatement("truncate table playerMap");
-					tblPlayerMap.execute();
 
 					tblInvent = conn.prepareStatement("truncate table invent");
 					tblInvent.execute();
@@ -441,7 +422,6 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblNpcs);
 					DBUtil.closeQuietly(tblPlayers);
 					DBUtil.closeQuietly(tblNpcMap);
-					DBUtil.closeQuietly(tblPlayerMap);
 					DBUtil.closeQuietly(tblInvent);
 					DBUtil.closeQuietly(tblConnections);
 				}
@@ -762,6 +742,8 @@ public class DerbyDatabase {
 		});
 	}
 
+	//TODO Add location bind? 
+	//currently only used in drop, can bind with inventory instead
 	public String getItemID(String itemName) { // get item id from item name
 		return executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
@@ -855,7 +837,7 @@ public class DerbyDatabase {
 	}
 	
 	// Player Functions
-	public ArrayList<Player> getPlayers() { // get all npcs
+	public ArrayList<Player> getPlayers() { // get all players
 		return executeTransaction(new Transaction<ArrayList<Player>>() {
 			public ArrayList<Player> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
@@ -872,9 +854,10 @@ public class DerbyDatabase {
 						found = true;
 						Player p = new Player();
 						p.setID(resultSet.getString("id"));
-						p.setHealth(Integer.parseInt(resultSet.getString("health")));;
-						p.setAttack(Integer.parseInt(resultSet.getString("attack")));;
-						p.setDefense(Integer.parseInt(resultSet.getString("defense")));;
+						p.setLocation(resultSet.getString("location"));
+						p.setHealth(Integer.parseInt(resultSet.getString("health")));
+						p.setAttack(Integer.parseInt(resultSet.getString("attack")));
+						p.setDefense(Integer.parseInt(resultSet.getString("defense")));
 							
 						players.add(p);
 					}
@@ -901,14 +884,14 @@ public class DerbyDatabase {
 		for (Player p : players) {
 			playerID = p.getID(); // get the players id
 			try { //get location for the given id
-				stmt = conn.prepareStatement("select location from playerMap where id = ?");
+				stmt = conn.prepareStatement("select location from player where id = ?");
 				stmt.setString(1, playerID); // set blank to id
 				resultSet = stmt.executeQuery();
 
 				while (resultSet.next()) {
 					String loc = resultSet.getString("location"); //get the location id from the result
 					Room r = map.get(loc); //retrieve the room related to the id
-					r.addPlayer(p); // add the npc to the room
+					r.addPlayer(p); // add the player to the room
 				}
 			} finally { // close the things
 				DBUtil.closeQuietly(resultSet);

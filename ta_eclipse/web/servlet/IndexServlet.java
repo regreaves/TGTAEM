@@ -13,9 +13,32 @@ public class IndexServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
-		System.out.println("Index Servlet: doGet");
-		
-		req.getRequestDispatcher("/_view/index.jsp").forward(req, resp);
+
+		System.out.println("\nIndexServlet: doGet");
+
+		String user = (String) req.getSession().getAttribute("user");
+		if (user == null) {
+			System.out.println("   User: <" + user + "> not logged in or session timed out");
+			
+			// user is not logged in, or the session expired
+			resp.sendRedirect(req.getContextPath() + "/login");
+			return;
+		}
+
+		// now we have the user's User object,
+		// proceed to handle request...
+		System.out.println("   User: <" + user + "> logged in");
+
+		req.getRequestDispatcher("/_view/user.jsp").forward(req, resp);
 	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		
+		System.out.println("\nIndexServlet: doPost");		
+		
+		// Forward to view to render the result HTML document
+		req.getRequestDispatcher("/_view/user.jsp").forward(req, resp);
+	}	
 }

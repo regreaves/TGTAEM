@@ -250,6 +250,7 @@ public class InitialData {
 				Iterator<String> i = tuple.iterator();
 				Player player = new Player();
 				player.setID(i.next());
+				player.setLocation(i.next());
 				player.setHealth(Integer.parseInt(i.next()));
 				player.setAttack(Integer.parseInt(i.next()));
 				player.setDefense(Integer.parseInt(i.next()));
@@ -260,8 +261,7 @@ public class InitialData {
 		} finally {
 			readPlayers.close();
 		}
-	}
-	
+	}	
 	public static List<Pair<String, String>> getPlayerMap() throws IOException {
 		List<Pair<String, String>> playerMap = new ArrayList<>();
 		ReadCSV readPlayers = new ReadCSV("player_loc.csv");
@@ -325,4 +325,5 @@ public class InitialData {
 //		}
 //		return;
 //	}
+
 }

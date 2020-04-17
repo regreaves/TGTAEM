@@ -15,7 +15,6 @@ import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 
 public class Game {
-	User user;
 	Player player;
 	Parser parser;
 	DerbyDatabase db;
@@ -28,6 +27,7 @@ public class Game {
 	boolean newGame = true;
 
 	String command = "";
+	String startRoom;// = "1";
 
 //	ArrayList<Action> actionsTaken = new ArrayList<>();
 //	ArrayList<String> roomsVisited = new ArrayList<>();
@@ -36,17 +36,22 @@ public class Game {
 //	ArrayList<Checkpoint> checkpoints = new ArrayList<>();
 
 	// not done here yet
-	public Game() throws SQLException {
+	public Game() {
 		DatabaseProvider.setInstance(new DerbyDatabase());
-//		this.user = user;
 		this.player = new Player();
 		this.db = DatabaseProvider.getInstance();
 		this.parser = new Parser(db);
 		map = db.getMap();
 		items = db.getItems();
 		npcs = db.getNPCs();
-		db.placeItems(map, items);
-		db.placeNPCs(map, npcs);
+		try {
+			db.placeItems(map, items);
+			db.placeNPCs(map, npcs);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	// for use with jsp
@@ -71,8 +76,9 @@ public class Game {
 	}
 
 	public String getRoomOne() {
-		newGame = false;
-		return loadRoom("1");
+//		newGame = false;
+//		return loadRoom("1");
+		return startRoom;
 	}
 
 	public String getCommand() {
@@ -93,6 +99,13 @@ public class Game {
 
 	// called by proxy through above methods
 	// probably could change to private
+	
+	public void reset() throws SQLException
+	{
+		db.clearAll();
+		db.fillAll();
+		remake();
+	}
 	
 	public void remake() throws SQLException
 	{
@@ -228,7 +241,7 @@ public class Game {
 		ArrayList<Item> roomItems = itemsHere();
 		for (Item i : roomItems) {
 			if (i.getName().equals(obj)) {
-				if (i.getItemWeight() < 30 && player.getInventory().checkWeight(i)) { //TODO - hardcoded maxSize but this would be found in the player table in the future
+				if (i.getWeight() < 30 && player.getInventory().checkWeight(i)) { //TODO - hardcoded maxSize but this would be found in the player table in the future
 //					player.get(i);
 //					Room r = map.get(here());
 //					r.removeItem(i);
@@ -494,9 +507,7 @@ public class Game {
 		String response = in.nextLine();
 		if(response.equalsIgnoreCase("y"))
 		{
-			g.db.clearAll();
-			g.db.fillAll();
-			g.remake();
+			g.reset();
 		}
 		
 		System.out.println(g.loadRoom("1"));

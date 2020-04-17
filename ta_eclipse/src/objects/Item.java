@@ -18,7 +18,6 @@ public class Item {
 
 	int weight;
 
-	ArrayList<Item> subItems = new ArrayList<>();
 	ArrayList<Action> actions = new ArrayList<>();
 	ArrayList<Action> actionsDone = new ArrayList<>();
 
@@ -88,14 +87,6 @@ public class Item {
 	public void setCritical(boolean critical) {
 		this.critical = critical;
 		return;
-	}
-
-	public void addItem(Item i) {
-		subItems.add(i);
-	}
-
-	public void removeItem(Item i) {
-		subItems.remove(i);
 	}
 
 	public boolean hidden() {

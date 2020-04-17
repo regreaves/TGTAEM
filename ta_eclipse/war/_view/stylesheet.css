@@ -5,18 +5,9 @@
 	src: url('PrintChar21.ttf') format('truetype');
 }
 
-* {
-	margin: 0;
-	padding: 0;
-	outline: none;
-	background: #000;
-	font-family: 'MyOutput';
-	font-size: 1em;
-	color: #fff;
-}
-
 body {
-	
+	background-color: black;
+	color: white;
 }
 
 #outer {
@@ -26,25 +17,23 @@ body {
 
 #output {
 	resize: none;
-	overflow: hidden;
+	overflow: scroll;
 	border: 0 none;
-	display: block !important;
+	display: block;
 	width: 35em;
 	min-width: 35em;
 	height: 24em;
 	background: transparent;
 	font-family: 'MyOutput';
-	color: #fff;
-	text-transform: uppercase;
 }
 
-.input {
+input {
 	resize: none;
 	border: 0 none;
-	width: 100%;
-	display: block !important;
+  width: 100%;
+	display: block;
 	background: transparent;
 	font-family: 'MyOutput';
-	color: #fff;
-	text-transform: uppercase;
+	font-size: 1em;
+	color: inherit;
 }
