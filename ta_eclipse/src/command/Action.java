@@ -16,14 +16,6 @@ public class Action {
 		this.method = method;
 	}
 
-	public Action getAction(String name) {
-		if (name.equals(this.name)) {
-			return this;
-		} else {
-			return null;
-		}
-	}
-
 	public String getName() {
 		return name;
 	}

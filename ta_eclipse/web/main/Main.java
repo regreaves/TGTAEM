@@ -19,7 +19,7 @@ public class Main {
 		server.start();
 		
 		// dump the console output - this will produce a lot of red text - no worries, that is normal
-		server.dumpStdErr();
+		//server.dumpStdErr();
 		
 		// Inform user that server is running
 		System.out.println("RUNNING: web server on port 8081");

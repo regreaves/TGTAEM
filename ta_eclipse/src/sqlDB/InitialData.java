@@ -103,18 +103,11 @@ public class InitialData {
 				if (x == 1) {
 					visited = true;
 				}
-				ArrayList<String> c = new ArrayList<>();
-				c.add(i.next()); // north
-				c.add(i.next()); // northeast
-				c.add(i.next()); // east
-				c.add(i.next()); // southeast
-				c.add(i.next()); // south
-				c.add(i.next()); // southwests
-				c.add(i.next()); // west
-				c.add(i.next()); // northwest
-				c.add(i.next()); // up
-				c.add(i.next()); // down
-				Room r = new Room(id, name, dscrpt, visited, c);
+				Room r = new Room();
+				r.setID(id);
+				r.setDisplayName(name);
+				r.setDescription(dscrpt);
+				r.setVisited(visited);
 				roomList.add(r);
 			}
 			return roomList;
@@ -292,5 +285,68 @@ public class InitialData {
 		} finally {
 			readPlayers.close();
 		}
+	}	
+	public static List<Pair<String, String>> getPlayerMap() throws IOException {
+		List<Pair<String, String>> playerMap = new ArrayList<>();
+		ReadCSV readPlayers = new ReadCSV("player_loc.csv");
+		try {
+			readPlayers.next(); // skip headings
+			while (true) {
+				List<String> tuple = readPlayers.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String id = i.next();
+				String loc = i.next();
+				Pair<String, String> p = new Pair<>(id, loc);
+				playerMap.add(p);
+			}
+			return playerMap;
+		} finally {
+			readPlayers.close();
+		}
+	}
+	
+	public static List<Pair<String, Pair<String, String>>> getConnections() throws IOException {
+		List<Pair<String, Pair<String, String>>> connections = new ArrayList<>();
+		ReadCSV readConnections = new ReadCSV("connections.csv");
+		try {
+			String o = "";
+			while (true) {
+				List<String> tuple = readConnections.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String x = i.next();
+				if(x.equals("room"))
+				{
+					o = i.next();
+				}
+				else
+				{
+					String action = x;
+					String destination = i.next();
+					Pair<String, String> p = new Pair<>(action, destination);
+					Pair<String, Pair<String, String>> p2 = new Pair<>(o, p);
+					connections.add(p2);
+				}
+			}
+			return connections;
+		} finally {
+			readConnections.close();
+		}
+	}
+	
+	public static void main(String[] args) throws IOException {
+		List<Pair<String, Pair<String, String>>> list = getConnections();
+		for(Pair<String, Pair<String, String>> i : list) {
+			String s = i.getLeft();
+			String s2 = i.getRight().getLeft();
+			String s3 = i.getRight().getRight();
+			System.out.println("-"+s + "-" + s2 + "-" + s3);
+		}
+		return;
 	}
 }

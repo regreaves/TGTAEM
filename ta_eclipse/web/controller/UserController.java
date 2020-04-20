@@ -1,6 +1,6 @@
 package controller;
 
-import state.User;
+import state.*;
 
 /**
  * Controller for User.
@@ -17,11 +17,11 @@ public class UserController {
 		this.model = model;
 	}
 	
-	public void setUsername(String username) {
-		this.model.setUsername(username);
+	public void setName(String username) {
+		this.model.setName(username);
 	}
 	
-	public void setPassword(String password) {
-		this.model.setPassword(password);
+	public void setGame(Game game) {
+		this.model.setGame(game);
 	}
 }

@@ -112,4 +112,9 @@ public class Actor
 	this.alive = false;
     return;
   }
+  
+  public void setAlive(boolean alive) {
+	  this.alive = alive;
+	  return;
+  }
 }

@@ -4,28 +4,28 @@ import java.util.HashMap;
 import command.Action;
 
 @SuppressWarnings("serial")
-public class Connections extends HashMap<Action, String> {
-	String room;
+public class Connections extends HashMap<String, String> {
+	String origin;
 	
 	public Connections() {
 		
 	}
 	
-	public String getRoomOrigin() {
-		return room;
+	public String getOrigin() {
+		return origin;
 	}
 	
-	public void setRoomOrigin(String room) {
-		this.room = room;
+	public void setOrigin(String origin) {
+		this.origin = origin;
 		return;
 	}
 	
-	public void addConnection(Action action, String value) {
+	public void addConnection(String action, String value) {
 		this.put(action, value);
 		return;
 	}
 	
-	public String getRoomDestination(Action action) {
+	public String getDestination(String action) {
 		String x = null;
 		x = this.get(action);
 		if(x == null) {
@@ -33,4 +33,13 @@ public class Connections extends HashMap<Action, String> {
 		}
 		return x;
 	}
+	
+	public String toString() {
+		String a = "Connections: ";
+		for (Entry<String, String> s : this.entrySet()) {
+			a += s.toString() + '\n';
+		}
+		return a;
+	}
+	
 }
