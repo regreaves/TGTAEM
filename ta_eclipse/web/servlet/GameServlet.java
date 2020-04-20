@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,15 +14,23 @@ import state.Game;
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private static Game model = new Game();
-	private static GameController controller = new GameController();
+	
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
 		System.out.println("\nGameServlet: doGet");
-		
+		String user = (String) req.getSession().getAttribute("user");
+
+		if (user == null) {
+			System.out.println("   User: <" + user + "> not logged in or session timed out");
+
+			// user is not logged in, or the session expired
+			resp.sendRedirect(req.getContextPath() + "/login");
+			return;
+		}
+		Game model = new Game();
 		String log = (String) req.getSession().getAttribute("log");
 		log += model.loadRoom(model.here());
 		req.getSession().setAttribute("log", log);
@@ -35,6 +44,8 @@ public class GameServlet extends HttpServlet {
 
 		System.out.println("\nGameServlet: doPost");
 		
+		Game model = new Game();
+		GameController controller = new GameController();
 		controller.setModel(model);
 		
 		String command = req.getParameter("command");
@@ -42,7 +53,11 @@ public class GameServlet extends HttpServlet {
 		req.setAttribute("command", req.getParameter("command"));
 
 		String log = (String) req.getSession().getAttribute("log");
-		log = log.concat("<br>> ").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
+		try {
+			log = log.concat("<br>>").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		req.getSession().setAttribute("log", log);
 
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);

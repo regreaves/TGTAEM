@@ -288,6 +288,7 @@ public class InitialData {
 		List<Pair<String, Pair<String, String>>> connections = new ArrayList<>();
 		ReadCSV readConnections = new ReadCSV("connections.csv");
 		try {
+			String o = "";
 			while (true) {
 				List<String> tuple = readConnections.next();
 				if (tuple == null) {
@@ -295,7 +296,6 @@ public class InitialData {
 				}
 				Iterator<String> i = tuple.iterator();
 				String x = i.next();
-				String o = "";
 				if(x.equals("room"))
 				{
 					o = i.next();
@@ -315,15 +315,15 @@ public class InitialData {
 		}
 	}
 	
-//	public static void main(String[] args) throws IOException {
-//		List<Pair<String, Pair<String, String>>> list = getConnections();
-//		for(Pair<String, Pair<String, String>> i : list) {
-//			String s = i.getLeft();
-//			String s2 = i.getRight().getLeft();
-//			String s3 = i.getRight().getRight();
-//			System.out.print(s + " " + s2 + " " + s3);
-//		}
-//		return;
-//	}
+	public static void main(String[] args) throws IOException {
+		List<Pair<String, Pair<String, String>>> list = getConnections();
+		for(Pair<String, Pair<String, String>> i : list) {
+			String s = i.getLeft();
+			String s2 = i.getRight().getLeft();
+			String s3 = i.getRight().getRight();
+			System.out.println("-"+s + "-" + s2 + "-" + s3);
+		}
+		return;
+	}
 
 }

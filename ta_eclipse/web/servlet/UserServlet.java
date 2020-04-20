@@ -13,8 +13,7 @@ import state.User;
 
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	UserController controller = new UserController();
-	User model = new User();
+
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -22,9 +21,7 @@ public class UserServlet extends HttpServlet {
 		System.out.println("\nUserServlet: doGet");
 
 		String user = (String) req.getSession().getAttribute("user");
-		String log = (String) req.getSession().getAttribute("log");
-		log += "<br>Welcome " + user + "<br>(N)ew Game or (L)oad Game?<br>";
-		req.getSession().setAttribute("log", log);
+
 
 		if (user == null) {
 			System.out.println("   User: <" + user + "> not logged in or session timed out");
@@ -33,7 +30,10 @@ public class UserServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
-
+		
+		String log = (String) req.getSession().getAttribute("log");
+		log += "<br>Welcome " + user + "<br>(N)ew Game or (L)oad Game?<br>";
+		req.getSession().setAttribute("log", log);
 		// now we have the user's User object,
 		// proceed to handle request...
 		System.out.println("   User: <" + user + "> logged in");
@@ -45,7 +45,9 @@ public class UserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		System.out.println("\nUserServlet: doPost");
-
+		
+		UserController controller = new UserController();
+		User model = new User();
 		controller.setModel(model);
 
 		String i = req.getParameter("input");
@@ -55,6 +57,8 @@ public class UserServlet extends HttpServlet {
 				model.resetGame();
 			} catch (SQLException e) {
 				System.out.println("SQLException thrown");
+				e.printStackTrace();
+
 			}
 			String log = (String) req.getSession().getAttribute("log");
 			log += i + "<br> Loading new game... <br>";

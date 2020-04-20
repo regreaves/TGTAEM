@@ -4,7 +4,7 @@ import java.util.HashMap;
 import command.Action;
 
 @SuppressWarnings("serial")
-public class Connections extends HashMap<Action, String> {
+public class Connections extends HashMap<String, String> {
 	String origin;
 	
 	public Connections() {
@@ -20,12 +20,12 @@ public class Connections extends HashMap<Action, String> {
 		return;
 	}
 	
-	public void addConnection(Action action, String value) {
+	public void addConnection(String action, String value) {
 		this.put(action, value);
 		return;
 	}
 	
-	public String getDestination(Action action) {
+	public String getDestination(String action) {
 		String x = null;
 		x = this.get(action);
 		if(x == null) {
@@ -34,20 +34,12 @@ public class Connections extends HashMap<Action, String> {
 		return x;
 	}
 	
-//	public static void main() {
-//		Connections c = new Connections();
-//		//TODO ???
-//		String s = c.toString();
-//		System.out.print(s);
-//	}
-//	
-//	@Override
-//	public String toString() {
-//		String a = "";
-//		for (Entry<Action, String> s : this.entrySet()) {
-//			a += s.toString();
-//		}
-//		return a;
-//	}
+	public String toString() {
+		String a = "Connections: ";
+		for (Entry<String, String> s : this.entrySet()) {
+			a += s.toString() + '\n';
+		}
+		return a;
+	}
 	
 }

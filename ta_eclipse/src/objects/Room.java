@@ -172,11 +172,22 @@ public class Room {
 		return;
 	}
 
-	public void addConnection(Action action, String destination) {
+	public void addConnection(String action, String destination) {
 		this.connections.put(action, destination);
 		return;
 	}
+	
+	public String getDestination(String action)
+	{
+		return this.connections.getDestination(action);
+	}
 
 
+	public String toString()
+	{
+		String out = "ID: " + ID + "Name: " + displayName;
+		return out;
+		
+	}
 	// TODO add NPC based methods
 }

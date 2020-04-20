@@ -27,31 +27,25 @@ public class Game {
 	boolean newGame = true;
 
 	String command = "";
-	String startRoom;// = "1";
-
-//	ArrayList<Action> actionsTaken = new ArrayList<>();
-//	ArrayList<String> roomsVisited = new ArrayList<>();
-//	int playerDeaths = 0;
-//	int victories = 0;
-//	ArrayList<Checkpoint> checkpoints = new ArrayList<>();
 
 	// not done here yet
 	public Game() {
 		DatabaseProvider.setInstance(new DerbyDatabase());
-		this.player = new Player();
 		this.db = DatabaseProvider.getInstance();
-		this.parser = new Parser(db);
-		map = db.getMap();
-		items = db.getItems();
-		npcs = db.getNPCs();
 		try {
+			this.parser = new Parser(db);
+			player = db.getPlayer();
+			map = db.getMap();
+			items = db.getItems();
+			npcs = db.getNPCs();
+			db.placePlayer(map, player);
 			db.placeItems(map, items);
 			db.placeNPCs(map, npcs);
-
+			db.addConnections(map);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	// for use with jsp
@@ -64,7 +58,7 @@ public class Game {
 		return newGame;
 	}
 
-	public String getAction() {
+	public String getAction() throws SQLException {
 		String s = "";
 		Action a = parse(command);
 		if (a != null) {
@@ -75,12 +69,6 @@ public class Game {
 		return s;
 	}
 
-	public String getRoomOne() {
-//		newGame = false;
-//		return loadRoom("1");
-		return startRoom;
-	}
-
 	public String getCommand() {
 		return command;
 	}
@@ -89,34 +77,30 @@ public class Game {
 		this.command = command;
 	}
 
-	public void setHere(String id) {
-		player.setLocation(id);
-	}
-
 	public String here() {
 		return player.getLocation();
 	}
 
 	// called by proxy through above methods
 	// probably could change to private
-	
-	public void reset() throws SQLException
-	{
+
+	public void reset() throws SQLException {
 		db.clearAll();
 		db.fillAll();
 		remake();
 	}
-	
-	public void remake() throws SQLException
-	{
+
+	public void remake() throws SQLException {
 		this.parser = new Parser(db);
 		map = db.getMap();
+		player = db.getPlayer();
 		items = db.getItems();
 		npcs = db.getNPCs();
+		db.placePlayer(map, player);
 		db.placeItems(map, items);
 		db.placeNPCs(map, npcs);
+		db.addConnections(map);
 	}
-
 
 	public Action parse(String input) {
 		Action a = parser.getAction(input);
@@ -127,7 +111,11 @@ public class Game {
 		return map.get(here()).getItems();
 	}
 
-	public String performAction(Action a) {
+	public Room room() {
+		return map.get(here());
+	}
+
+	public String performAction(Action a) throws SQLException {
 		String display = "";
 		int method = a.getMethod();
 		switch (method) {
@@ -187,49 +175,16 @@ public class Game {
 		return display;
 	}
 
-	private String go(Action a) {
+	private String go(Action a) throws SQLException {
 		String display = "";
-		String id = "0";
-		String direction = a.noun();
-		switch (direction) {
-		case "north":
-			id = map.get(here()).getNorth();
-			break;
-		case "northeast":
-			id = map.get(here()).getNorthEast();
-			break;
-		case "east":
-			id = map.get(here()).getEast();
-			break;
-		case "southeast":
-			id = map.get(here()).getSouthEast();
-			break;
-		case "south":
-			id = map.get(here()).getSouth();
-			break;
-		case "southwest":
-			id = map.get(here()).getSouthWest();
-			break;
-		case "west":
-			id = map.get(here()).getWest();
-			break;
-		case "northwest":
-			id = map.get(here()).getNorthWest();
-			break;
-		case "up":
-			id = map.get(here()).getUp();
-			break;
-		case "down":
-			id = map.get(here()).getDown();
-			break;
-		}
-
+		String id = room().getDestination(a.getName());
 		if (id.equals("0")) {
 			display = "You can't go that way.";
 		} else {
-			map.get(here()).setVisited(true);
+			room().setVisited(true);
 			db.setVisited(here());
 			display = loadRoom(id);
+			db.movePlayer(id, player);
 			player.move(id);
 		}
 		return display;
@@ -241,7 +196,9 @@ public class Game {
 		ArrayList<Item> roomItems = itemsHere();
 		for (Item i : roomItems) {
 			if (i.getName().equals(obj)) {
-				if (i.getWeight() < 30 && player.getInventory().checkWeight(i)) { //TODO - hardcoded maxSize but this would be found in the player table in the future
+				if (i.getWeight() < 30 && player.getInventory().checkWeight(i)) { // TODO - hardcoded maxSize but this
+																					// would be found in the player
+																					// table in the future
 //					player.get(i);
 //					Room r = map.get(here());
 //					r.removeItem(i);
@@ -288,7 +245,7 @@ public class Game {
 		display = "There's no " + obj + " for you to examine.";
 		return display;
 	}
-	
+
 	private String hideUnder(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -303,7 +260,7 @@ public class Game {
 		display = "There is nothing to hide under in here.";
 		return display;
 	}
-	
+
 	private String flip(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -315,7 +272,7 @@ public class Game {
 		display = "There is nothing to flip in here.";
 		return display;
 	}
-	
+
 	private String reset(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -327,7 +284,7 @@ public class Game {
 		display = "There is nothing to reset in here.";
 		return display;
 	}
-	
+
 	private String dump(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -339,7 +296,7 @@ public class Game {
 		display = "There is nothing to dump in here.";
 		return display;
 	}
-	
+
 	private String throwItem(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -351,7 +308,7 @@ public class Game {
 		display = "There is nothing to throw in here.";
 		return display;
 	}
-	
+
 	private String breakItem(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -363,7 +320,7 @@ public class Game {
 		display = "There is nothing to break in here.";
 		return display;
 	}
-	
+
 	private String wear(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -376,7 +333,7 @@ public class Game {
 		display = "There is nothing to wear in here.";
 		return display;
 	}
-	
+
 	private String drink(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -388,7 +345,7 @@ public class Game {
 		display = "There is nothing to drink in here.";
 		return display;
 	}
-	
+
 	private String smell(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -400,7 +357,7 @@ public class Game {
 		display = "There is nothing to smell in here.";
 		return display;
 	}
-	
+
 	private String eat(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -412,7 +369,7 @@ public class Game {
 		display = "There is nothing to eat in here.";
 		return display;
 	}
-	
+
 	private String jumpOn(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -424,7 +381,7 @@ public class Game {
 		display = "There is no bed to jump on in here.";
 		return display;
 	}
-	
+
 	private String sleep(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -436,7 +393,7 @@ public class Game {
 		display = "You cannot sleep in the " + obj + ", no matter how hard you try.";
 		return display;
 	}
-	
+
 	private String quit(Action a) {
 		String display = "";
 		display = "Quitting game...";
@@ -500,16 +457,15 @@ public class Game {
 //		User u = new User("user", "user");
 //		Player p = new Player();
 		Game g = new Game();
-		
+
 		Scanner in = new Scanner(System.in);
 
 		System.out.println("New Game? Y/N");
 		String response = in.nextLine();
-		if(response.equalsIgnoreCase("y"))
-		{
+		if (response.equalsIgnoreCase("y")) {
 			g.reset();
 		}
-		
+
 		System.out.println(g.loadRoom("1"));
 		while (!g.done) {
 			g.setCommand(in.nextLine());

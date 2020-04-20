@@ -20,6 +20,7 @@ public abstract class DBUtil {
 				stmt.close();
 			} catch (SQLException e) {
 				// ignore
+				System.err.println(e);
 			}
 		}
 	}
@@ -35,6 +36,7 @@ public abstract class DBUtil {
 				resultSet.close();
 			} catch (SQLException e) {
 				// ignore
+				System.err.println(e);
 			}
 		}
 	}
@@ -50,6 +52,7 @@ public abstract class DBUtil {
 				conn.close();
 			} catch (SQLException e) {
 				// ignore
+				System.err.println(e);
 			}
 		}
 	}
