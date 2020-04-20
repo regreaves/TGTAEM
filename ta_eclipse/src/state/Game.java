@@ -44,7 +44,7 @@ public class Game {
 			db.placePlayer(map, player);
 			db.placeItems(map, items);
 			db.placeNPCs(map, npcs);
-			db.getShortcuts();
+			shortcuts = db.getShortcuts();
 			db.addConnections(map);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -103,7 +103,7 @@ public class Game {
 		db.placeItems(map, items);
 		db.placeNPCs(map, npcs);
 		//R
-		db.getShortcuts();
+		shortcuts = db.getShortcuts();
 		db.addConnections(map);
 	}
 
