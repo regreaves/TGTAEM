@@ -1,6 +1,6 @@
- room_id|diplay_name|display_description|visited|north|northeast|east|southeast|south|southwest|west|northwest|up|down
-1|Large Room|You are in a large room. There is a door to the north, east, west, and south.|0|2|0|3|0|4|0|5|0|0|0
-2|Closet|This room seems to be a large closet. The door is to the south.|0|0|0|0|0|1|0|0|0|0|0
-3|Bedroom|You are in a bedroom. The door is to the west.|0|0|0|0|0|0|0|1|0|0|0
-4|Porch|You are on a porch. The door to the rest of the house is north.|0|1|0|0|0|0|0|0|0|0|0
-5|Kitchen|You are in a kitchen. There is a door to the east.|0|0|0|1|0|0|0|0|0|0|0
+ room_id|diplay_name|display_description|visited
+1|Large Room|You are in a large room. There is a door to the north, east, west, and south.|0
+2|Closet|This room seems to be a large closet. The door is to the south.|0
+3|Bedroom|You are in a bedroom. The door is to the west.|0
+4|Porch|You are on a porch. The door to the rest of the house is north.|0
+5|Kitchen|You are in a kitchen. There is a door to the east.|0

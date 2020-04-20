@@ -20,27 +20,13 @@
 			<form id="myForm"
 				action="${pageContext.servletContext.contextPath}/game"
 				method="post">
-				<textarea id="input" class="input" name="command" rows="1"
-					placeholder="command?" autofocus></textarea>
+				<input id="input" class="input" name="command"
+					placeholder="command?" autofocus autocomplete="off"/>
+					<button type="submit" style="visibility: hidden;"></button>
 			</form>
+
 		</div>
 	</div>
 </body>
 
-<script>
-	window.onload = function() {
-		var myDiv = document.getElementById('output');
-		var myInput = document.getElementById('input');
-		myDiv.scrollTop = myDiv.scrollHeight;
-		input.scrollTop = myDiv.scrollHeight;
-
-		input.onkeydown = function(ev) {
-
-			var k = ev.which || ev.keyCode;
-			if (k == 13) {
-				document.getElementById("myForm").submit();
-			}
-		}
-	};
-</script>
 </html>

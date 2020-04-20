@@ -3,7 +3,7 @@ package controller;
 import state.Library;
 
 public class LoginController {
-	private Library model = null;
+	private Library model;
 	
 	public LoginController(Library model) {
 		this.model = model;
@@ -16,8 +16,4 @@ public class LoginController {
 	public boolean validateCredentials(String name, String pw) {
 		return model.validatePW(name, pw);
 	}
-	
-	/*
-	 * Get saved Game here...?
-	 */
 }
