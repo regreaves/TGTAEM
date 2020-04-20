@@ -178,15 +178,14 @@ public class Game {
 	private String go(Action a) throws SQLException {
 		String display = "";
 		String id = room().getDestination(a.getName());
-		System.out.println(id);
 		if (id.equals("0")) {
 			display = "You can't go that way.";
 		} else {
 			room().setVisited(true);
 			db.setVisited(here());
 			display = loadRoom(id);
-			player.move(id);
 			db.movePlayer(id, player);
+			player.move(id);
 		}
 		return display;
 	}

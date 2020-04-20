@@ -20,8 +20,8 @@ uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
           action="${pageContext.servletContext.contextPath}/login"
           method="post"
         >
-          <input name="username" placeholder="Username:" autofocus />
-          <input name="password" placeholder="Password:" />
+          <input name="username" placeholder="Username:" value="student" autofocus />
+          <input name="password" placeholder="Password:" value="ycp" />
           <button type="submit" style="visibility: hidden;"></button>
         </form>
 

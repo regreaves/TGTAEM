@@ -372,43 +372,42 @@ public class DerbyDatabase {
 				PreparedStatement tblInvent = null;
 				PreparedStatement tblConnections = null;
 
-				try { // truncating because words did not want to be deleted??
-					tblWord = conn.prepareStatement("drop table words");
-					tblWord.execute();
+				try {
+					tblWord = conn.prepareStatement("truncate table words");
+					tblWord.executeUpdate();
+					
+					tblAct = conn.prepareStatement("truncate table actions");
+					tblAct.executeUpdate();
 
-					tblAct = conn.prepareStatement("drop table actions");
-					tblAct.execute();
+					tblRoom = conn.prepareStatement("truncate table rooms");
+					tblRoom.executeUpdate();
 
-					tblRoom = conn.prepareStatement("drop table rooms");
-					tblRoom.execute();
+					tblItem = conn.prepareStatement("truncate table items");
+					tblItem.executeUpdate();
 
-					tblItem = conn.prepareStatement("drop table items");
-					tblItem.execute();
+					tblItemMap = conn.prepareStatement("truncate table itemMap");
+					tblItemMap.executeUpdate();
 
-					tblItemMap = conn.prepareStatement("drop table itemMap");
-					tblItemMap.execute();
+					tblItemAct = conn.prepareStatement("truncate table itemAct");
+					tblItemAct.executeUpdate();
 
-					tblItemAct = conn.prepareStatement("drop table itemAct");
-					tblItemAct.execute();
+					tblNpcs = conn.prepareStatement("truncate table npcs");
+					tblNpcs.executeUpdate();
 
-					tblNpcs = conn.prepareStatement("drop table npcs");
-					tblNpcs.execute();
+					tblPlayers = conn.prepareStatement("truncate table player");
+					tblPlayers.executeUpdate();
 
-					tblPlayers = conn.prepareStatement("drop table player");
-					tblPlayers.execute();
+					tblNpcMap = conn.prepareStatement("truncate table npcMap");
+					tblNpcMap.executeUpdate();
 
-					tblNpcMap = conn.prepareStatement("drop table npcMap");
-					tblNpcMap.execute();
+					tblInvent = conn.prepareStatement("truncate table invent");
+					tblInvent.executeUpdate();
 
-					tblInvent = conn.prepareStatement("drop table invent");
-					tblInvent.execute();
-
-					tblConnections = conn.prepareStatement("drop table connections");
-					tblConnections.execute();
+					tblConnections = conn.prepareStatement("truncate table connections");
+					tblConnections.executeUpdate();
 
 					System.out.println("Tables cleared!"); // messages are good
 
-					return true;
 				} finally { // close the things
 					DBUtil.closeQuietly(tblWord);
 					DBUtil.closeQuietly(tblAct);
@@ -422,12 +421,12 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblInvent);
 					DBUtil.closeQuietly(tblConnections);
 				}
+				return true;
 			}
 		});
 	}
 
 	public void fillAll() { // refill tables
-		createTables();
 		loadInitialData(); // don't judge me
 		System.out.println("Tables made!"); // messages are good
 	}
@@ -678,6 +677,8 @@ public class DerbyDatabase {
 				DBUtil.closeQuietly(stmt);
 			}
 		}
+		conn.commit();
+		DBUtil.closeQuietly(conn);
 	}
 
 	public String takeItem(String id) { // let player take item into inventory
@@ -831,9 +832,11 @@ public class DerbyDatabase {
 					Room r = map.get(loc); // retrieve the room related to the id
 					r.addNPC(n); // add the npc to the room
 				}
+				conn.commit();
 			} finally { // close the things
 				DBUtil.closeQuietly(resultSet);
 				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(conn);
 			}
 		}
 	}
@@ -865,11 +868,13 @@ public class DerbyDatabase {
 			if (!found) {
 				System.out.println("no player found");
 			}
-			return p;
+			conn.commit();
 		} finally { // close the things
 			DBUtil.closeQuietly(resultSet);
 			DBUtil.closeQuietly(stmt);
+			DBUtil.closeQuietly(conn);
 		}
+		return p;
 	}
 
 	// place player in map
@@ -888,9 +893,11 @@ public class DerbyDatabase {
 				Room r = map.get(loc); // retrieve the room related to the id
 				r.addPlayer(p); // add the player to the room
 			}
+			conn.commit();
 		} finally { // close the things
 			DBUtil.closeQuietly(resultSet);
 			DBUtil.closeQuietly(stmt);
+			DBUtil.closeQuietly(conn);
 		}
 	}
 
@@ -904,9 +911,10 @@ public class DerbyDatabase {
 			stmt.setString(1, id); // set location to roomId
 			stmt.setString(2, playerID); // set blank to playerID
 			stmt.executeUpdate();
-
+			conn.commit();
 		} finally { // close the things
 			DBUtil.closeQuietly(stmt);
+			DBUtil.closeQuietly(conn);
 		}
 	}
 
@@ -914,9 +922,7 @@ public class DerbyDatabase {
 	public void addConnections(HashMap<String, Room> map) throws SQLException { // add connections to room
 		Connection conn = connect();
 		PreparedStatement stmt = null;
-		PreparedStatement stmt2 = null;
 		ResultSet resultSet = null;
-		ResultSet resultSet2 = null;
 
 		try {
 			stmt = conn.prepareStatement("select * from connections");
@@ -926,14 +932,14 @@ public class DerbyDatabase {
 				String actionName = resultSet.getString("action"); // get the action from the result
 				String destination = resultSet.getString("destination"); // get the destination
 				Room r = map.get(origin);
-				
+
 				r.addConnection(actionName, destination);
 			}
+			conn.commit();
 		} finally { // close the things
 			DBUtil.closeQuietly(resultSet);
-			DBUtil.closeQuietly(resultSet2);
 			DBUtil.closeQuietly(stmt);
-			DBUtil.closeQuietly(stmt2);
+			DBUtil.closeQuietly(conn);
 		}
 	}
 
