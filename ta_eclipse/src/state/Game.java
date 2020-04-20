@@ -109,7 +109,6 @@ public class Game {
 		db.getShortcuts();
 	}
 
-
 	//R
 	public Action parse(String input) {
 		Action a = parser.getAction(input);

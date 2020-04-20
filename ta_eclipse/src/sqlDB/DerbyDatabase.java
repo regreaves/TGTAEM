@@ -492,35 +492,6 @@ public class DerbyDatabase {
 		});
 	}
 	
-	/*
- 	public void placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException { // place items in map
-		Connection conn = connect();
-		PreparedStatement stmt = null;
-		ResultSet resultSet = null;
-		String itemID;
-
-		for (Item i : items) {
-			itemID = i.getID(); // get the item id
-
-			try { // get the location for the given id
-				stmt = conn.prepareStatement("select location from itemMap where id = ?");
-				stmt.setString(1, itemID); // set the blank as the id
-				resultSet = stmt.executeQuery();
-
-				while (resultSet.next()) {
-					String loc = resultSet.getString("location"); // get the location id from the result
-					Room r = map.get(loc); // retrieve the room related to the id
-					r.addItem(i); // add the item to the room
-				}
-			} finally { // close the things
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-			}
-		}
-	}
-	 */
-	 
-	
 	// Word/Action Functions
 	public ArrayList<Action> getActions() { // create all action objects available
 		return executeTransaction(new Transaction<ArrayList<Action>>() {
