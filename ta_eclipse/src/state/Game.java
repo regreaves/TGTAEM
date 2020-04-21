@@ -113,6 +113,7 @@ public class Game {
 		if (a == null) {
 			a = parser.getAction(input);
 		}
+		
 		return a;
 	}
 
