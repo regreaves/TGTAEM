@@ -108,7 +108,11 @@ public class Game {
 	}
 
 	public Action parse(String input) {
-		Action a = parser.getAction(input);
+		Action a = shortcuts.get(input);
+		
+		if (a == null) {
+			a = parser.getAction(input);
+		}
 		return a;
 	}
 
