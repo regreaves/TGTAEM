@@ -20,7 +20,7 @@ public class Game {
 	DerbyDatabase db;
 
 	//R
-	HashMap<String, Action> shortcuts = new HashMap<>();
+	HashMap<String, String> shortcuts = new HashMap<>();
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
@@ -108,10 +108,13 @@ public class Game {
 	}
 
 	public Action parse(String input) {
-		Action a = shortcuts.get(input);
+		String s = shortcuts.get(input);
+		Action a;
 		
-		if (a == null) {
+		if (s == null) {
 			a = parser.getAction(input);
+		} else {
+			a = parser.getAction(s);
 		}
 		
 		return a;

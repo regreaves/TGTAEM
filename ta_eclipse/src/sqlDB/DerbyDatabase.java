@@ -154,6 +154,11 @@ public class DerbyDatabase {
 									+ " health varchar(5)," + " attack varchar(5)," + " defense varchar(5)" + ")");
 					stmt10.executeUpdate();
 
+					//R
+ 					stmt11 = conn.prepareStatement(
+ 							"create table shortcuts (" + " shortcut varchar(5)," + " action varchar(42)" + ")");
+ 					stmt11.executeUpdate();
+ 					
 					stmt12 = conn.prepareStatement( // connections table
 							"create table connections (" + " action varchar(42)," + " origin varchar(5),"
 									+ " destination varchar(5)" + ")");
@@ -192,6 +197,8 @@ public class DerbyDatabase {
 				List<Pair<String, String>> itemMap;
 				List<Pair<String, String>> npcMap;
 				List<Pair<String, String>> itemAction;
+				//R
+ 				List<Pair<String, String>> shortcutList;
 				List<Pair<String, Pair<String, String>>> connections;
 
 				try { // get info from csvs
@@ -204,6 +211,8 @@ public class DerbyDatabase {
 					itemMap = InitialData.getItemMap();
 					npcMap = InitialData.getNPCMap();
 					itemAction = InitialData.getItemActions();
+					//R
+ 					shortcutList = InitialData.getShortcuts();
 					connections = InitialData.getConnections();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
@@ -218,6 +227,8 @@ public class DerbyDatabase {
 				PreparedStatement insertItemMap = null;
 				PreparedStatement insertNpcMap = null;
 				PreparedStatement insertItemAction = null;
+				//R
+ 				PreparedStatement insertShortcut = null;
 				PreparedStatement insertConnection = null;
 
 				try {
@@ -328,6 +339,18 @@ public class DerbyDatabase {
 					}
 					insertItemAction.executeBatch();
 
+ 					//R
+ 					// populate shortcut table
+ 					insertShortcut = conn.prepareStatement(
+ 							"insert into shortcuts (shortcut, action)"
+ 									+ " values (?, ?)");
+ 					for (Pair<String, String> p : shortcutList) {
+ 						insertShortcut.setString(1, p.getLeft());
+ 						insertShortcut.setString(2, p.getRight());
+ 						insertShortcut.addBatch();
+ 					}
+ 					insertItemAction.executeBatch();
+					
 					// populate connections table
 					insertConnection = conn.prepareStatement(
 							"insert into connections (action, origin, destination)" + " values (?, ?, ?)");
@@ -350,6 +373,8 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertItemMap);
 					DBUtil.closeQuietly(insertNpcMap);
 					DBUtil.closeQuietly(insertItemAction);
+					//R
+ 					DBUtil.closeQuietly(insertShortcut);
 					DBUtil.closeQuietly(insertConnection);
 				}
 			}
@@ -370,6 +395,8 @@ public class DerbyDatabase {
 				PreparedStatement tblPlayers = null;
 				PreparedStatement tblNpcMap = null;
 				PreparedStatement tblInvent = null;
+				//R
+ 				PreparedStatement tblShortcut = null;
 				PreparedStatement tblConnections = null;
 
 				try {
@@ -402,7 +429,11 @@ public class DerbyDatabase {
 
 					tblInvent = conn.prepareStatement("truncate table invent");
 					tblInvent.executeUpdate();
-
+					
+					//R
+ 					tblShortcut = conn.prepareStatement("truncate table shortcuts");
+ 					tblShortcut.execute();
+ 					
 					tblConnections = conn.prepareStatement("truncate table connections");
 					tblConnections.executeUpdate();
 
@@ -419,6 +450,8 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblPlayers);
 					DBUtil.closeQuietly(tblNpcMap);
 					DBUtil.closeQuietly(tblInvent);
+					//R
+ 					DBUtil.closeQuietly(tblShortcut);
 					DBUtil.closeQuietly(tblConnections);
 				}
 				return true;
@@ -432,12 +465,12 @@ public class DerbyDatabase {
 	}
 
 	// R
-	public HashMap<String, Action> getShortcuts() {
-		return executeTransaction(new Transaction<HashMap<String, Action>>() {
-			public HashMap<String, Action> execute(Connection conn) throws SQLException {
+	public HashMap<String, String> getShortcuts() {
+		return executeTransaction(new Transaction<HashMap<String, String>>() {
+			public HashMap<String, String> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-				HashMap<String, Action> shortcuts = new HashMap<>();
+				HashMap<String, String> shortcuts = new HashMap<>();
 
 				try {
 					stmt = conn.prepareStatement("select * from shortcuts");
@@ -448,12 +481,7 @@ public class DerbyDatabase {
 					while (resultSet.next()) {
 						found = true;
 						String shortcut = resultSet.getString("shortcut");
-						String actionName = resultSet.getString("name");
-						// ArrayList<String> c = new ArrayList<>();
-						// c.add(resultSet.getString(5)); // north
-						// c.add(resultSet.getString(6)); // northeast
-						// c.add(resultSet.getString(7)); // east
-						Action action = new Action(actionName, null, null, 0);
+						String action = resultSet.getString("action");
 						shortcuts.put(shortcut, action);
 					}
 
@@ -461,11 +489,12 @@ public class DerbyDatabase {
 					if (!found) {
 						System.out.println("error in shortcuts table");
 					}
-					return shortcuts; // return the map
 				} finally { // close the things
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);
 				}
+				return shortcuts;
+
 			}
 		});
 	}
