@@ -103,7 +103,6 @@ public class Game {
 		db.placePlayer(map, player);
 		db.placeItems(map, items);
 		db.placeNPCs(map, npcs);
-		//R
 		shortcuts = db.getShortcuts();
 		db.addConnections(map);
 	}

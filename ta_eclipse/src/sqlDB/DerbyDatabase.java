@@ -154,10 +154,8 @@ public class DerbyDatabase {
 									+ " health varchar(5)," + " attack varchar(5)," + " defense varchar(5)" + ")");
 					stmt10.executeUpdate();
 
-					//R
  					stmt11 = conn.prepareStatement(
  							"create table shortcuts (" + " shortcut varchar(5)," + " action varchar(42)" + ")");
- 					System.out.println("DerbyDatabase: stmt11 = conn.prepareStatement...");
  					stmt11.executeUpdate();
  					
 					stmt12 = conn.prepareStatement( // connections table
@@ -178,7 +176,6 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt9);
 					DBUtil.closeQuietly(stmt10);
 					DBUtil.closeQuietly(stmt11);
- 					System.out.println("DerbyDatabase: DBUtil.closeQuietly(stmt11)");
 					DBUtil.closeQuietly(stmt12);
 				}
 			}
@@ -213,7 +210,6 @@ public class DerbyDatabase {
 					itemMap = InitialData.getItemMap();
 					npcMap = InitialData.getNPCMap();
 					itemAction = InitialData.getItemActions();
-					//R
  					shortcutList = InitialData.getShortcuts();
 					connections = InitialData.getConnections();
 				} catch (IOException e) {
@@ -229,7 +225,6 @@ public class DerbyDatabase {
 				PreparedStatement insertItemMap = null;
 				PreparedStatement insertNpcMap = null;
 				PreparedStatement insertItemAction = null;
-				//R
  				PreparedStatement insertShortcut = null;
 				PreparedStatement insertConnection = null;
 
@@ -341,8 +336,6 @@ public class DerbyDatabase {
 					}
 					insertItemAction.executeBatch();
 
- 					//R
- 					System.out.println("DerbyDatabase: Populating shortcut table.");
  					// populate shortcut table
  					insertShortcut = conn.prepareStatement(
  							"insert into shortcuts (shortcut, action)"
@@ -352,7 +345,7 @@ public class DerbyDatabase {
  						insertShortcut.setString(2, p.getRight());
  						insertShortcut.addBatch();
  					}
- 					insertItemAction.executeBatch();
+ 					insertShortcut.executeBatch();
 					
 					// populate connections table
 					insertConnection = conn.prepareStatement(
@@ -376,8 +369,6 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertItemMap);
 					DBUtil.closeQuietly(insertNpcMap);
 					DBUtil.closeQuietly(insertItemAction);
-					//R
- 					System.out.println("DerbyDatabase: DBUtil.closeQuietly(insertShortcut)");
  					DBUtil.closeQuietly(insertShortcut);
 					DBUtil.closeQuietly(insertConnection);
 				}
@@ -399,8 +390,6 @@ public class DerbyDatabase {
 				PreparedStatement tblPlayers = null;
 				PreparedStatement tblNpcMap = null;
 				PreparedStatement tblInvent = null;
-				//R
-				System.out.println("DerbyDatabase: PreparedStatement tblShortcut = null;");
  				PreparedStatement tblShortcut = null;
 				PreparedStatement tblConnections = null;
 
@@ -435,8 +424,6 @@ public class DerbyDatabase {
 					tblInvent = conn.prepareStatement("truncate table invent");
 					tblInvent.executeUpdate();
 					
-					//R
- 					System.out.println("DerbyDatabase: tblShortcut = conn.prepareStatement(\"truncate table shortcuts\")");
  					tblShortcut = conn.prepareStatement("truncate table shortcuts");
  					tblShortcut.execute();
  					
@@ -456,8 +443,6 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblPlayers);
 					DBUtil.closeQuietly(tblNpcMap);
 					DBUtil.closeQuietly(tblInvent);
-					//R
-					System.out.println("DerbyDatabase: DBUtil.closeQuietly(tblShortcut);");
  					DBUtil.closeQuietly(tblShortcut);
 					DBUtil.closeQuietly(tblConnections);
 				}
@@ -471,7 +456,6 @@ public class DerbyDatabase {
 		System.out.println("Tables made!"); // messages are good
 	}
 
-	// R
 	public HashMap<String, String> getShortcuts() {
 		return executeTransaction(new Transaction<HashMap<String, String>>() {
 			public HashMap<String, String> execute(Connection conn) throws SQLException {
@@ -480,7 +464,7 @@ public class DerbyDatabase {
 				HashMap<String, String> shortcuts = new HashMap<>();
 
 				try {
-					stmt = conn.prepareStatement("select * from shortcuts");
+					stmt = conn.prepareStatement("select shortcut, action from shortcuts");
 					resultSet = stmt.executeQuery();
 
 					// for testing that a result was returned
@@ -488,7 +472,6 @@ public class DerbyDatabase {
 					while (resultSet.next()) {
 						found = true;
 						String shortcut = resultSet.getString("shortcut");
-						System.out.println(shortcut);
 						String action = resultSet.getString("action");
 						shortcuts.put(shortcut, action);
 					}

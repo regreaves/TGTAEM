@@ -1,2 +1,11 @@
 shortcut|action
 n|go north
+ne|go northeast
+e|go east
+se|go southeast
+s|go south
+sw|go southwest
+w|go west
+nw|go northwest
+u|go up
+d|go down
