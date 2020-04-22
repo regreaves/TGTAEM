@@ -20,9 +20,9 @@ public class Room {
 	}
 
 	public String loadRoom() {
-		String dscrpt = displayName;
+		String dscrpt = "<br>>" + displayName;
 		if (!visited) {
-			dscrpt += ":" + '\n' + this.description;
+			dscrpt += ":<br>" + this.description;
 			for (Item i : items) {
 				if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
 					dscrpt += " " + i.init_dscrpt;

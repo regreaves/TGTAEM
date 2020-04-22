@@ -4,28 +4,28 @@ import java.util.ArrayList;
 
 public class Inventory {
 	int currentWeight;
-	int maxTotalWeight;
+	int maxWeight;
 	String id;
 	ArrayList<Item> items = new ArrayList<>();
 
 	public Inventory(int currentWeight, int maxTotalWeight, String id) {
 		this.currentWeight = currentWeight;
-		this.maxTotalWeight = maxTotalWeight;
+		this.maxWeight = maxTotalWeight;
 		this.id = id;
 	}
 
-	public int getMaxTotalWeight() {
-		return maxTotalWeight;
+	public int getMaxWeight() {
+		return maxWeight;
 	}
 
-	public void setMaxTotalWeight(int maxTotalWeight) {
-		this.maxTotalWeight = maxTotalWeight;
+	public void setMaxWeight(int maxTotalWeight) {
+		this.maxWeight = maxTotalWeight;
 		return;
 	}
 
-	public boolean checkWeight(Item item) {
-		int x = getCurrentWeight();
-		if (x + item.getWeight() < this.maxTotalWeight) {
+	public boolean hasSpace(Item item) {
+		int x = item.getWeight() + getCurrentWeight();
+		if (x < this.maxWeight) {
 			return true;
 		} else {
 			return false;
@@ -64,7 +64,7 @@ public class Inventory {
 
 	public void addItem(Item i) {
 		int x = currentWeight + i.getWeight();
-		if(x <= maxTotalWeight) {
+		if(x <= maxWeight) {
 			this.items.add(i);
 			currentWeight += i.getWeight();
 			i.move();

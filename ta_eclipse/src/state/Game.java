@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import command.Action;
 import command.Parser;
+import objects.Inventory;
 import objects.Item;
 import objects.NPC;
 import objects.Player;
@@ -20,7 +21,7 @@ public class Game {
 	Parser parser;
 	DerbyDatabase db;
 
-	//R
+	// R
 	HashMap<String, String> shortcuts = new HashMap<>();
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
@@ -47,6 +48,7 @@ public class Game {
 			db.placeNPCs(map, npcs);
 			shortcuts = db.getShortcuts();
 			db.addConnections(map);
+			inventory().addItems(db.getInventory());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -105,18 +107,19 @@ public class Game {
 		db.placeNPCs(map, npcs);
 		shortcuts = db.getShortcuts();
 		db.addConnections(map);
+		inventory().addItems(db.getInventory());
 	}
 
 	public Action parse(String input) {
 		String s = shortcuts.get(input);
 		Action a;
-		
+
 		if (s == null) {
 			a = parser.getAction(input);
 		} else {
 			a = parser.getAction(s);
 		}
-		
+
 		return a;
 	}
 
@@ -126,6 +129,10 @@ public class Game {
 
 	public Room room() {
 		return map.get(here());
+	}
+
+	public Inventory inventory() {
+		return player.getInventory();
 	}
 
 	public String performAction(Action a) throws SQLException {
@@ -143,6 +150,9 @@ public class Game {
 			break;
 		case 3:
 			display = examine(a);
+			break;
+		case 4:
+			display = checkInventory(a);
 			break;
 		case 6:
 			display = hideUnder(a);
@@ -209,17 +219,21 @@ public class Game {
 		ArrayList<Item> roomItems = itemsHere();
 		for (Item i : roomItems) {
 			if (i.getName().equals(obj)) {
-				if (i.getWeight() < 30 && player.getInventory().checkWeight(i)) { // TODO - hardcoded maxSize but this
-																					// would be found in the player
-																					// table in the future
-//					player.get(i);
-//					Room r = map.get(here());
-//					r.removeItem(i);
-					db.takeItem(i.getID());
+				if (i.getWeight() < 30 && inventory().hasSpace(i)) {
+					String id = i.getID();
+					db.takeItem(id);
+					inventory().addItem(i);
 					display = "You take the " + obj + ".";
 					return display;
 				} else {
-					display = "You can't take that, it's too heavy!";
+					if (obj.equalsIgnoreCase("window")) {
+						display = "You can't take the window. That's sorta attached to the house.";
+					} else if (obj.equalsIgnoreCase("painting")) {
+						display = "As much as you'd like to take and destroy it, you really shouldn't.";
+					}
+					else {
+						display = "That's too heavy to carry. You can't take that.";
+					}
 					return display;
 				}
 			}
@@ -231,11 +245,14 @@ public class Game {
 	private String drop(Action a) {
 		String display = "";
 		String obj = a.noun();
-//		Item i = player.getInventory().getItemByName(obj);
-//		Room r = map.get(here());
-//		r.addItem(player.drop(i));
 		String id = db.getItemID(obj);
+		if(id.equals(""))
+		{
+			display = "You don't have that in your inventory to drop.";
+			return display;
+		}
 		db.dropItem(id, here());
+		inventory().dropItem(inventory().getItemByName(obj));
 		display = "You drop the " + obj + ".";
 		return display;
 	}
@@ -259,6 +276,21 @@ public class Game {
 		return display;
 	}
 
+	private String checkInventory(Action a)
+	{
+		String display = "";
+		if(a.noun().equals("inventory"))
+		{
+			display = "<br>>Inventory: <br>";
+			ArrayList<String> items = db.listInventory();
+			for(String i : items)
+			{
+				display += "--" + i + "<br>";
+			}
+		}
+		return display;
+	}
+	
 	private String hideUnder(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -418,7 +450,6 @@ public class Game {
 		Room r = map.get(id);
 		return r.loadRoom();
 	}
-
 
 	public static void main(String[] args) throws SQLException {
 		Game g = new Game();

@@ -122,7 +122,7 @@ public class DerbyDatabase {
 
 					stmt4 = conn.prepareStatement( // items table
 							"create table items (" + " id varchar(5) primary key," + " name varchar(42),"
-									+ " init_dscrpt varchar(200)," + " invent_dscrpt varchar(200)," + " hidden boolean,"
+									+ " init_dscrpt varchar(500)," + " invent_dscrpt varchar(500)," + " hidden boolean,"
 									+ " moved boolean," + " vowel boolean," + " plural boolean," + " weight int" + ")");
 					stmt4.executeUpdate();
 
@@ -153,10 +153,10 @@ public class DerbyDatabase {
 									+ " health varchar(5)," + " attack varchar(5)," + " defense varchar(5)" + ")");
 					stmt10.executeUpdate();
 
- 					stmt11 = conn.prepareStatement(
- 							"create table shortcuts (" + " shortcut varchar(5)," + " action varchar(42)" + ")");
- 					stmt11.executeUpdate();
- 					
+					stmt11 = conn.prepareStatement(
+							"create table shortcuts (" + " shortcut varchar(5)," + " action varchar(42)" + ")");
+					stmt11.executeUpdate();
+
 					stmt12 = conn.prepareStatement( // connections table
 							"create table connections (" + " action varchar(42)," + " origin varchar(5),"
 									+ " destination varchar(5)" + ")");
@@ -195,8 +195,8 @@ public class DerbyDatabase {
 				List<Pair<String, String>> itemMap;
 				List<Pair<String, String>> npcMap;
 				List<Pair<String, String>> itemAction;
-				//R
- 				List<Pair<String, String>> shortcutList;
+				// R
+				List<Pair<String, String>> shortcutList;
 				List<Pair<String, Pair<String, String>>> connections;
 
 				try { // get info from csvs
@@ -209,7 +209,7 @@ public class DerbyDatabase {
 					itemMap = InitialData.getItemMap();
 					npcMap = InitialData.getNPCMap();
 					itemAction = InitialData.getItemActions();
- 					shortcutList = InitialData.getShortcuts();
+					shortcutList = InitialData.getShortcuts();
 					connections = InitialData.getConnections();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
@@ -224,7 +224,7 @@ public class DerbyDatabase {
 				PreparedStatement insertItemMap = null;
 				PreparedStatement insertNpcMap = null;
 				PreparedStatement insertItemAction = null;
- 				PreparedStatement insertShortcut = null;
+				PreparedStatement insertShortcut = null;
 				PreparedStatement insertConnection = null;
 
 				try {
@@ -335,17 +335,16 @@ public class DerbyDatabase {
 					}
 					insertItemAction.executeBatch();
 
- 					// populate shortcut table
- 					insertShortcut = conn.prepareStatement(
- 							"insert into shortcuts (shortcut, action)"
- 									+ " values (?, ?)");
- 					for (Pair<String, String> p : shortcutList) {
- 						insertShortcut.setString(1, p.getLeft());
- 						insertShortcut.setString(2, p.getRight());
- 						insertShortcut.addBatch();
- 					}
- 					insertShortcut.executeBatch();
-					
+					// populate shortcut table
+					insertShortcut = conn
+							.prepareStatement("insert into shortcuts (shortcut, action)" + " values (?, ?)");
+					for (Pair<String, String> p : shortcutList) {
+						insertShortcut.setString(1, p.getLeft());
+						insertShortcut.setString(2, p.getRight());
+						insertShortcut.addBatch();
+					}
+					insertShortcut.executeBatch();
+
 					// populate connections table
 					insertConnection = conn.prepareStatement(
 							"insert into connections (action, origin, destination)" + " values (?, ?, ?)");
@@ -368,7 +367,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertItemMap);
 					DBUtil.closeQuietly(insertNpcMap);
 					DBUtil.closeQuietly(insertItemAction);
- 					DBUtil.closeQuietly(insertShortcut);
+					DBUtil.closeQuietly(insertShortcut);
 					DBUtil.closeQuietly(insertConnection);
 				}
 			}
@@ -389,7 +388,7 @@ public class DerbyDatabase {
 				PreparedStatement tblPlayers = null;
 				PreparedStatement tblNpcMap = null;
 				PreparedStatement tblInvent = null;
- 				PreparedStatement tblShortcut = null;
+				PreparedStatement tblShortcut = null;
 				PreparedStatement tblConnections = null;
 
 				try {
@@ -422,10 +421,10 @@ public class DerbyDatabase {
 
 					tblInvent = conn.prepareStatement("truncate table invent");
 					tblInvent.executeUpdate();
-					
- 					tblShortcut = conn.prepareStatement("truncate table shortcuts");
- 					tblShortcut.execute();
- 					
+
+					tblShortcut = conn.prepareStatement("truncate table shortcuts");
+					tblShortcut.execute();
+
 					tblConnections = conn.prepareStatement("truncate table connections");
 					tblConnections.executeUpdate();
 
@@ -442,7 +441,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblPlayers);
 					DBUtil.closeQuietly(tblNpcMap);
 					DBUtil.closeQuietly(tblInvent);
- 					DBUtil.closeQuietly(tblShortcut);
+					DBUtil.closeQuietly(tblShortcut);
 					DBUtil.closeQuietly(tblConnections);
 				}
 				return true;
@@ -455,7 +454,6 @@ public class DerbyDatabase {
 		System.out.println("Tables made!"); // messages are good
 	}
 
-	
 	// Word/Action Functions
 	public ArrayList<Action> getActions() { // create all action objects available
 		return executeTransaction(new Transaction<ArrayList<Action>>() {
@@ -766,9 +764,7 @@ public class DerbyDatabase {
 		});
 	}
 
-	// TODO Add location bind?
-	// currently only used in drop, can bind with inventory instead
-	public String getItemID(String itemName) { // get item id from item name
+	public String getItemID(String itemName) { // get item id from inventory by item name
 		return executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
@@ -777,7 +773,8 @@ public class DerbyDatabase {
 
 				try {
 					// get id from the name
-					stmt = conn.prepareStatement("select id from items where name = ?");
+					stmt = conn.prepareStatement(
+							"select invent.id from invent, items" + " where invent.id = items.id and items.name = ?");
 					stmt.setString(1, itemName); // set blank equal to name
 					resultSet = stmt.executeQuery();
 
@@ -791,6 +788,105 @@ public class DerbyDatabase {
 				}
 
 				return id; // return id
+			}
+		});
+	}
+
+	public ArrayList<String> listInventory() { // get all items in inventory
+		return executeTransaction(new Transaction<ArrayList<String>>() {
+			public ArrayList<String> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				ResultSet resultSet1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet2 = null;
+				ArrayList<String> ids = new ArrayList<>();
+				ArrayList<String> inventory = new ArrayList<>();
+
+				try {
+					stmt1 = conn.prepareStatement("select id from invent");
+					resultSet1 = stmt1.executeQuery();
+
+					while (resultSet1.next()) {
+						ids.add(resultSet1.getString("id")); // get the id as a string
+					}
+
+					for (String id : ids) {
+						stmt2 = conn.prepareStatement("select name from items where id = ?");
+						stmt2.setString(1, id);
+						resultSet2 = stmt2.executeQuery();
+						while (resultSet2.next()) {
+							inventory.add(resultSet2.getString("name"));
+						}
+					}
+
+				} finally { // close the things
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(resultSet2);
+				}
+
+				return inventory; // return id
+			}
+		});
+	}
+
+	public ArrayList<Item> getInventory() { // get all items in inventory
+		return executeTransaction(new Transaction<ArrayList<Item>>() {
+			public ArrayList<Item> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				ResultSet resultSet1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet2 = null;
+				ArrayList<String> ids = new ArrayList<>();
+				ArrayList<Item> inventory = new ArrayList<>();
+
+				try {
+					stmt1 = conn.prepareStatement("select id from invent");
+					resultSet1 = stmt1.executeQuery();
+
+					while (resultSet1.next()) {
+						ids.add(resultSet1.getString("id")); // get the id as a string
+					}
+
+					for (String id : ids) {
+						stmt2 = conn.prepareStatement(
+								"select name, init_dscrpt, invent_dscrpt, hidden, moved, vowel, plural, weight from items where id = ?");
+						stmt2.setString(1, id);
+						resultSet2 = stmt2.executeQuery();
+						Boolean found = false; // for testing that a result was returned
+						while (resultSet2.next()) {
+							found = true;
+							Item i = new Item(); // create item
+
+							// set attributes
+							i.setID(id);
+							i.setName(resultSet2.getString("name"));
+							i.setInitDscrpt(resultSet2.getString("init_dscrpt"));
+							i.setInventDscrpt(resultSet2.getString("invent_dscrpt"));
+							i.setHidden(resultSet2.getBoolean("hidden"));
+							i.setMoved(resultSet2.getBoolean("moved"));
+							i.setVowel(resultSet2.getBoolean("vowel"));
+							i.setPlural(resultSet2.getBoolean("plural"));
+							i.setWeight(resultSet2.getInt("weight"));
+
+							inventory.add(i); // add item to list
+						}
+
+						// check items were found
+						if (!found) {
+							System.out.println("no items found in inventory");
+						}
+					}
+
+				} finally { // close the things
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(resultSet2);
+				}
+
+				return inventory; // return id
 			}
 		});
 	}
@@ -1002,7 +1098,6 @@ public class DerbyDatabase {
 		});
 	}
 
-	
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");

@@ -19,48 +19,37 @@ west|w|2
 northwest|nw|2
 up|u|2
 down|d|2
-table|table|2
-vase|vase|2
-flowers|flowers|2
-coat|coat|2
-coins|coins|2
-flashlight|flashlight|2
 bed|bed|2
-monsters|monsters|2
-pockets|pockets|2
-table|round table|2
-vase|flower vase|2
-flowers|daffodils|2
-coat|warm coat|2
-coins|gold coins|2
-flashlight|torch|2
-water|water|2
-stand on|stand on|1
-push|push|1
-hide under|hide under|1
-flip|flip|1
-reset|reset|1
-look under|look under|1
+desk|desk|2
+laptop|laptop|2
+window|window|2
+jacket|jacket|2
+flashlight|flashlight|2
+boxes|boxes|2
+painting|painting|2
+sink|sink|2
+toilet|toilet|2
+shower|shower|2
+couch|couch|2
+TV|TV|2
+remote|remote|2
+piano|piano|2
+PC|PC|2
+table|table|2
+apple|apple|2
+bench|bench|2
+mailbox|mailbox|2
+letter|letter|2
+swings|swings|2
+pikachu|pikachu|2
+sword|sword|2
+go|go|1
 take|take|1
 drop|drop|1
-dump|dump|1
-throw|throw|1
-break|break|1
-drink|drink|1
-smell|smell|1
-eat|eat|1
-wear|wear|1
-check|check|1
 examine|examine|1
-spend|spend|1
-turn on|turn on|1
-turn off|turn off|1
-sleep in|sleep in|1
-jump on|jump on|1
-check for|check for|1
-hit with|hit with|1
-go|go|1
-quit|quit|1
 room|room|2
 game|game|2
 dad|dad|2
+inventory|inventory|2
+quit|quit|1
+check|check|1
