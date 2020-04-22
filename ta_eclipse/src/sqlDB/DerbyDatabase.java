@@ -352,7 +352,7 @@ public class DerbyDatabase {
  						insertShortcut.setString(2, p.getRight());
  						insertShortcut.addBatch();
  					}
- 					insertItemAction.executeBatch();
+ 					insertShortcut.executeBatch();
 					
 					// populate connections table
 					insertConnection = conn.prepareStatement(
