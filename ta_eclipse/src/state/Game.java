@@ -11,6 +11,7 @@ import objects.Item;
 import objects.NPC;
 import objects.Player;
 import objects.Room;
+import sqlDB.DBUtil;
 import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 
