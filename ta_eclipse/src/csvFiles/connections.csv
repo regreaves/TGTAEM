@@ -1,13 +1,58 @@
 room|1
 go north|2
-go east|3
-go south|4
-go west|5
+go west|3
 room|2
 go south|1
 room|3
-go west|1
-room|4
-go north|1
-room|5
+go north|4
 go east|1
+go west|5
+go south|6
+go down|6
+room|4
+go south|3
+room|5
+go east|3
+room|6
+go north|3
+go up|3
+go east|7
+go south|9
+go west|8
+room|7
+go west|6
+room|8
+go east|6
+go west|13
+room|9
+go north |6
+go south|10
+room|10
+go north|9
+go south|14
+go northeast|11
+go northwest|13
+room|11
+go southwest|10
+go northwest|12
+room|12
+go southwest|11
+go southeast|13
+room|13
+go northwest|12
+go southeast|10
+room|14
+go north|10
+go east|15
+go west|17
+room|15
+go west|14
+go east|16
+room|16
+go east|15
+go west|15
+room|17
+go east|14
+go west|18
+room|18
+go east|17

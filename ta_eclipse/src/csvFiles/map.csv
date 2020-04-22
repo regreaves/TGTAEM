@@ -1,6 +1,19 @@
- room_id|diplay_name|display_description|visited
-1|Large Room|You are in a large room. There is a door to the north, east, west, and south.|0
-2|Closet|This room seems to be a large closet. The door is to the south.|0
-3|Bedroom|You are in a bedroom. The door is to the west.|0
-4|Porch|You are on a porch. The door to the rest of the house is north.|0
-5|Kitchen|You are in a kitchen. There is a door to the east.|0
+id|name|description|visited
+1|Bedroom|You are in your bedroom. It's a bit bare, but it is your space. Your closet is to the NORTH, an EASTern window overlooks the yard, and the door to the hallway is WEST.|0
+2|Closet|It's your closet. It's a mess.|0
+3|Hallway|A tiny hallway. To the NORTH is the bathroom. To the WEST is your dad's room. To the EAST is your bedroom. To the SOUTH are the stairs to go down to the living room.|0
+4|Bathroom|It's a bathroom. It has a sink, toilet, and shower. What did you expect?|0
+5|Locked Room|To be fair, you only assume this is your dad's bedroom. He always keeps it locked, and you've never seen inside.|0
+6|Living Room|This is where you tend to hang out, when not in your room. There is a study to the EAST, and the kitchen to the WEST. The door to the front porch is SOUTH.|0
+7|Study|The study always seems dark, even with the lights on. It's a quiet place to work though.|0
+8|Kitchen|You've never seen your dad cook, but there always seems to be food waiting for you in the kitchen.|0
+9|Porch|You've heard other people sit on their front porch and watch life go by. You really don't understand it though. Nothing ever happens on your street.|0
+10|Front of House|You look at the road: empty as usual. |0
+11|East of House|You spent many summers playing out in the yard growing up. It hasn't been the same since you moved out.|0
+12|Back of House|There's not much back here, the house sits right against the tree line of a forest. There's a path leading into the forest to the north.|0
+13|West of House|Before you moved out, it was your job to keep the grass cut. Looks like your dad hasn't been keeping up with that. He's always been so busy with work.|0
+14|E/W Road|The road stretches long and straight to the EAST and WEST. The town (and the rest of civilization, basically) is to your WEST. You've never had a reason to go EAST.|0
+15|E/W Road|It's a long and empty road.|0
+16|E/W Road|This road seems to go on forever.|0
+17|W/E Road|It's not too long a walk to town. It's just across the bridge.|0
+18|W/E Road|You encounter a sign. "BRIDGE OUT AHEAD" Well, guess we aren't going to town today.|0

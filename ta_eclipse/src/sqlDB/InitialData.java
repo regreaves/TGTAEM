@@ -197,7 +197,7 @@ public class InitialData {
 
 	public static List<Pair<String, String>> getItemMap() throws IOException {
 		List<Pair<String, String>> itemMap = new ArrayList<>();
-		ReadCSV readItems = new ReadCSV("items_loc.csv");
+		ReadCSV readItems = new ReadCSV("itemMap.csv");
 		try {
 			readItems.next(); // skip headings
 			while (true) {
