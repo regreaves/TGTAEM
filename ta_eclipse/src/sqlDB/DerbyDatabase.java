@@ -12,7 +12,6 @@ import java.util.List;
 
 import command.Action;
 import command.Word;
-import objects.Connections;
 import objects.Item;
 import objects.NPC;
 import objects.Player;
@@ -456,40 +455,7 @@ public class DerbyDatabase {
 		System.out.println("Tables made!"); // messages are good
 	}
 
-	public HashMap<String, String> getShortcuts() {
-		return executeTransaction(new Transaction<HashMap<String, String>>() {
-			public HashMap<String, String> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				HashMap<String, String> shortcuts = new HashMap<>();
-
-				try {
-					stmt = conn.prepareStatement("select shortcut, action from shortcuts");
-					resultSet = stmt.executeQuery();
-
-					// for testing that a result was returned
-					Boolean found = false;
-					while (resultSet.next()) {
-						found = true;
-						String shortcut = resultSet.getString("shortcut");
-						String action = resultSet.getString("action");
-						shortcuts.put(shortcut, action);
-					}
-
-					// check if no shortcuts were found
-					if (!found) {
-						System.out.println("error in shortcuts table");
-					}
-				} finally { // close the things
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-				return shortcuts;
-
-			}
-		});
-	}
-
+	
 	// Word/Action Functions
 	public ArrayList<Action> getActions() { // create all action objects available
 		return executeTransaction(new Transaction<ArrayList<Action>>() {
@@ -1002,6 +968,41 @@ public class DerbyDatabase {
 		}
 	}
 
+	public HashMap<String, String> getShortcuts() {
+		return executeTransaction(new Transaction<HashMap<String, String>>() {
+			public HashMap<String, String> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				HashMap<String, String> shortcuts = new HashMap<>();
+
+				try {
+					stmt = conn.prepareStatement("select shortcut, action from shortcuts");
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+					Boolean found = false;
+					while (resultSet.next()) {
+						found = true;
+						String shortcut = resultSet.getString("shortcut");
+						String action = resultSet.getString("action");
+						shortcuts.put(shortcut, action);
+					}
+
+					// check if no shortcuts were found
+					if (!found) {
+						System.out.println("error in shortcuts table");
+					}
+				} finally { // close the things
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+				return shortcuts;
+
+			}
+		});
+	}
+
+	
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");
