@@ -92,16 +92,16 @@ public class InventoryTests {
 	
 	@Test
 	public void testCheckWeight() throws Exception {
-		assertTrue(inv1.checkWeight(flower));
-		assertFalse(inv2.checkWeight(sword));
-		assertTrue(inv3.checkWeight(flower));
+		assertTrue(inv1.hasSpace(flower));
+		assertFalse(inv2.hasSpace(sword));
+		assertTrue(inv3.hasSpace(flower));
 	}
 	
 	@Test
 	public void testGetMaxTotalWeight() throws Exception {
-		assertEquals(40, inv1.getMaxTotalWeight());
-		assertEquals(5, inv2.getMaxTotalWeight());
-		assertEquals(30, inv3.getMaxTotalWeight());
+		assertEquals(40, inv1.getMaxWeight());
+		assertEquals(5, inv2.getMaxWeight());
+		assertEquals(30, inv3.getMaxWeight());
 	}
 	
 	@Test
@@ -113,13 +113,13 @@ public class InventoryTests {
 	
 	@Test
 	public void testSetMaxSize() throws Exception {
-		inv1.setMaxTotalWeight(5);
-		inv2.setMaxTotalWeight(10);
-		inv3.setMaxTotalWeight(15);
+		inv1.setMaxWeight(5);
+		inv2.setMaxWeight(10);
+		inv3.setMaxWeight(15);
 		
-		assertEquals(5, inv1.getMaxTotalWeight());
-		assertEquals(10, inv2.getMaxTotalWeight());
-		assertEquals(15, inv3.getMaxTotalWeight());
+		assertEquals(5, inv1.getMaxWeight());
+		assertEquals(10, inv2.getMaxWeight());
+		assertEquals(15, inv3.getMaxWeight());
 	}
 	
 	@Test
