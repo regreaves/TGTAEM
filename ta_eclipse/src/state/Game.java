@@ -406,56 +406,8 @@ public class Game {
 		return r.loadRoom();
 	}
 
-//	public void makeNPCS(String npcFile) {
-//
-//	}
-//
-//	public void addActionTaken(Action action) {
-//		actionsTaken.add(action);
-//		return;
-//	}
-//
-//	public void addRoomVisited(String roomID) {
-//		roomsVisited.add(roomID);
-//		return;
-//	}
-//
-//	public void playerDies() {
-//		playerDeaths++;
-//		return;
-//	}
-//
-//	public void playerWins() {
-//		victories++;
-//		return;
-//	}
-//
-//	public void saveGame() { // TODO with checkpoint
-//		return;
-//	}
-
-//	public void loadGame(Checkpoint checkpoint) { // TODO: implement with checkpoint
-//		this.user = user;
-//		this.player = player;
-//		this.parser = parser;
-//		this.items = items;
-//		this.npcs = npcs;
-//		this.map = map;
-//		this.actionsTaken = actionsTaken;
-//		this.roomsVisited = roomsVisited;
-//		this.playerDeaths = playerDeaths;
-//		this.victories = victories;
-//		this.checkpoints = checkpoints;
-//	}
-//
-//	public void teleport(String roomID) {
-//		player.location = roomID; // TODO: I think more is needed here
-//		return;
-//	}
 
 	public static void main(String[] args) throws SQLException {
-//		User u = new User("user", "user");
-//		Player p = new Player();
 		Game g = new Game();
 
 		Scanner in = new Scanner(System.in);
