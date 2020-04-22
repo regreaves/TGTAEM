@@ -11,6 +11,7 @@ import objects.Item;
 import objects.NPC;
 import objects.Player;
 import objects.Room;
+import sqlDB.DBUtil;
 import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 
@@ -19,6 +20,8 @@ public class Game {
 	Parser parser;
 	DerbyDatabase db;
 
+	//R
+	HashMap<String, String> shortcuts = new HashMap<>();
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
@@ -32,6 +35,7 @@ public class Game {
 	public Game() {
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		this.db = DatabaseProvider.getInstance();
+
 		try {
 			this.parser = new Parser(db);
 			player = db.getPlayer();
@@ -41,11 +45,11 @@ public class Game {
 			db.placePlayer(map, player);
 			db.placeItems(map, items);
 			db.placeNPCs(map, npcs);
+			shortcuts = db.getShortcuts();
 			db.addConnections(map);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	// for use with jsp
@@ -99,11 +103,21 @@ public class Game {
 		db.placePlayer(map, player);
 		db.placeItems(map, items);
 		db.placeNPCs(map, npcs);
+		//R
+		shortcuts = db.getShortcuts();
 		db.addConnections(map);
 	}
 
 	public Action parse(String input) {
-		Action a = parser.getAction(input);
+		String s = shortcuts.get(input);
+		Action a;
+		
+		if (s == null) {
+			a = parser.getAction(input);
+		} else {
+			a = parser.getAction(s);
+		}
+		
 		return a;
 	}
 

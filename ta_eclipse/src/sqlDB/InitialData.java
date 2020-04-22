@@ -13,6 +13,30 @@ import objects.Player;
 import objects.Room;
 
 public class InitialData {
+	
+	//R
+	public static List<Pair<String, String>> getShortcuts() throws IOException {
+		List<Pair<String, String>> shortcutList = new ArrayList<>();
+		ReadCSV readShortcuts = new ReadCSV("shortcuts.csv");
+		try {
+			readShortcuts.next(); // skip headings
+			while (true) {
+				List<String> tuple = readShortcuts.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String shortcut = i.next();
+				String action = i.next();
+				Pair<String, String> p = new Pair<>(shortcut, action);
+				shortcutList.add(p);
+			}
+			return shortcutList;
+		} finally {
+			readShortcuts.close();
+		}
+	}
+	
 	public static List<Word> getWords() throws IOException {
 		List<Word> wordList = new ArrayList<Word>();
 		ReadCSV readWords = new ReadCSV("words.csv");
@@ -316,14 +340,12 @@ public class InitialData {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		List<Pair<String, Pair<String, String>>> list = getConnections();
-		for(Pair<String, Pair<String, String>> i : list) {
+		List<Pair<String, String>> list = getShortcuts();
+		for(Pair<String, String> i : list) {
 			String s = i.getLeft();
-			String s2 = i.getRight().getLeft();
-			String s3 = i.getRight().getRight();
-			System.out.println("-"+s + "-" + s2 + "-" + s3);
+			String s2 = i.getRight();
+			System.out.println("-"+s + "-" + s2 + "-");
 		}
 		return;
 	}
-
 }
