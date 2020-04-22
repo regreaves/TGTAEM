@@ -157,20 +157,8 @@ public class Game {
 		case 6:
 			display = hideUnder(a);
 			break;
-		case 7:
-			display = flip(a);
-			break;
-		case 8:
-			display = reset(a);
-			break;
-		case 9:
-			display = dump(a);
-			break;
 		case 10:
 			display = throwItem(a);
-			break;
-		case 11:
-			display = breakItem(a);
 			break;
 		case 12:
 			display = drink(a);
@@ -306,42 +294,6 @@ public class Game {
 		return display;
 	}
 
-	private String flip(Action a) {
-		String display = "";
-		String obj = a.noun();
-		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("table")))) {
-			display = "You flip the table in a fit of rage. Everything on the table goes flying.";
-			return display;
-		}
-		display = "There is nothing to flip in here.";
-		return display;
-	}
-
-	private String reset(Action a) {
-		String display = "";
-		String obj = a.noun();
-		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("table")))) {
-			display = "You calm down and put the table back up.";
-			return display;
-		}
-		display = "There is nothing to reset in here.";
-		return display;
-	}
-
-	private String dump(Action a) {
-		String display = "";
-		String obj = a.noun();
-		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("vase")))) {
-			display = "You dump the contents of the vase out onto the floor. It\'s a mess.";
-			return display;
-		}
-		display = "There is nothing to dump in here.";
-		return display;
-	}
-
 	private String throwItem(Action a) {
 		String display = "";
 		String obj = a.noun();
@@ -354,25 +306,13 @@ public class Game {
 		return display;
 	}
 
-	private String breakItem(Action a) {
-		String display = "";
-		String obj = a.noun();
-		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("vase")))) {
-			display = "You smash the vase, spilling water everywhere and while leaving the flowers unharmed.";
-			return display;
-		}
-		display = "There is nothing to break in here.";
-		return display;
-	}
-
 	private String wear(Action a) {
 		String display = "";
 		String obj = a.noun();
 		take(a);
 		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("coat")))) {
-			display = "You take the coat and put it on. You feel warm and look very fashionable!";
+		if (roomItems.contains(roomItems.get(obj.indexOf("jacket")))) {
+			display = "You take the jacket and put it on. You feel warm and look very fashionable!";
 			return display;
 		}
 		display = "There is nothing to wear in here.";
@@ -431,7 +371,7 @@ public class Game {
 		String display = "";
 		String obj = a.noun();
 		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("bed")))) {
+		if (roomItems.contains(roomItems.get(obj.indexOf("bed"))) || roomItems.contains(roomItems.get(obj.indexOf("couch")))) {
 			display = "You take a quick nap in the " + obj + ". You feel refreshed!";
 			return display;
 		}
