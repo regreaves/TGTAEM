@@ -15,6 +15,8 @@ public class ActorTests {
 		actor.setID("0");
 		actor.setLocation("1");
 		actor.setAlive(true);
+		actor.setAttack(10);
+		actor.setDefense(10);
 	}
 	
 	@Test
@@ -48,6 +50,28 @@ public class ActorTests {
 	public void testSetID() throws Exception {
 		actor.setID("10");
 		assertEquals("10", actor.getID());
+	}
+	
+	@Test
+	public void testGetAttack() throws Exception {
+		assertEquals(10, actor.getAttack());
+	}
+	
+	@Test
+	public void testSetAttack() throws Exception {
+		actor.setAttack(100);
+		assertEquals(100, actor.getAttack());
+	}
+	
+	@Test
+	public void testGetDefense() throws Exception {
+		assertEquals(10, actor.getDefense());
+	}
+	
+	@Test
+	public void testSetDefense() throws Exception {
+		actor.setDefense(100);
+		assertEquals(100, actor.getDefense());
 	}
 
 }
