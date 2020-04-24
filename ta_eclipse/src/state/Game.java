@@ -246,21 +246,21 @@ public class Game {
 	}
 
 	private String examine(Action a) {
-		String display = "";
+		String display = "<br>>";
 		String obj = a.noun();
 		if (obj.equals("room")) {
-			display = map.get(here()).look();
+			display += map.get(here()).look();
 			return display;
 		} else {
 			ArrayList<Item> roomItems = itemsHere();
 			for (Item i : roomItems) {
 				if (i.getName().equals(obj)) {
-					display = i.getInventDscrpt();
+					display += i.getInventDscrpt();
 					return display;
 				}
 			}
 		}
-		display = "There's no " + obj + " for you to examine.";
+		display += "There's no " + obj + " for you to examine.";
 		return display;
 	}
 
