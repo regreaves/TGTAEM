@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import command.Action;
+import command.ActionHandler;
 import command.Parser;
 import objects.Inventory;
 import objects.Item;
@@ -21,14 +22,14 @@ public class Game {
 	Parser parser;
 	DerbyDatabase db;
 
-	// R
 	HashMap<String, String> shortcuts = new HashMap<>();
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
 
+	ActionHandler ah;
+
 	boolean done = false;
-	boolean newGame = true;
 
 	String command = "";
 
@@ -60,14 +61,11 @@ public class Game {
 		return done;
 	}
 
-	public boolean isNewGame() {
-		return newGame;
-	}
-
 	public String getAction() throws SQLException {
 		String s = "";
 		Action a = parse(command);
 		if (a != null) {
+			ah.addAction(a);
 			s = performAction(a);
 		} else {
 			s = "I don't understand \"" + command + '\"' + " Please try something else.";
@@ -135,6 +133,45 @@ public class Game {
 		return player.getInventory();
 	}
 
+	public String loadRoom(String id) {
+		Room r = map.get(id);
+		return r.loadRoom();
+	}
+	
+	//Updater methods
+	private void setVisited() {
+		room().setVisited(true);
+		db.setVisited(here());
+	}
+
+	private void movePlayer(String id) throws SQLException {
+		db.movePlayer(id, player);
+		player.move(id);
+	}
+
+	private void takeItem(String obj) {
+		ArrayList<Item> roomItems = itemsHere();
+		boolean taken = false;
+		for (Item i : roomItems) {
+			if (i.getName().equals(obj)) {
+				String id = i.getID();
+				db.takeItem(id);
+				inventory().addItem(i);
+				taken = true;
+			}
+		}
+		if (!taken) {
+			System.out.println("Error: " + obj + " not taken.");
+		}
+	}
+
+	private void dropItem(String obj) {
+		String id = db.getItemID(obj);
+		db.dropItem(id, here());
+		inventory().dropItem(inventory().getItemByName(obj));
+	}
+
+	//Switch Case for all actions
 	public String performAction(Action a) throws SQLException {
 		String display = "";
 		int method = a.getMethod();
@@ -154,49 +191,43 @@ public class Game {
 		case 4:
 			display = checkInventory(a);
 			break;
+		case 5:
+			display = quit(a);
+			break;
 		case 6:
-			display = hideUnder(a);
+			display = wear(a);
 			break;
-		case 10:
-			display = throwItem(a);
-			break;
-		case 12:
-			display = drink(a);
-			break;
-		case 13:
-			display = smell(a);
+		case 7:
+			display = jumpOn(a);
 			break;
 		case 14:
 			display = eat(a);
 			break;
 		case 15:
-			display = wear(a);
+			
 			break;
 		case 23:
-			display = jumpOn(a);
 			break;
 		case 24:
 			display = sleep(a);
 			break;
 		case 26:
-			display = quit(a);
 			break;
 		}
 
 		return display;
 	}
 
+	//(Mostly) Fixed Action Methods
 	private String go(Action a) throws SQLException {
 		String display = "";
 		String id = room().getDestination(a.getName());
-		if (id.equals("0")) {
+		if (!ah.hasConnection(a, room())) {
 			display = "You can't go that way.";
 		} else {
-			room().setVisited(true);
-			db.setVisited(here());
+			setVisited();
+			movePlayer(id);
 			display = loadRoom(id);
-			db.movePlayer(id, player);
-			player.move(id);
 		}
 		return display;
 	}
@@ -204,26 +235,20 @@ public class Game {
 	private String take(Action a) {
 		String display = "";
 		String obj = a.noun();
-		ArrayList<Item> roomItems = itemsHere();
-		for (Item i : roomItems) {
-			if (i.getName().equals(obj)) {
-				if (i.getWeight() < 30 && inventory().hasSpace(i)) {
-					String id = i.getID();
-					db.takeItem(id);
-					inventory().addItem(i);
-					display = "You take the " + obj + ".";
-					return display;
+		if (ah.itemInRoom(room(), obj)) {
+			if (ah.canTake(a, inventory())) {
+				takeItem(obj);
+				display = "You take the " + obj + ".";
+				return display;
+			} else {
+				if (obj.equalsIgnoreCase("window")) {
+					display = "You can't take the window. That's sorta attached to the house.";
+				} else if (obj.equalsIgnoreCase("painting")) {
+					display = "As much as you'd like to take and destroy it, you really shouldn't.";
 				} else {
-					if (obj.equalsIgnoreCase("window")) {
-						display = "You can't take the window. That's sorta attached to the house.";
-					} else if (obj.equalsIgnoreCase("painting")) {
-						display = "As much as you'd like to take and destroy it, you really shouldn't.";
-					}
-					else {
-						display = "That's too heavy to carry. You can't take that.";
-					}
-					return display;
+					display = "That's too heavy to carry. You can't take that.";
 				}
+				return display;
 			}
 		}
 		display = "You can't do that.";
@@ -233,14 +258,11 @@ public class Game {
 	private String drop(Action a) {
 		String display = "";
 		String obj = a.noun();
-		String id = db.getItemID(obj);
-		if(id.equals(""))
-		{
+		if (!ah.hasItem(inventory(), obj)) {
 			display = "You don't have that in your inventory to drop.";
 			return display;
 		}
-		db.dropItem(id, here());
-		inventory().dropItem(inventory().getItemByName(obj));
+		dropItem(obj);
 		display = "You drop the " + obj + ".";
 		return display;
 	}
@@ -264,47 +286,33 @@ public class Game {
 		return display;
 	}
 
-	private String checkInventory(Action a)
-	{
+	private String checkInventory(Action a) {
 		String display = "";
-		if(a.noun().equals("inventory"))
-		{
+		boolean empty = true;
+		if (a.noun().equals("inventory")) {
 			display = "<br>>Inventory: <br>";
 			ArrayList<String> items = db.listInventory();
-			for(String i : items)
-			{
+			for (String i : items) {
+				empty = false;
 				display += "--" + i + "<br>";
+			}
+			if(empty) {
+				display += "Your inventory is empty. <br>";
 			}
 		}
 		return display;
 	}
-	
-	private String hideUnder(Action a) {
-		String display = "";
-		String obj = a.noun();
-		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("table")))) {
-			display = "You hide under the table. Nothing in here can hurt you, though, so you get back up.";
-			return display;
-		} else if (roomItems.contains(roomItems.get(obj.indexOf("bed")))) {
-			display = "You hide under the bed. Once you realize the coast is clear, you crawl back out.";
-			return display;
-		}
-		display = "There is nothing to hide under in here.";
-		return display;
-	}
 
-	private String throwItem(Action a) {
+	private String quit(Action a) {
 		String display = "";
-		String obj = a.noun();
-		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("vase")))) {
-			display = "You throw the vase against a wall and it shatters into a million pieces. The water stains the wall and the flowers fall to the floor.";
-			return display;
-		}
-		display = "There is nothing to throw in here.";
+		display = "Quitting game...";
+		done = true;
 		return display;
 	}
+	
+	//Flexible Action Methods
+	
+
 
 	private String wear(Action a) {
 		String display = "";
@@ -371,7 +379,8 @@ public class Game {
 		String display = "";
 		String obj = a.noun();
 		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("bed"))) || roomItems.contains(roomItems.get(obj.indexOf("couch")))) {
+		if (roomItems.contains(roomItems.get(obj.indexOf("bed")))
+				|| roomItems.contains(roomItems.get(obj.indexOf("couch")))) {
 			display = "You take a quick nap in the " + obj + ". You feel refreshed!";
 			return display;
 		}
@@ -379,17 +388,8 @@ public class Game {
 		return display;
 	}
 
-	private String quit(Action a) {
-		String display = "";
-		display = "Quitting game...";
-		done = true;
-		return display;
-	}
+	
 
-	public String loadRoom(String id) {
-		Room r = map.get(id);
-		return r.loadRoom();
-	}
 
 	public static void main(String[] args) throws SQLException {
 		Game g = new Game();

@@ -911,13 +911,9 @@ public class DerbyDatabase {
 						n.setID(resultSet.getString("id"));
 						n.setName(resultSet.getString("name"));
 						n.setHealth(Integer.parseInt(resultSet.getString("health")));
-						;
 						n.setAttack(Integer.parseInt(resultSet.getString("attack")));
-						;
 						n.setDefense(Integer.parseInt(resultSet.getString("defense")));
-						;
 						n.setDescription(resultSet.getString("description"));
-						;
 
 						npcs.add(n);
 					}
