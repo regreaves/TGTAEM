@@ -465,12 +465,12 @@ public class DerbyDatabase {
 		System.out.println("Tables made!"); // messages are good
 	}
 
-	public String getLog() { // concatenate each row of strings and return entire log
-		String log = null;
+	public String getSessionLog() { // concatenate each row of strings and return session log
+		String sessionLog = null;
 		
 		
 		
-		return log;
+		return sessionLog;
 	}
 	
 	// Word/Action Functions
