@@ -164,7 +164,7 @@ public class DerbyDatabase {
 					stmt12.executeUpdate();
 
 					stmt13 = conn.prepareStatement( // log table
-							"create table log (" + " log_row varchar(1000)" + ")");
+							"create table log (" +  " id varchar(5) primary key," + " log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
 
 					return true;
