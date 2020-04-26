@@ -162,7 +162,7 @@ public class DerbyDatabase {
 							"create table connections (" + " action varchar(42)," + " origin varchar(5),"
 									+ " destination varchar(5)" + ")");
 					stmt12.executeUpdate();
-					
+
 					stmt13 = conn.prepareStatement( // log table
 							"create table log (" + " log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
@@ -434,7 +434,7 @@ public class DerbyDatabase {
 
 					tblConnections = conn.prepareStatement("truncate table connections");
 					tblConnections.executeUpdate();
-					
+
 					tblLog = conn.prepareStatement("truncate table log");
 					tblLog.executeUpdate();
 
@@ -466,13 +466,15 @@ public class DerbyDatabase {
 	}
 
 	public String getSessionLog() { // concatenate each row of strings and return session log
-		String sessionLog = null;
-		
-		
-		
-		return sessionLog;
+		return executeTransaction(new Transaction<String>() {
+			public String execute(Connection conn) throws SQLException {
+				String sessionLog = null;
+
+				return sessionLog;
+			}
+		});
 	}
-	
+
 	// Word/Action Functions
 	public ArrayList<Action> getActions() { // create all action objects available
 		return executeTransaction(new Transaction<ArrayList<Action>>() {
