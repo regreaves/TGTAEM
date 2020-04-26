@@ -469,7 +469,9 @@ public class DerbyDatabase {
 		return executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
 				String sessionLog = null;
-
+				
+				
+				
 				return sessionLog;
 			}
 		});
