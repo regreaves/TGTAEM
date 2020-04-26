@@ -21,7 +21,6 @@ public class Game {
 	Parser parser;
 	DerbyDatabase db;
 
-	// R
 	HashMap<String, String> shortcuts = new HashMap<>();
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
@@ -53,8 +52,6 @@ public class Game {
 			e.printStackTrace();
 		}
 	}
-
-	// for use with jsp
 
 	public boolean isDone() {
 		return done;
