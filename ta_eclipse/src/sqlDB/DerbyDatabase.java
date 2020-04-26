@@ -164,7 +164,7 @@ public class DerbyDatabase {
 					stmt12.executeUpdate();
 					
 					stmt13 = conn.prepareStatement( // log table
-							"create table log (" + " " + ")");
+							"create table log (" + " log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
 
 					return true;
@@ -465,6 +465,14 @@ public class DerbyDatabase {
 		System.out.println("Tables made!"); // messages are good
 	}
 
+	public String getLog() { // concatenate each row of strings and return entire log
+		String log = null;
+		
+		
+		
+		return log;
+	}
+	
 	// Word/Action Functions
 	public ArrayList<Action> getActions() { // create all action objects available
 		return executeTransaction(new Transaction<ArrayList<Action>>() {
