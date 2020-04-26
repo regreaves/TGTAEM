@@ -64,7 +64,9 @@ public class Game {
 	public String getAction() throws SQLException {
 		String s = "";
 		Action a = parse(command);
-		if (a != null) {
+		if (ah.freeze()) {
+			s = ah.getFreeze();
+		} else if (a != null) {
 			ah.addAction(a);
 			s = performAction(a);
 		} else {
@@ -137,8 +139,8 @@ public class Game {
 		Room r = map.get(id);
 		return r.loadRoom();
 	}
-	
-	//Updater methods
+
+	// Updater methods
 	private void setVisited() {
 		room().setVisited(true);
 		db.setVisited(here());
@@ -171,7 +173,7 @@ public class Game {
 		inventory().dropItem(inventory().getItemByName(obj));
 	}
 
-	//Switch Case for all actions
+	// Switch Case for all actions
 	public String performAction(Action a) throws SQLException {
 		String display = "";
 		int method = a.getMethod();
@@ -200,16 +202,15 @@ public class Game {
 		case 7:
 			display = jumpOn(a);
 			break;
-		case 14:
-			display = eat(a);
+		case 8:
+			display = sleep(a);
 			break;
 		case 15:
-			
+
 			break;
 		case 23:
 			break;
 		case 24:
-			display = sleep(a);
 			break;
 		case 26:
 			break;
@@ -218,7 +219,7 @@ public class Game {
 		return display;
 	}
 
-	//(Mostly) Fixed Action Methods
+	// (Mostly) Fixed Action Methods
 	private String go(Action a) throws SQLException {
 		String display = "";
 		String id = room().getDestination(a.getName());
@@ -296,7 +297,7 @@ public class Game {
 				empty = false;
 				display += "--" + i + "<br>";
 			}
-			if(empty) {
+			if (empty) {
 				display += "Your inventory is empty. <br>";
 			}
 		}
@@ -309,10 +310,8 @@ public class Game {
 		done = true;
 		return display;
 	}
-	
-	//Flexible Action Methods
-	
 
+	// Flexible Action Methods
 
 	private String wear(Action a) {
 		String display = "";
@@ -324,6 +323,31 @@ public class Game {
 			return display;
 		}
 		display = "There is nothing to wear in here.";
+		return display;
+	}
+
+	private String jumpOn(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("bed")))) {
+			display = "Wheeeeeee!";
+			return display;
+		}
+		display = "There is no bed to jump on in here.";
+		return display;
+	}
+
+	private String sleep(Action a) {
+		String display = "";
+		String obj = a.noun();
+		ArrayList<Item> roomItems = itemsHere();
+		if (roomItems.contains(roomItems.get(obj.indexOf("bed")))
+				|| roomItems.contains(roomItems.get(obj.indexOf("couch")))) {
+			display = "You take a quick nap in the " + obj + ". You feel refreshed!";
+			return display;
+		}
+		display = "You cannot sleep in the " + obj + ", no matter how hard you try.";
 		return display;
 	}
 
@@ -362,34 +386,6 @@ public class Game {
 		display = "There is nothing to eat in here.";
 		return display;
 	}
-
-	private String jumpOn(Action a) {
-		String display = "";
-		String obj = a.noun();
-		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("bed")))) {
-			display = "Wheeeeeee!";
-			return display;
-		}
-		display = "There is no bed to jump on in here.";
-		return display;
-	}
-
-	private String sleep(Action a) {
-		String display = "";
-		String obj = a.noun();
-		ArrayList<Item> roomItems = itemsHere();
-		if (roomItems.contains(roomItems.get(obj.indexOf("bed")))
-				|| roomItems.contains(roomItems.get(obj.indexOf("couch")))) {
-			display = "You take a quick nap in the " + obj + ". You feel refreshed!";
-			return display;
-		}
-		display = "You cannot sleep in the " + obj + ", no matter how hard you try.";
-		return display;
-	}
-
-	
-
 
 	public static void main(String[] args) throws SQLException {
 		Game g = new Game();

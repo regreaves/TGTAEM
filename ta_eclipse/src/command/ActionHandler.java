@@ -39,11 +39,6 @@ public class ActionHandler {
 	public void addAction(Action a) {
 		history.add(a);
 	}
-	
-	public Action getLastAction()
-	{
-		return history.get(history.size()-1);
-	}
 
 	public boolean hasConnection(Action a, Room r) {
 		String id = r.getDestination(a.getName());
