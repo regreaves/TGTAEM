@@ -164,7 +164,7 @@ public class DerbyDatabase {
 					stmt12.executeUpdate();
 
 					stmt13 = conn.prepareStatement( // log table
-							"create table log (" +  " id varchar(5) primary key," + " log_row varchar(1000)" + ")");
+							"create table log (" + "log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
 
 					return true;
@@ -465,12 +465,23 @@ public class DerbyDatabase {
 		System.out.println("Tables made!"); // messages are good
 	}
 
-	public String getSessionLog() { // concatenate each row of strings and return session log
+	public String getLog() { // concatenate each row of strings and return session log
 		return executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
 				String sessionLog = null;
 				
-				
+				try {
+					stmt = conn.prepareStatement("select * from log");
+					resultSet = stmt.executeQuery();
+
+					while (resultSet.next()) {
+						sessionLog = sessionLog.concat(resultSet.getString("log_row"));
+					}
+				} finally {
+					DBUtil.closeQuietly(stmt);
+				}
 				
 				return sessionLog;
 			}
