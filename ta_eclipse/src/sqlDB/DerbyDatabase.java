@@ -463,7 +463,6 @@ public class DerbyDatabase {
 		System.out.println("Tables made!"); // messages are good
 	}
 
-// FOR TESTING
 	public void addRowToLog(String row) {
 		executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
