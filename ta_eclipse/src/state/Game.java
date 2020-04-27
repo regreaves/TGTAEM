@@ -392,7 +392,7 @@ public class Game {
 	}
 	
 	public void addToLogFromDatabase(String row) {
-		db.addToLog(row);
+		db.addRowToLog(row);
 	}
 	
 	public static void main(String[] args) throws SQLException {

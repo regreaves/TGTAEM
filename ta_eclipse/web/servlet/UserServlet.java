@@ -49,9 +49,8 @@ public class UserServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-			req.getSession().setAttribute("log", (req.getSession().getAttribute("log") + model.getGame().getLogFromDatabase()) + model.getGame().here());
+			resp.sendRedirect(req.getContextPath() + "/game");
 		} else if (req.getParameter("input").equalsIgnoreCase("L")) {
-			req.getSession().setAttribute("log", (req.getSession().getAttribute("log") + "Loading saved game... <br><br>" + model.getGame().getLogFromDatabase()));
 			resp.sendRedirect(req.getContextPath() + "/game");
 		}
 	}

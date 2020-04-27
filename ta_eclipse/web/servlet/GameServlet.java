@@ -29,8 +29,8 @@ public class GameServlet extends HttpServlet {
 		}
 		
 		Game model = new Game();
-		
-		req.getSession().setAttribute("log", (req.getSession().getAttribute("log") + model.loadRoom(model.here())));
+
+		req.getSession().setAttribute("log", model.getLogFromDatabase());
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 
@@ -48,15 +48,13 @@ public class GameServlet extends HttpServlet {
 		controller.setCommand(command);
 		req.setAttribute("command", req.getParameter("command"));
 
-		String log = (String) req.getSession().getAttribute("log");
-		
 		try {
-			log = log.concat("<br>>").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
+			model.addToLogFromDatabase(model.getAction());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		req.getSession().setAttribute("log", log);
+		req.getSession().setAttribute("log", model.getLogFromDatabase());
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 }

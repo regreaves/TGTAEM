@@ -464,7 +464,7 @@ public class DerbyDatabase {
 	}
 
 // FOR TESTING
-	public void addToLog(String row) {
+	public void addRowToLog(String row) {
 		executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = conn.prepareStatement("insert into log (log_row) values (?)");
@@ -482,7 +482,8 @@ public class DerbyDatabase {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
 // FOR TESTING
-				String log = "initial log";
+				String log = "";
+//				log = "initial log";
 				
 				try {
 					stmt = conn.prepareStatement("select * from log");
@@ -492,7 +493,7 @@ public class DerbyDatabase {
 //					System.out.println(log);
 
 					while (resultSet.next()) {
-						log += ("<br>" + (resultSet.getString("log_row")));
+						log += (resultSet.getString("log_row"));
 
 // FOR TESTING
 //						System.out.println(log);
