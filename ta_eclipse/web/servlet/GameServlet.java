@@ -47,6 +47,8 @@ public class GameServlet extends HttpServlet {
 		String command = req.getParameter("command");
 		controller.setCommand(command);
 		req.setAttribute("command", req.getParameter("command"));
+		
+		model.addToLogFromDatabase("<br>" + command);
 
 		try {
 			model.addToLogFromDatabase(model.getAction());
