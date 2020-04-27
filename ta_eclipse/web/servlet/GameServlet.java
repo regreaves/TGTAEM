@@ -30,11 +30,12 @@ public class GameServlet extends HttpServlet {
 			
 			//return;
 		}
+		
 		Game model = new Game();
-		model.addToLogFromDatabase();
+		//model.addToLogFromDatabase();
 		//String log = (String) req.getSession().getAttribute("log");
 		//log += model.loadRoom(model.here());
-		req.getSession().setAttribute("log", req.getSession().getAttribute("log"));
+		req.getSession().setAttribute("log", (req.getSession().getAttribute("log") + model.loadRoom(model.here())));
 		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}

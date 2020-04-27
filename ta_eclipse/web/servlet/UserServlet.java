@@ -52,20 +52,21 @@ public class UserServlet extends HttpServlet {
 				System.out.println("SQLException thrown");
 				e.printStackTrace();
 			}
-			req.getSession().setAttribute("log", req.getSession().getAttribute("log"));
+			req.getSession().setAttribute("log", (req.getSession().getAttribute("log") + model.getGame().getLogFromDatabase()) + model.getGame().here());
 			//req.getSession().setAttribute("log", model.getGame().getLogFromDatabase());
 			//req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			
 			//return;
 		} else if (req.getParameter("input").equalsIgnoreCase("L")) {
-			req.getSession().setAttribute("log", ("Loading saved game... <br><br>" + model.getGame().getLogFromDatabase()));
+			req.getSession().setAttribute("log", (req.getSession().getAttribute("log") + "Loading saved game... <br><br>" + model.getGame().getLogFromDatabase()));
+			resp.sendRedirect(req.getContextPath() + "/game");
 
 			//req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			
 			//return;
 		}
 		
-		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+		//req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 
 	}
 }
