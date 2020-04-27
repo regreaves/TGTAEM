@@ -167,6 +167,13 @@ public class DerbyDatabase {
 							"create table log (" + "log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
 					
+					
+// FOR TESTING
+					PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
+					stmt14.setString(1, "first insertion");
+					stmt14.executeUpdate();
+					DBUtil.closeQuietly(stmt14);
+
 					return true;
 				} finally { // close the things
 					DBUtil.closeQuietly(stmt1);
@@ -185,7 +192,6 @@ public class DerbyDatabase {
 				}
 			}
 		});
-
 	}
 
 	public void loadInitialData() { // load data into tables
@@ -473,14 +479,14 @@ public class DerbyDatabase {
 				String log = "initial log";
 				
 // FOR TESTING
-				PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
-				stmt14.setString(1, "first insertion");
-				stmt14.executeUpdate();
+//				PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
+//				stmt14.setString(1, "first insertion");
+//				stmt14.executeUpdate();
 
 // FOR TESTING
-				stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
-				stmt14.setString(1, "second insertion");
-				stmt14.executeUpdate();
+//				stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
+//				stmt14.setString(1, "second insertion");
+//				stmt14.executeUpdate();
 				
 				try {
 					stmt = conn.prepareStatement("select * from log");
