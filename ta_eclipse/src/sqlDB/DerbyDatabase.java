@@ -472,7 +472,7 @@ public class DerbyDatabase {
 	}
 
 // FOR TESTING
-	public void addToLog() { // concatenate each row of strings and return log
+	public void addToLog() {
 		executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
@@ -489,6 +489,7 @@ public class DerbyDatabase {
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
+// FOR TESTING
 				String log = "initial log";
 				
 				try {
