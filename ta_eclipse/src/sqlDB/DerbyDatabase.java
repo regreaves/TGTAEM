@@ -470,20 +470,21 @@ public class DerbyDatabase {
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-				String sessionLog = null;
+				String log = null;
 				
 				try {
 					stmt = conn.prepareStatement("select * from log");
 					resultSet = stmt.executeQuery();
 
 					while (resultSet.next()) {
-						sessionLog = sessionLog.concat(resultSet.getString("log_row"));
+						log = log.concat(resultSet.getString("log_row"));
 					}
 				} finally {
 					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
 				}
 				
-				return sessionLog;
+				return log;
 			}
 		});
 	}
