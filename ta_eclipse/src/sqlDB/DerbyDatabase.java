@@ -200,7 +200,6 @@ public class DerbyDatabase {
 				List<Pair<String, String>> itemMap;
 				List<Pair<String, String>> npcMap;
 				List<Pair<String, String>> itemAction;
-				// R
 				List<Pair<String, String>> shortcutList;
 				List<Pair<String, Pair<String, String>>> connections;
 
@@ -465,12 +464,12 @@ public class DerbyDatabase {
 	}
 
 // FOR TESTING
-	public void addToLog() {
+	public void addToLog(String row) {
 		executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
-				PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
-				stmt14.setString(1, "first insertion");
-				stmt14.executeUpdate();
+				PreparedStatement stmt = conn.prepareStatement("insert into log (log_row) values (?)");
+				stmt.setString(1, row);
+				stmt.executeUpdate();
 				
 				return null;
 			}
