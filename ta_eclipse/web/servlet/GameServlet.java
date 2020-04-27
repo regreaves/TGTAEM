@@ -15,7 +15,6 @@ public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -31,9 +30,9 @@ public class GameServlet extends HttpServlet {
 			return;
 		}
 		Game model = new Game();
-		String log = (String) req.getSession().getAttribute("log");
-		log += model.loadRoom(model.here());
-		req.getSession().setAttribute("log", log);
+		//String log = (String) req.getSession().getAttribute("log");
+		//log += model.loadRoom(model.here());
+		req.getSession().setAttribute("log", req.getSession().getAttribute("log"));
 		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}

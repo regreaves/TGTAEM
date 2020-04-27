@@ -24,7 +24,6 @@ public class UserServlet extends HttpServlet {
 		if (user == null) {
 			System.out.println("   User: <" + user + "> not logged in or session timed out");
 
-			// user is not logged in, or the session expired
 			resp.sendRedirect(req.getContextPath() + "/login");
 			
 			return;
@@ -55,9 +54,9 @@ public class UserServlet extends HttpServlet {
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			
 			return;
-		} else if (req.getParameter("input").equalsIgnoreCase("L")) {			
-			req.getSession().setAttribute("log", ("Loading saved game... <br><br>" + model.getGame().getLogFromDatabase()));
+		} else if (req.getParameter("input").equalsIgnoreCase("L")) {
 			model.getGame().addToLogFromDatabase();
+			req.getSession().setAttribute("log", ("Loading saved game... <br><br>" + model.getGame().getLogFromDatabase()));
 
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			
@@ -65,6 +64,5 @@ public class UserServlet extends HttpServlet {
 		}
 		
 		req.getRequestDispatcher("/_view/user.jsp").forward(req, resp);
-
 	}
 }

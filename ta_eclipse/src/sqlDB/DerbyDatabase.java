@@ -496,13 +496,13 @@ public class DerbyDatabase {
 					resultSet = stmt.executeQuery();
 					
 // FOR TESTING
-					System.out.println(log);
+//					System.out.println(log);
 
 					while (resultSet.next()) {
 						log += ("<br>" + (resultSet.getString("log_row")));
 
 // FOR TESTING
-						System.out.println(log);
+//						System.out.println(log);
 					}
 				} finally {
 					DBUtil.closeQuietly(stmt);
