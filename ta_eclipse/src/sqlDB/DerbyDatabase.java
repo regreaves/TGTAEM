@@ -166,7 +166,31 @@ public class DerbyDatabase {
 					stmt13 = conn.prepareStatement( // log table
 							"create table log (" + "log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
+					PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
+					stmt14.setString(1, "huh");
+					stmt14.executeUpdate();
+					stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
+					stmt14.setString(1, "what?!");
+					stmt14.executeUpdate();
+					PreparedStatement stmt = null;
+					String log = "gimme!";
+					System.out.println(log);
 
+					ResultSet resultSet = null;
+					try {
+						 stmt = conn.prepareStatement("select * from log");
+						 resultSet = stmt.executeQuery();
+						while (resultSet.next()) {
+							log += resultSet.getString("log_row");
+						}
+					} finally {
+						System.out.println(log);
+						DBUtil.closeQuietly(stmt);
+						DBUtil.closeQuietly(resultSet);
+					}
+					
+					
+					
 					return true;
 				} finally { // close the things
 					DBUtil.closeQuietly(stmt1);
@@ -470,14 +494,14 @@ public class DerbyDatabase {
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-				String log = null;
+				String log = "";
 				
 				try {
 					stmt = conn.prepareStatement("select * from log");
 					resultSet = stmt.executeQuery();
 
 					while (resultSet.next()) {
-						log = log.concat(resultSet.getString("log_row"));
+						log = (resultSet.getString("log_row"));
 					}
 				} finally {
 					DBUtil.closeQuietly(stmt);
