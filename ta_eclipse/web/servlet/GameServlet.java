@@ -26,14 +26,11 @@ public class GameServlet extends HttpServlet {
 
 			// user is not logged in, or the session expired
 			resp.sendRedirect(req.getContextPath() + "/login");
-			
-			//return;
 		}
 		
 		Game model = new Game();
 		
 		req.getSession().setAttribute("log", (req.getSession().getAttribute("log") + model.loadRoom(model.here())));
-		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 
@@ -60,7 +57,6 @@ public class GameServlet extends HttpServlet {
 		}
 		
 		req.getSession().setAttribute("log", log);
-
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 }

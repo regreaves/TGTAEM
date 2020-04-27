@@ -26,8 +26,6 @@ public class UserServlet extends HttpServlet {
 			System.out.println("   User: <" + user + "> not logged in or session timed out");
 
 			resp.sendRedirect(req.getContextPath() + "/login");
-			
-			//return;
 		}
 		
 		req.getSession().setAttribute("log", "Welcome " + user + "<br>(N)ew Game or (L)oad Game?<br>");
@@ -43,8 +41,6 @@ public class UserServlet extends HttpServlet {
 		User model = new User();
 		controller.setModel(model);
 		
-//		req.getSession().setAttribute("log", req.getSession().getAttribute("log"));
-
 		if (req.getParameter("input").equalsIgnoreCase("N")) {
 			try {
 				model.resetGame();
@@ -52,21 +48,11 @@ public class UserServlet extends HttpServlet {
 				System.out.println("SQLException thrown");
 				e.printStackTrace();
 			}
-			req.getSession().setAttribute("log", (req.getSession().getAttribute("log") + model.getGame().getLogFromDatabase()) + model.getGame().here());
-			//req.getSession().setAttribute("log", model.getGame().getLogFromDatabase());
-			//req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			
-			//return;
+			req.getSession().setAttribute("log", (req.getSession().getAttribute("log") + model.getGame().getLogFromDatabase()) + model.getGame().here());
 		} else if (req.getParameter("input").equalsIgnoreCase("L")) {
 			req.getSession().setAttribute("log", (req.getSession().getAttribute("log") + "Loading saved game... <br><br>" + model.getGame().getLogFromDatabase()));
 			resp.sendRedirect(req.getContextPath() + "/game");
-
-			//req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
-			
-			//return;
 		}
-		
-		//req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
-
 	}
 }
