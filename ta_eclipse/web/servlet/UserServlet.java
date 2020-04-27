@@ -30,7 +30,7 @@ public class UserServlet extends HttpServlet {
 			return;
 		}
 		
-		req.getSession().setAttribute("log", "<br>Welcome " + user + "<br>(N)ew Game or (L)oad Game?<br>");
+		req.getSession().setAttribute("log", "Welcome " + user + "<br>(N)ew Game or (L)oad Game?<br>");
 		req.getRequestDispatcher("/_view/user.jsp").forward(req, resp);
 	}
 
@@ -55,8 +55,10 @@ public class UserServlet extends HttpServlet {
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			
 			return;
-		} else if (req.getParameter("input").equalsIgnoreCase("L")) {
-			req.getSession().setAttribute("log", ("Loading saved game... <br>" + model.getGame().getLogFromDatabase()));
+		} else if (req.getParameter("input").equalsIgnoreCase("L")) {			
+			req.getSession().setAttribute("log", ("Loading saved game... <br><br>" + model.getGame().getLogFromDatabase()));
+			model.getGame().addToLogFromDatabase();
+
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			
 			return;

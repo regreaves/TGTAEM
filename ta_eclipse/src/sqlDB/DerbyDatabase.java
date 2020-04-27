@@ -471,22 +471,25 @@ public class DerbyDatabase {
 		System.out.println("Tables made!"); // messages are good
 	}
 
-	public String getLog() { // concatenate each row of strings and return log
+// FOR TESTING
+	public void addToLog() { // concatenate each row of strings and return log
+		executeTransaction(new Transaction<String>() {
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
+				stmt14.setString(1, "first insertion");
+				stmt14.executeUpdate();
+				
+				return null;
+			}
+		});
+	}
+	
+	public String getLog() {
 		return executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
 				String log = "initial log";
-				
-// FOR TESTING
-//				PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
-//				stmt14.setString(1, "first insertion");
-//				stmt14.executeUpdate();
-
-// FOR TESTING
-//				stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
-//				stmt14.setString(1, "second insertion");
-//				stmt14.executeUpdate();
 				
 				try {
 					stmt = conn.prepareStatement("select * from log");

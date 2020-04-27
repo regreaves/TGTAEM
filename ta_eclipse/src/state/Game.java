@@ -392,6 +392,10 @@ public class Game {
 		return db.getLog();
 	}
 	
+	public void addToLogFromDatabase() {
+		db.addToLog();
+	}
+	
 	public static void main(String[] args) throws SQLException {
 		Game g = new Game();
 
