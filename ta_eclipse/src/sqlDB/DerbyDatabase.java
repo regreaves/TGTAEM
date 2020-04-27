@@ -166,30 +166,6 @@ public class DerbyDatabase {
 					stmt13 = conn.prepareStatement( // log table
 							"create table log (" + "log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
-					PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
-					stmt14.setString(1, "huh");
-					stmt14.executeUpdate();
-					stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
-					stmt14.setString(1, "what?!");
-					stmt14.executeUpdate();
-					PreparedStatement stmt = null;
-					String log = "gimme!";
-					System.out.println(log);
-
-					ResultSet resultSet = null;
-					try {
-						 stmt = conn.prepareStatement("select * from log");
-						 resultSet = stmt.executeQuery();
-						while (resultSet.next()) {
-							log += resultSet.getString("log_row");
-						}
-					} finally {
-						System.out.println(log);
-						DBUtil.closeQuietly(stmt);
-						DBUtil.closeQuietly(resultSet);
-					}
-					
-					
 					
 					return true;
 				} finally { // close the things
@@ -494,14 +470,30 @@ public class DerbyDatabase {
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-				String log = "";
+				String log = "initial log";
+				
+// FOR TESTING
+				PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
+				stmt14.setString(1, "first insertion");
+				stmt14.executeUpdate();
+
+// FOR TESTING
+				stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
+				stmt14.setString(1, "second insertion");
+				stmt14.executeUpdate();
 				
 				try {
 					stmt = conn.prepareStatement("select * from log");
 					resultSet = stmt.executeQuery();
+					
+// FOR TESTING
+					System.out.println(log);
 
 					while (resultSet.next()) {
-						log = (resultSet.getString("log_row"));
+						log += ("<br>" + (resultSet.getString("log_row")));
+
+// FOR TESTING
+						System.out.println(log);
 					}
 				} finally {
 					DBUtil.closeQuietly(stmt);

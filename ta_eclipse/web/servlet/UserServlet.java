@@ -61,8 +61,9 @@ public class UserServlet extends HttpServlet {
 
 			}
 			String log = (String) req.getSession().getAttribute("log");
-			log += i + "<br> Loading new game... <br>";
-			log += model.getGame().loadRoom("1") + "<br>";
+			//log += i + "<br> Loading new game... <br>";
+			//log += model.getGame().loadRoom("1") + "<br>";
+			log = model.getGame().getLogFromDatabase();
 			req.getSession().setAttribute("log", log);
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			return;
