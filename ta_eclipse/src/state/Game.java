@@ -384,8 +384,7 @@ public class Game {
 	}
 
 	public String loadRoom(String id) {
-		Room r = map.get(id);
-		return r.loadRoom();
+		return map.get(id).loadRoom();
 	}
 
 	public String getLogFromDatabase() {

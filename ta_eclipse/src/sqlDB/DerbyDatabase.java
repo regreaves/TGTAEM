@@ -166,13 +166,6 @@ public class DerbyDatabase {
 					stmt13 = conn.prepareStatement( // log table
 							"create table log (" + "log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
-					
-					
-// FOR TESTING
-					PreparedStatement stmt14 = conn.prepareStatement("insert into log (log_row) values (?)");
-					stmt14.setString(1, "first insertion");
-					stmt14.executeUpdate();
-					DBUtil.closeQuietly(stmt14);
 
 					return true;
 				} finally { // close the things
