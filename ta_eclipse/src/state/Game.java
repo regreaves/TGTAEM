@@ -64,11 +64,13 @@ public class Game {
 	public String getAction() throws SQLException {
 		String s = "";
 		Action a = parse(command);
+		
 		if (a != null) {
 			s = performAction(a);
 		} else {
 			s = "I don't understand \"" + command + '\"' + " Please try something else.";
 		}
+		db.addRowToLog("<br>" + s);
 		return s;
 	}
 
@@ -78,6 +80,7 @@ public class Game {
 
 	public void setCommand(String command) {
 		this.command = command;
+		db.addRowToLog("<br>>" + command);
 	}
 
 	public String here() {
@@ -91,7 +94,7 @@ public class Game {
 		db.clearAll();
 		db.fillAll();
 		remake();
-		//db.addRowToLog(here());
+		db.addRowToLog("<br>" + loadRoom("1"));
 	}
 
 	public void remake() throws SQLException {
@@ -385,7 +388,9 @@ public class Game {
 	}
 
 	public String loadRoom(String id) {
-		return map.get(id).loadRoom();
+		String s = map.get(id).loadRoom();
+
+		return s;
 	}
 
 	public String getLogFromDatabase() {

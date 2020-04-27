@@ -481,22 +481,16 @@ public class DerbyDatabase {
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-// FOR TESTING
+
 				String log = "";
-//				log = "initial log";
 				
 				try {
 					stmt = conn.prepareStatement("select * from log");
 					resultSet = stmt.executeQuery();
-					
-// FOR TESTING
-//					System.out.println(log);
 
 					while (resultSet.next()) {
 						log += (resultSet.getString("log_row"));
 
-// FOR TESTING
-//						System.out.println(log);
 					}
 				} finally {
 					DBUtil.closeQuietly(stmt);

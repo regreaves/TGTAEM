@@ -14,6 +14,8 @@ import state.Game;
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -26,11 +28,12 @@ public class GameServlet extends HttpServlet {
 
 			// user is not logged in, or the session expired
 			resp.sendRedirect(req.getContextPath() + "/login");
+			return;
 		}
-		
 		Game model = new Game();
-
-		req.getSession().setAttribute("log", model.getLogFromDatabase());
+		String log = (String) req.getSession().getAttribute("log");
+		req.getSession().setAttribute("log", log);
+		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 
@@ -47,16 +50,15 @@ public class GameServlet extends HttpServlet {
 		String command = req.getParameter("command");
 		controller.setCommand(command);
 		req.setAttribute("command", req.getParameter("command"));
-		
-		model.addToLogFromDatabase("<br>" + command);
 
+		String log = (String) req.getSession().getAttribute("log");
 		try {
-			model.addToLogFromDatabase(model.getAction());
+			log = log.concat(">").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		req.getSession().setAttribute("log", model.getLogFromDatabase());
+		req.getSession().setAttribute("log", log);
+
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 }

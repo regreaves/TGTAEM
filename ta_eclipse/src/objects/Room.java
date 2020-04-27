@@ -20,7 +20,7 @@ public class Room {
 	}
 
 	public String loadRoom() {
-		String dscrpt = "<br>" + displayName;
+		String dscrpt = displayName;
 		if (!visited) {
 			dscrpt += ":<br>" + this.description;
 			for (Item i : items) {
@@ -37,7 +37,7 @@ public class Room {
 			for (NPC n : npcs) {
 				if (!(n.description.contentEquals("null"))) {
 					dscrpt += " " + n.description;
-			}
+				}
 			}
 		}
 		return dscrpt;
