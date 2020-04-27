@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.sql.SQLException;
+
 import controller.UserController;
 import state.User;
 
@@ -26,7 +27,7 @@ public class UserServlet extends HttpServlet {
 
 			resp.sendRedirect(req.getContextPath() + "/login");
 			
-			return;
+			//return;
 		}
 		
 		req.getSession().setAttribute("log", "Welcome " + user + "<br>(N)ew Game or (L)oad Game?<br>");
@@ -42,6 +43,8 @@ public class UserServlet extends HttpServlet {
 		User model = new User();
 		controller.setModel(model);
 		
+//		req.getSession().setAttribute("log", req.getSession().getAttribute("log"));
+
 		if (req.getParameter("input").equalsIgnoreCase("N")) {
 			try {
 				model.resetGame();
@@ -49,20 +52,20 @@ public class UserServlet extends HttpServlet {
 				System.out.println("SQLException thrown");
 				e.printStackTrace();
 			}
+			req.getSession().setAttribute("log", req.getSession().getAttribute("log"));
+			//req.getSession().setAttribute("log", model.getGame().getLogFromDatabase());
+			//req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			
-			req.getSession().setAttribute("log", model.getGame().getLogFromDatabase());
-			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
-			
-			return;
+			//return;
 		} else if (req.getParameter("input").equalsIgnoreCase("L")) {
-			model.getGame().addToLogFromDatabase();
 			req.getSession().setAttribute("log", ("Loading saved game... <br><br>" + model.getGame().getLogFromDatabase()));
 
-			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+			//req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			
-			return;
+			//return;
 		}
 		
-		req.getRequestDispatcher("/_view/user.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+
 	}
 }

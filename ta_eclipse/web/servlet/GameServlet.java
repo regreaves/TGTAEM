@@ -27,9 +27,11 @@ public class GameServlet extends HttpServlet {
 
 			// user is not logged in, or the session expired
 			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
+			
+			//return;
 		}
 		Game model = new Game();
+		model.addToLogFromDatabase();
 		//String log = (String) req.getSession().getAttribute("log");
 		//log += model.loadRoom(model.here());
 		req.getSession().setAttribute("log", req.getSession().getAttribute("log"));
@@ -52,11 +54,13 @@ public class GameServlet extends HttpServlet {
 		req.setAttribute("command", req.getParameter("command"));
 
 		String log = (String) req.getSession().getAttribute("log");
+		
 		try {
 			log = log.concat("<br>>").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		req.getSession().setAttribute("log", log);
 
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
