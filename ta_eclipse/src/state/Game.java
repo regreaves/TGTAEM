@@ -91,6 +91,7 @@ public class Game {
 		db.clearAll();
 		db.fillAll();
 		remake();
+		//db.addRowToLog(here());
 	}
 
 	public void remake() throws SQLException {
