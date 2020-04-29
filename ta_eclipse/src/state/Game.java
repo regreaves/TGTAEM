@@ -26,7 +26,7 @@ public class Game {
 	HashMap<String, String> shortcuts = new HashMap<>();
 	public HashMap<String, Room> map = new HashMap<>();
 	HashMap<String, Updater> updates = new HashMap<>();
-	
+
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
 
@@ -84,8 +84,7 @@ public class Game {
 		getUpdates();
 	}
 
-	
-	public void getUpdates(){
+	public void getUpdates() {
 		updates.put(Move.name, new Move());
 		updates.put(TakeItem.name, new TakeItem());
 		updates.put(DropItem.name, new DropItem());
@@ -105,27 +104,26 @@ public class Game {
 
 	public void setCommand(String command) {
 		this.command = command;
-    db.addRowToLog("<br>>" + command);
+		db.addRowToLog("<br>>" + command);
 
 	}
-	
+
 	public void setOutput(String out) {
 		this.output = out;
 	}
-	
+
 	public void addOutput(String out) {
 		this.output += out;
 	}
-	
-	public String output()
-	{
+
+	public String output() {
 		return output;
 	}
 
 	public String here() {
 		return player.getLocation();
 	}
-	
+
 	public ArrayList<Item> itemsHere() {
 		return map.get(here()).getItems();
 	}
@@ -143,9 +141,7 @@ public class Game {
 		return r.loadRoom();
 	}
 
-
-	
-	//parse input into action
+	// parse input into action
 	public Action parse(String input) {
 		String s = shortcuts.get(input);
 		Action a;
@@ -158,8 +154,8 @@ public class Game {
 
 		return a;
 	}
-	
-	//get output from action
+
+	// get output from action
 	public String getAction() throws SQLException {
 		String s = "";
 		Action a = parse(command);
@@ -170,22 +166,20 @@ public class Game {
 		} else {
 			s = "I don't understand \"" + command + "." + '\"' + " Please try something else.";
 		}
-    db.addRowToLog("<br>" + s);
+		db.addRowToLog("<br>" + s);
 		return s;
 	}
-	
-	
+
 	public String performAction(Action a) throws SQLException {
 		Updater u = updates.get(a.getMethod());
-		u.update(this, a);
+		if (u == null) {
+			setOutput("You can't do that.... yet.");
+		} else {
+			u.update(this, a);
+		}
 		return output;
 	}
 
-
-
-	
-	
-	
 	// Updater methods
 	public void setVisited() {
 		room().setVisited(true);
@@ -202,7 +196,6 @@ public class Game {
 		db.takeItem(id);
 		inventory().addItem(i);
 	}
-
 
 	public void dropItem(String obj) {
 		String id = db.getItemID(obj);
