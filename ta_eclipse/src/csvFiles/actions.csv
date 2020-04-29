@@ -1,70 +1,126 @@
-action|verb|noun|method
-go north|go|north|move
-go northeast|go|northeast|move
-go east|go|east|move
-go southeast|go|southeast|move
-go south|go|south|move
-go southwest|go|southwest|move
-go west|go|west|move
-go northwest|go|northwest|move
-go up|go|up|move
-go down|go|down|move
-take bed|take|bed|take item
-take desk|take|desk|take item
-take laptop|take|laptop|take item
-take window|take|window|take item
-take jacket|take|jacket|take item
-take flashlight|take|flashlight|take item
-take boxes|take|boxes|take item
-take painting|take|painting|take item
-take sink|take|sink|take item
-take toilet|take|toilet|take item
-take shower|take|shower|take item
-take couch|take|couch|take item
-take TV|take|TV|take item
-take remote|take|remote|take item
-take piano|take|piano|take item
-take PC|take|PC|take item
-take table|take|table|take item
-take apple|take|apple|take item
-take bench|take|bench|take item
-take mailbox|take|mailbox|take item
-take letter|take|letter|take item
-take swings|take|swings|take item
-take pikachu|take|pikachu|take item
-take sword|take|sword|take item
-drop laptop|drop|laptop|drop item
-drop jacket|drop|jacket|drop item
-drop flashlight|drop|flashlight|drop item
-drop remote|drop|remote|drop item
-drop apple|drop|apple|drop item
-drop letter|drop|letter|drop item
-drop pikachu|drop|pikachu|drop item
-drop sword|drop|sword|drop item
-examine bed|examine|bed|examine
-examine desk|examine|desk|examine
-examine laptop|examine|laptop|examine
-examine window|examine|window|examine
-examine jacket|examine|jacket|examine
-examine flashlight|examine|flashlight|examine
-examine boxes|examine|boxes|examine
-examine painting|examine|painting|examine
-examine sink|examine|sink|examine
-examine toilet|examine|toilet|examine
-examine shower|examine|shower|examine
-examine couch|examine|couch|examine
-examine TV|examine|TV|examine
-examine remote|examine|remote|examine
-examine piano|examine|piano|examine
-examine PC|examine|PC|examine
-examine table|examine|table|examine
-examine apple|examine|apple|examine
-examine bench|examine|bench|examine
-examine mailbox|examine|mailbox|examine
-examine letter|examine|letter|examine
-examine swings|examine|swings|examine
-examine pikachu|examine|pikachu|examine
-examine sword|examine|sword|examine
-examine room|examine|room|examine
-check inventory|check|inventory|check inventory
-quit game|quit|game|5
+action,verb,noun,method,,                    
+go north,go,north,move,,
+go northeast,go,northeast,move,,
+go east,go,east,move,,
+go southeast,go,southeast,move,,
+go south,go,south,move,,
+go southwest,go,southwest,move,,
+go west,go,west,move,,
+go northwest,go,northwest,move,,
+go up,go,up,move,,
+go down,go,down,move,,
+take bed,take,bed,take item,,
+take desk,take,desk,take item,,
+take laptop,take,laptop,take item,,
+take window,take,window,take item,,
+take jacket,take,jacket,take item,,
+take flashlight,take,flashlight,take item,,
+take boxes,take,boxes,take item,,
+take painting,take,painting,take item,,
+take sink,take,sink,take item,,
+take toilet,take,toilet,take item,,
+take shower,take,shower,take item,,
+take couch,take,couch,take item,,
+take TV,take,TV,take item,,
+take remote,take,remote,take item,,
+take piano,take,piano,take item,,
+take PC,take,PC,take item,,
+take table,take,table,take item,,
+take apple,take,apple,take item,,
+take bench,take,bench,take item,,
+take mailbox,take,mailbox,take item,,
+take letter,take,letter,take item,,
+take swings,take,swings,take item,,
+take pikachu,take,pikachu,take item,,
+take sword,take,sword,take item,,
+drop laptop,drop,laptop,drop item,,
+drop jacket,drop,jacket,drop item,,
+drop flashlight,drop,flashlight,drop item,,
+drop remote,drop,remote,drop item,,
+drop apple,drop,apple,drop item,,
+drop letter,drop,letter,drop item,,
+drop pikachu,drop,pikachu,drop item,,
+drop sword,drop,sword,drop item,,
+examine bed,examine,bed,examine,,
+examine desk,examine,desk,examine,,
+examine laptop,examine,laptop,examine,,
+examine window,examine,window,examine,,
+examine jacket,examine,jacket,examine,,
+examine flashlight,examine,flashlight,examine,,
+examine boxes,examine,boxes,examine,,
+examine painting,examine,painting,examine,,
+examine sink,examine,sink,examine,,
+examine toilet,examine,toilet,examine,,
+examine shower,examine,shower,examine,,
+examine couch,examine,couch,examine,,
+examine TV,examine,TV,examine,,
+examine remote,examine,remote,examine,,
+examine piano,examine,piano,examine,,
+examine PC,examine,PC,examine,,
+examine table,examine,table,examine,,
+examine apple,examine,apple,examine,,
+examine bench,examine,bench,examine,,
+examine mailbox,examine,mailbox,examine,,
+examine letter,examine,letter,examine,,
+examine swings,examine,swings,examine,,
+examine pikachu,examine,pikachu,examine,,
+examine sword,examine,sword,examine,,
+examine room,examine,room,examine,,
+check inventory,check,inventory,check inventory,,
+quit game,quit,game,quit,,
+wear jacket,wear,jacket,wear,,
+take off jacket,take off,jacket,wear,,
+jump on bed,jump on,bed,textOnly,,
+sleep in bed,sleep in,bed,textOnly,,
+hide under bed,hide under,bed,hide,,
+check for monsters,check for,monsters,monster check,,
+sit at desk,sit at,desk,sit,,
+stand up,stand,up,stand,,
+open laptop,open,laptop,switch,,
+close laptop,close,laptop,switch,,
+type on laptop,type on ,laptop,type laptop,,
+look out window,look out,window,examine,,
+open window,open,window,switch,,
+close window,close,window,switch,,
+jump out window,jump out,window,textOnly,,
+turn on flashlight,turn on,flashlight,switch,,
+turn off flashlight,turn off,flashlight,switch,,
+look in boxes,look in,boxes,textOnly,,
+unpack boxes,unpack,boxes,textOnly,,
+appreciate painting,appreciate,painting,textOnly,,
+destroy painting,destroy,painting,textOnly,,
+turn on sink,turn on,sink,switch,,
+turn off sink,turn off,sink,switch,,
+wash hands,wash,hands,textOnly,,
+wash face,wash,face,textOnly,,
+flush toliet,flush,toliet,textOnly,,
+use toliet,use,toliet,textOnly,,
+turn on shower,turn on,shower,switch,,
+turn off shower,turn off,shower,switch,,
+get in shower,get in,shower,textOnly,,
+get undressed,get,undressed,switch,,
+dry off,dry ,off,textOnly,,
+get dressed,get,dressed,switch,,
+sleep in couch,sleep in,couch,textOnly,,
+search couch,search,couch,search,,
+turn on TV,turn on,TV,switch,,
+turn off TV,turn off,TV,switch,,
+change channels,change,channels,switch,,
+play piano,play,piano,textOnly,,
+turn on PC,turn on,PC,switch,,
+turn off PC,turn off,PC,switch,,
+enter password,enter,password,type PC,,
+eat apple,eat,apple,textOnly,,
+sit at bench,sit at,bench,sit,,
+open mailbox ,open,mailbox,open,,
+raise flag,raise,flag,switch,,
+lower flag,lower,flag,switch,,
+read letter,read,letter,textOnly,,
+sit on swings,sit on,swings,sit,,
+swing,swing,swing,textOnly,,
+search grass,search,grass,search,,
+swing sword,swing,sword,textOnly,,
+take towel,take,towel,take item,,
+drop towel,drop,towel,drop item,,
+turn on laptop,turn on ,laptop,switch,,
+turn off laptop,turn off,laptop,switch,,

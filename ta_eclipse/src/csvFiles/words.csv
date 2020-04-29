@@ -1,59 +1,108 @@
-prime|name|type
-north|north|2
-northeast|northeast|2
-east|east|2
-southeast|southeast|2
-south|south|2
-southwest|southwest|2
-west|west|2
-northwest|northwest|2
-up|up|2
-down|down|2
-north|n|2
-northeast|ne|2
-east|e|2
-southeast|se|2
-south|s|2
-southwest|sw|2
-west|w|2
-northwest|nw|2
-up|u|2
-down|d|2
-bed|bed|2
-desk|desk|2
-laptop|laptop|2
-window|window|2
-jacket|jacket|2
-flashlight|flashlight|2
-boxes|boxes|2
-painting|painting|2
-sink|sink|2
-toilet|toilet|2
-shower|shower|2
-couch|couch|2
-TV|TV|2
-remote|remote|2
-piano|piano|2
-PC|PC|2
-table|table|2
-apple|apple|2
-bench|bench|2
-mailbox|mailbox|2
-letter|letter|2
-swings|swings|2
-pikachu|pikachu|2
-sword|sword|2
-go|go|1
-take|take|1
-drop|drop|1
-examine|examine|1
-room|room|2
-game|game|2
-dad|dad|2
-inventory|inventory|2
-quit|quit|1
-check|check|1
-jump on|jump on|1
-sleep in|sleep in|1
-sleep in|sleep on|1
-wear|wear|1
+prime,name,type
+north,north,2
+northeast,northeast,2
+east,east,2
+southeast,southeast,2
+south,south,2
+southwest,southwest,2
+west,west,2
+northwest,northwest,2
+up,up,2
+down,down,2
+north,n,2
+northeast,ne,2
+east,e,2
+southeast,se,2
+south,s,2
+southwest,sw,2
+west,w,2
+northwest,nw,2
+up,u,2
+down,d,2
+bed,bed,2
+desk,desk,2
+laptop,laptop,2
+window,window,2
+jacket,jacket,2
+flashlight,flashlight,2
+boxes,boxes,2
+painting,painting,2
+sink,sink,2
+toilet,toilet,2
+shower,shower,2
+couch,couch,2
+TV,TV,2
+remote,remote,2
+piano,piano,2
+PC,PC,2
+table,table,2
+apple,apple,2
+bench,bench,2
+mailbox,mailbox,2
+letter,letter,2
+swings,swings,2
+pikachu,pikachu,2
+sword,sword,2
+go,go,1
+take,take,1
+drop,drop,1
+examine,examine,1
+room,room,2
+game,game,2
+dad,dad,2
+inventory,inventory,2
+quit,quit,1
+check,check,1
+jump on,jump on,1
+sleep in,sleep in,1
+sleep in,sleep on,1
+wear,wear,1
+wear,put on,1
+couch,sofa,2
+TV,television,2
+PC,computer,2
+laptop,computer,2
+swings,swing set,2
+pikachu,electric mouse,2
+sit at,sit at,1
+take off,take off,1
+hide under,hide under,1
+check for,check for,1
+stand,stand,1
+open,open,1
+close,close,1
+type on,type on,1
+examine,look out,1
+jump out,jump out,1
+turn on,turn on,1
+turn off,turn off,1
+look in,look in,1
+unpack,unpack,1
+appreciate,appreciate,1
+destroy,destroy,1
+wash,wash,1
+flush,flush,1
+use,use,1
+get in,get in,1
+get,get,1
+dry,dry,1
+search,search,1
+change,change,1
+play,play,1
+enter,enter,1
+eat,eat,1
+raise,raise,1
+lower,lower,1
+read,read,1
+swing,swing,1
+monsters,monsters,2
+hands,hands,2
+face,face,2
+undressed,undressed,2
+dressed,dressed,2
+off,off,2
+channels,channels,2
+password,password,2
+flag,flag,2
+grass,grass,2
+towel,towel,2

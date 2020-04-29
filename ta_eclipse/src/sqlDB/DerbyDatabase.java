@@ -103,8 +103,8 @@ public class DerbyDatabase {
 				PreparedStatement stmt9 = null;
 				PreparedStatement stmt10 = null;
 				PreparedStatement stmt11 = null;
-				PreparedStatement stmt12 = null
-        PreparedStatement stmt13 = null;
+				PreparedStatement stmt12 = null;
+				PreparedStatement stmt13 = null;
 				PreparedStatement stmt14 = null;
         
 				try {
