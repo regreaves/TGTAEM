@@ -72,7 +72,7 @@ stand|stand|1
 open|open|1
 close|close|1
 type on|type on|1
-examine|look out|1
+look out|look out|1
 jump out|jump out|1
 turn on|turn on|1
 turn off|turn off|1
@@ -106,3 +106,5 @@ password|password|2
 flag|flag|2
 grass|grass|2
 towel|towel|2
+swing|swing|2
+sit on|sit on|1

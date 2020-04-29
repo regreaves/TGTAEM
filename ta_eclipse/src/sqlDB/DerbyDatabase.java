@@ -1157,7 +1157,7 @@ public class DerbyDatabase {
 		PreparedStatement stmt = null;
 		
 		try {
-			stmt = conn.prepareStatement("insert into actionLog (action. verb, noun, method) values (?, ?, ?, ?)");
+			stmt = conn.prepareStatement("insert into actionLog (name, verb, noun, method) values (?, ?, ?, ?)");
 			stmt.setString(1, a.getName());
 			stmt.setString(2, a.verb());
 			stmt.setString(3, a.noun());
@@ -1196,7 +1196,7 @@ public class DerbyDatabase {
 
 					// check if no results found
 					if (!found) {
-						System.out.println("error in actions table");
+						System.out.println("error in action log table");
 					}
 				} finally { // close the things
 					DBUtil.closeQuietly(resultSet);
