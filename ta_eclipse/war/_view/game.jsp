@@ -22,7 +22,7 @@
 				method="post">
 				<input id="input" class="input" name="command"
 					placeholder="command?" autofocus autocomplete="off"/>
-					<button type="submit" style="visibility: hidden;"></button>
+				<button type="submit" style="visibility: hidden;"></button>
 			</form>
 
 		</div>

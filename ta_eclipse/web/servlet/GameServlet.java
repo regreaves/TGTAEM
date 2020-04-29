@@ -32,7 +32,6 @@ public class GameServlet extends HttpServlet {
 		}
 		Game model = new Game();
 		String log = (String) req.getSession().getAttribute("log");
-		log += model.loadRoom(model.here());
 		req.getSession().setAttribute("log", log);
 		
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
@@ -54,7 +53,7 @@ public class GameServlet extends HttpServlet {
 
 		String log = (String) req.getSession().getAttribute("log");
 		try {
-			log = log.concat("<br><br>>").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
+		  log = log.concat("<br><br>>").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -60,11 +60,12 @@ public class Game {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void reset() throws SQLException {
 		db.clearAll();
 		db.fillAll();
 		remake();
+		db.addRowToLog("<br>" + loadRoom("1"));
 	}
 
 	public void remake() throws SQLException {
@@ -104,6 +105,8 @@ public class Game {
 
 	public void setCommand(String command) {
 		this.command = command;
+    db.addRowToLog("<br>>" + command);
+
 	}
 	
 	public void setOutput(String out) {
@@ -167,6 +170,7 @@ public class Game {
 		} else {
 			s = "I don't understand \"" + command + "." + '\"' + " Please try something else.";
 		}
+    db.addRowToLog("<br>" + s);
 		return s;
 	}
 	
@@ -199,10 +203,10 @@ public class Game {
 		inventory().addItem(i);
 	}
 
+
 	public void dropItem(String obj) {
 		String id = db.getItemID(obj);
 		db.dropItem(id, here());
 		inventory().dropItem(inventory().getItemByName(obj));
 	}
-
 }
