@@ -90,6 +90,8 @@ public class Game {
 		updates.put(DropItem.name, new DropItem());
 		updates.put(CheckInventory.name, new CheckInventory());
 		updates.put(Examine.name, new Examine());
+		updates.put(TextOnly.name, new TextOnly());
+		updates.put(Switch.name, new Switch());
 	}
 
 	public boolean isDone() {

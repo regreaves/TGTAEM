@@ -62,10 +62,6 @@ public class Status {
 		if(waterOn > 10) {
 			flood = true;
 		}
-		
-		if(sitting) {
-			return false;
-		}
 		return true;
 	}
 	
