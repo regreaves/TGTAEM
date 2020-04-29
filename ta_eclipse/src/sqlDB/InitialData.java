@@ -74,7 +74,7 @@ public class InitialData {
 				String name = i.next();
 				Word verb = Word.makeWord(i.next(), 1);
 				Word noun = Word.makeWord(i.next(), 2);
-				int method = Integer.parseInt(i.next());
+				String method = i.next();
 				Action action = new Action(name, verb, noun, method);
 				actionList.add(action);
 			}

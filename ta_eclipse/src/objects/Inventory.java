@@ -102,4 +102,26 @@ public class Inventory {
 		}
 		return inventory;
 	}
+	
+	public boolean hasItem(String name)
+	{
+		for(Item i : items) {
+			if(i.getName().equalsIgnoreCase(name))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void removeItem(String name)
+	{
+		for(Item i : items) {
+			if(i.getName().equalsIgnoreCase(name))
+			{
+				items.remove(i);
+				return;
+			}
+		}
+	}
 }
