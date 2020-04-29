@@ -7,9 +7,9 @@ public class Action {
 	Word verb;
 	Word noun;
 	ArrayList<String> altNames = new ArrayList<>();
-	int method;
+	String method;
 
-	public Action(String name, Word verb, Word noun, int method) {
+	public Action(String name, Word verb, Word noun, String method) {
 		this.name = name;
 		this.verb = verb;
 		this.noun = noun;
@@ -36,7 +36,7 @@ public class Action {
 		return noun.getPrime();
 	}
 
-	public int getMethod() {
+	public String getMethod() {
 		return this.method;
 	}
 

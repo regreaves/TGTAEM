@@ -103,9 +103,10 @@ public class DerbyDatabase {
 				PreparedStatement stmt9 = null;
 				PreparedStatement stmt10 = null;
 				PreparedStatement stmt11 = null;
-				PreparedStatement stmt12 = null;
-				PreparedStatement stmt13 = null;
-
+				PreparedStatement stmt12 = null
+        PreparedStatement stmt13 = null;
+				PreparedStatement stmt14 = null;
+        
 				try {
 					stmt1 = conn.prepareStatement( // words table
 							"create table words (" + "	prime varchar(42)," + "	word varchar(42)," + " type int" + ")");
@@ -113,7 +114,7 @@ public class DerbyDatabase {
 
 					stmt2 = conn.prepareStatement( // actions table
 							"create table actions (" + "	name varchar(42)," + " verb varchar(42),"
-									+ " noun varchar(42)," + " method int " + ")");
+									+ " noun varchar(42)," + " method varchar(42) " + ")");
 					stmt2.executeUpdate();
 
 					stmt3 = conn.prepareStatement( // rooms table
@@ -166,6 +167,11 @@ public class DerbyDatabase {
 					stmt13 = conn.prepareStatement( // log table
 							"create table log (" + "log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
+					
+					stmt14 = conn.prepareStatement( // action log table
+							"create table actionLog (" + "	name varchar(42)," + " verb varchar(42),"
+									+ " noun varchar(42)," + " method varchar(42) " + ")");
+					stmt14.executeUpdate();
 
 					return true;
 				} finally { // close the things
@@ -181,7 +187,8 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt10);
 					DBUtil.closeQuietly(stmt11);
 					DBUtil.closeQuietly(stmt12);
-					DBUtil.closeQuietly(stmt13);
+          DBUtil.closeQuietly(stmt13);
+					DBUtil.closeQuietly(stmt14);
 				}
 			}
 		});
@@ -249,7 +256,7 @@ public class DerbyDatabase {
 						insertAction.setString(1, action.getName());
 						insertAction.setString(2, action.getVerb().getName());
 						insertAction.setString(3, action.getNoun().getName());
-						insertAction.setInt(4, action.getMethod());
+						insertAction.setString(4, action.getMethod());
 						insertAction.addBatch();
 					}
 					insertAction.executeBatch();
@@ -395,6 +402,7 @@ public class DerbyDatabase {
 				PreparedStatement tblShortcut = null;
 				PreparedStatement tblConnections = null;
 				PreparedStatement tblLog = null;
+				PreparedStatement tblActionLog = null;
 
 				try {
 					tblWord = conn.prepareStatement("truncate table words");
@@ -435,6 +443,9 @@ public class DerbyDatabase {
 
 					tblLog = conn.prepareStatement("truncate table log");
 					tblLog.executeUpdate();
+					
+					tblActionLog = conn.prepareStatement("truncate table actionLog");
+					tblActionLog.executeUpdate();
 
 					System.out.println("Tables cleared!"); // messages are good
 
@@ -452,6 +463,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblShortcut);
 					DBUtil.closeQuietly(tblConnections);
 					DBUtil.closeQuietly(tblLog);
+					DBUtil.closeQuietly(tblActionLog);
 				}
 				return true;
 			}
@@ -517,10 +529,10 @@ public class DerbyDatabase {
 					boolean found = false;
 					while (resultSet.next()) { // put the attributes into the action object
 						found = true;
-						String name = resultSet.getString(1);
-						Word verb = Word.makeWord(resultSet.getString(2), 1);
-						Word noun = Word.makeWord(resultSet.getString(3), 2);
-						int method = resultSet.getInt(4);
+						String name = resultSet.getString("name");
+						Word verb = Word.makeWord(resultSet.getString("verb"), 1);
+						Word noun = Word.makeWord(resultSet.getString("noun"), 2);
+						String method = resultSet.getString("method");
 						Action action = new Action(name, verb, noun, method);
 						actions.add(action); // add the action to the action list
 					}
@@ -706,7 +718,6 @@ public class DerbyDatabase {
 						i.setVowel(resultSet.getBoolean("vowel"));
 						i.setPlural(resultSet.getBoolean("plural"));
 						i.setWeight(resultSet.getInt("weight"));
-
 						items.add(i); // add item to list
 					}
 
@@ -958,13 +969,9 @@ public class DerbyDatabase {
 						n.setID(resultSet.getString("id"));
 						n.setName(resultSet.getString("name"));
 						n.setHealth(Integer.parseInt(resultSet.getString("health")));
-						;
 						n.setAttack(Integer.parseInt(resultSet.getString("attack")));
-						;
 						n.setDefense(Integer.parseInt(resultSet.getString("defense")));
-						;
 						n.setDescription(resultSet.getString("description"));
-						;
 
 						npcs.add(n);
 					}
@@ -1141,6 +1148,80 @@ public class DerbyDatabase {
 				}
 				return shortcuts;
 
+			}
+		});
+	}
+	
+	public void addAction(Action a) throws SQLException {
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = conn.prepareStatement("insert into actionLog (action. verb, noun, method) values (?, ?, ?, ?)");
+			stmt.setString(1, a.getName());
+			stmt.setString(2, a.verb());
+			stmt.setString(3, a.noun());
+			stmt.setString(4, a.getMethod());
+			stmt.executeUpdate();
+			conn.commit();
+			
+		} finally {
+			DBUtil.closeQuietly(conn);
+			DBUtil.closeQuietly(stmt);
+		}
+	}
+	
+	public ArrayList<Action> getActionLog() { // create all action objects available
+		return executeTransaction(new Transaction<ArrayList<Action>>() {
+			public ArrayList<Action> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				ArrayList<Action> actions = new ArrayList<>();
+
+				try { // get all attributes from the action table
+					stmt = conn.prepareStatement("select name, verb, noun, method from actionLog");
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+					boolean found = false;
+					while (resultSet.next()) { // put the attributes into the action object
+						found = true;
+						String name = resultSet.getString("name");
+						Word verb = Word.makeWord(resultSet.getString("verb"), 1);
+						Word noun = Word.makeWord(resultSet.getString("noun"), 2);
+						String method = resultSet.getString("method");
+						Action action = new Action(name, verb, noun, method);
+						actions.add(action); // add the action to the action list
+					}
+
+					// check if no results found
+					if (!found) {
+						System.out.println("error in actions table");
+					}
+				} finally { // close the things
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+
+				for (Action action : actions) {
+					// get the string back from the word objects
+					String verb = action.getVerb().getName();
+					String noun = action.getNoun().getName();
+
+					// use the strings to make list of all possible synonyms
+					ArrayList<String> verbSyn = getVerbs(verb);
+					ArrayList<String> nounSyn = getNouns(noun);
+
+					// combine the synonyms to make all possible acceptable (thought of) commands
+					for (String v : verbSyn) {
+						for (String n : nounSyn) {
+							String alt = v + " " + n;
+							action.addAltName(alt);
+						}
+					}
+				}
+
+				return actions; // return all actions
 			}
 		});
 	}

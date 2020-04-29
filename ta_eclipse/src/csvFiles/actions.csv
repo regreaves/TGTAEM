@@ -1,74 +1,70 @@
 action|verb|noun|method
-go north|go|north|0
-go northeast|go|northeast|0
-go east|go|east|0
-go southeast|go|southeast|0
-go south|go|south|0
-go southwest|go|southwest|0
-go west|go|west|0
-go northwest|go|northwest|0
-go up|go|up|0
-go down|go|down|0
-take bed|take|bed|1
-take desk|take|desk|1
-take laptop|take|laptop|1
-take window|take|window|1
-take jacket|take|jacket|1
-take flashlight|take|flashlight|1
-take boxes|take|boxes|1
-take painting|take|painting|1
-take sink|take|sink|1
-take toilet|take|toilet|1
-take shower|take|shower|1
-take couch|take|couch|1
-take TV|take|TV|1
-take remote|take|remote|1
-take piano|take|piano|1
-take PC|take|PC|1
-take table|take|table|1
-take apple|take|apple|1
-take bench|take|bench|1
-take mailbox|take|mailbox|1
-take letter|take|letter|1
-take swings|take|swings|1
-take pikachu|take|pikachu|1
-take sword|take|sword|1
-drop laptop|drop|laptop|2
-drop jacket|drop|jacket|2
-drop flashlight|drop|flashlight|2
-drop remote|drop|remote|2
-drop apple|drop|apple|2
-drop letter|drop|letter|2
-drop pikachu|drop|pikachu|2
-drop sword|drop|sword|2
-examine bed|examine|bed|3
-examine desk|examine|desk|3
-examine laptop|examine|laptop|3
-examine window|examine|window|3
-examine jacket|examine|jacket|3
-examine flashlight|examine|flashlight|3
-examine boxes|examine|boxes|3
-examine painting|examine|painting|3
-examine sink|examine|sink|3
-examine toilet|examine|toilet|3
-examine shower|examine|shower|3
-examine couch|examine|couch|3
-examine TV|examine|TV|3
-examine remote|examine|remote|3
-examine piano|examine|piano|3
-examine PC|examine|PC|3
-examine table|examine|table|3
-examine apple|examine|apple|3
-examine bench|examine|bench|3
-examine mailbox|examine|mailbox|3
-examine letter|examine|letter|3
-examine swings|examine|swings|3
-examine pikachu|examine|pikachu|3
-examine sword|examine|sword|3
-examine room|examine|room|3
-check inventory|check|inventory|4
-quit game|quit|game|26
-jump on bed|jump on|bed|23
-sleep in bed|sleep in|bed|24
-sleep in couch|sleep in|couch|24
-wear jacket|wear|jacket|15
+go north|go|north|move
+go northeast|go|northeast|move
+go east|go|east|move
+go southeast|go|southeast|move
+go south|go|south|move
+go southwest|go|southwest|move
+go west|go|west|move
+go northwest|go|northwest|move
+go up|go|up|move
+go down|go|down|move
+take bed|take|bed|take item
+take desk|take|desk|take item
+take laptop|take|laptop|take item
+take window|take|window|take item
+take jacket|take|jacket|take item
+take flashlight|take|flashlight|take item
+take boxes|take|boxes|take item
+take painting|take|painting|take item
+take sink|take|sink|take item
+take toilet|take|toilet|take item
+take shower|take|shower|take item
+take couch|take|couch|take item
+take TV|take|TV|take item
+take remote|take|remote|take item
+take piano|take|piano|take item
+take PC|take|PC|take item
+take table|take|table|take item
+take apple|take|apple|take item
+take bench|take|bench|take item
+take mailbox|take|mailbox|take item
+take letter|take|letter|take item
+take swings|take|swings|take item
+take pikachu|take|pikachu|take item
+take sword|take|sword|take item
+drop laptop|drop|laptop|drop item
+drop jacket|drop|jacket|drop item
+drop flashlight|drop|flashlight|drop item
+drop remote|drop|remote|drop item
+drop apple|drop|apple|drop item
+drop letter|drop|letter|drop item
+drop pikachu|drop|pikachu|drop item
+drop sword|drop|sword|drop item
+examine bed|examine|bed|examine
+examine desk|examine|desk|examine
+examine laptop|examine|laptop|examine
+examine window|examine|window|examine
+examine jacket|examine|jacket|examine
+examine flashlight|examine|flashlight|examine
+examine boxes|examine|boxes|examine
+examine painting|examine|painting|examine
+examine sink|examine|sink|examine
+examine toilet|examine|toilet|examine
+examine shower|examine|shower|examine
+examine couch|examine|couch|examine
+examine TV|examine|TV|examine
+examine remote|examine|remote|examine
+examine piano|examine|piano|examine
+examine PC|examine|PC|examine
+examine table|examine|table|examine
+examine apple|examine|apple|examine
+examine bench|examine|bench|examine
+examine mailbox|examine|mailbox|examine
+examine letter|examine|letter|examine
+examine swings|examine|swings|examine
+examine pikachu|examine|pikachu|examine
+examine sword|examine|sword|examine
+examine room|examine|room|examine
+check inventory|check|inventory|check inventory
+quit game|quit|game|5
