@@ -21,7 +21,6 @@ public class Game {
 	Parser parser;
 	DerbyDatabase db;
 
-	// R
 	HashMap<String, String> shortcuts = new HashMap<>();
 	HashMap<String, Room> map = new HashMap<>();
 	ArrayList<Item> items = new ArrayList<>();
@@ -54,8 +53,6 @@ public class Game {
 		}
 	}
 
-	// for use with jsp
-
 	public boolean isDone() {
 		return done;
 	}
@@ -67,11 +64,13 @@ public class Game {
 	public String getAction() throws SQLException {
 		String s = "";
 		Action a = parse(command);
+		
 		if (a != null) {
 			s = performAction(a);
 		} else {
 			s = "I don't understand \"" + command + '\"' + " Please try something else.";
 		}
+		db.addRowToLog("<br>" + s);
 		return s;
 	}
 
@@ -81,6 +80,7 @@ public class Game {
 
 	public void setCommand(String command) {
 		this.command = command;
+		db.addRowToLog("<br>>" + command);
 	}
 
 	public String here() {
@@ -94,6 +94,7 @@ public class Game {
 		db.clearAll();
 		db.fillAll();
 		remake();
+		db.addRowToLog("<br>" + loadRoom("1"));
 	}
 
 	public void remake() throws SQLException {
@@ -387,10 +388,19 @@ public class Game {
 	}
 
 	public String loadRoom(String id) {
-		Room r = map.get(id);
-		return r.loadRoom();
+		String s = map.get(id).loadRoom();
+
+		return s;
 	}
 
+	public String getLogFromDatabase() {
+		return db.getLog();
+	}
+	
+	public void addToLogFromDatabase(String row) {
+		db.addRowToLog(row);
+	}
+	
 	public static void main(String[] args) throws SQLException {
 		Game g = new Game();
 

@@ -104,6 +104,7 @@ public class DerbyDatabase {
 				PreparedStatement stmt10 = null;
 				PreparedStatement stmt11 = null;
 				PreparedStatement stmt12 = null;
+				PreparedStatement stmt13 = null;
 
 				try {
 					stmt1 = conn.prepareStatement( // words table
@@ -153,7 +154,7 @@ public class DerbyDatabase {
 									+ " health varchar(5)," + " attack varchar(5)," + " defense varchar(5)" + ")");
 					stmt10.executeUpdate();
 
-					stmt11 = conn.prepareStatement(
+					stmt11 = conn.prepareStatement( // shortcuts table
 							"create table shortcuts (" + " shortcut varchar(5)," + " action varchar(42)" + ")");
 					stmt11.executeUpdate();
 
@@ -161,6 +162,10 @@ public class DerbyDatabase {
 							"create table connections (" + " action varchar(42)," + " origin varchar(5),"
 									+ " destination varchar(5)" + ")");
 					stmt12.executeUpdate();
+
+					stmt13 = conn.prepareStatement( // log table
+							"create table log (" + "log_row varchar(1000)" + ")");
+					stmt13.executeUpdate();
 
 					return true;
 				} finally { // close the things
@@ -176,10 +181,10 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt10);
 					DBUtil.closeQuietly(stmt11);
 					DBUtil.closeQuietly(stmt12);
+					DBUtil.closeQuietly(stmt13);
 				}
 			}
 		});
-
 	}
 
 	public void loadInitialData() { // load data into tables
@@ -195,7 +200,6 @@ public class DerbyDatabase {
 				List<Pair<String, String>> itemMap;
 				List<Pair<String, String>> npcMap;
 				List<Pair<String, String>> itemAction;
-				// R
 				List<Pair<String, String>> shortcutList;
 				List<Pair<String, Pair<String, String>>> connections;
 
@@ -390,6 +394,7 @@ public class DerbyDatabase {
 				PreparedStatement tblInvent = null;
 				PreparedStatement tblShortcut = null;
 				PreparedStatement tblConnections = null;
+				PreparedStatement tblLog = null;
 
 				try {
 					tblWord = conn.prepareStatement("truncate table words");
@@ -428,6 +433,9 @@ public class DerbyDatabase {
 					tblConnections = conn.prepareStatement("truncate table connections");
 					tblConnections.executeUpdate();
 
+					tblLog = conn.prepareStatement("truncate table log");
+					tblLog.executeUpdate();
+
 					System.out.println("Tables cleared!"); // messages are good
 
 				} finally { // close the things
@@ -443,6 +451,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblInvent);
 					DBUtil.closeQuietly(tblShortcut);
 					DBUtil.closeQuietly(tblConnections);
+					DBUtil.closeQuietly(tblLog);
 				}
 				return true;
 			}
@@ -452,6 +461,44 @@ public class DerbyDatabase {
 	public void fillAll() { // refill tables
 		loadInitialData(); // don't judge me
 		System.out.println("Tables made!"); // messages are good
+	}
+
+	public void addRowToLog(String row) {
+		executeTransaction(new Transaction<String>() {
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = conn.prepareStatement("insert into log (log_row) values (?)");
+				stmt.setString(1, row);
+				stmt.executeUpdate();
+				
+				return null;
+			}
+		});
+	}
+	
+	public String getLog() {
+		return executeTransaction(new Transaction<String>() {
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+				String log = "";
+				
+				try {
+					stmt = conn.prepareStatement("select * from log");
+					resultSet = stmt.executeQuery();
+
+					while (resultSet.next()) {
+						log += (resultSet.getString("log_row"));
+
+					}
+				} finally {
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}
+				
+				return log;
+			}
+		});
 	}
 
 	// Word/Action Functions
