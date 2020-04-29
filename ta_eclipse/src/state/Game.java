@@ -93,6 +93,10 @@ public class Game {
 		updates.put(TextOnly.name, new TextOnly());
 		updates.put(Switch.name, new Switch());
 	}
+	
+	public String getLog() {
+		return db.getLog();
+	}
 
 	public boolean isDone() {
 		return done;
