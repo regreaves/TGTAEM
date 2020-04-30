@@ -7,7 +7,7 @@ import state.Game;
 
 public class TextOnly implements Updater {
 	public static String name = "textOnly";
-
+//TODO add room checks, inventory checks
 	@Override
 	public void update(Game g, Action a) throws SQLException {
 		String s = a.getName();

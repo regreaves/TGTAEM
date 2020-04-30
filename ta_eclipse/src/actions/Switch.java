@@ -7,7 +7,7 @@ import state.Game;
 
 public class Switch implements Updater {
 	public static String name = "switch";
-
+//TODO Add Room checks where necessary
 	@Override
 	public void update(Game g, Action a) throws SQLException {
 		String v = a.verb();

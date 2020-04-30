@@ -3,7 +3,7 @@ package state;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
+
 
 import command.Action;
 import command.ActionLog;
@@ -13,7 +13,6 @@ import objects.Item;
 import objects.NPC;
 import objects.Player;
 import objects.Room;
-import sqlDB.DBUtil;
 import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 import actions.*;
