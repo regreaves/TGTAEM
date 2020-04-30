@@ -12,6 +12,7 @@ import java.util.List;
 
 import command.Action;
 import command.Word;
+import objects.Dialogue;
 import objects.Item;
 import objects.NPC;
 import objects.Player;
@@ -106,7 +107,9 @@ public class DerbyDatabase {
 				PreparedStatement stmt12 = null;
 				PreparedStatement stmt13 = null;
 				PreparedStatement stmt14 = null;
-        
+				PreparedStatement stmt15 = null;
+				PreparedStatement stmt16 = null;
+
 				try {
 					stmt1 = conn.prepareStatement( // words table
 							"create table words (" + "	prime varchar(42)," + "	word varchar(42)," + " type int" + ")");
@@ -167,11 +170,19 @@ public class DerbyDatabase {
 					stmt13 = conn.prepareStatement( // log table
 							"create table log (" + "log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
-					
+
 					stmt14 = conn.prepareStatement( // action log table
 							"create table actionLog (" + "	name varchar(42)," + " verb varchar(42),"
 									+ " noun varchar(42)," + " method varchar(42) " + ")");
 					stmt14.executeUpdate();
+
+					stmt15 = conn.prepareStatement( // dialogue table
+							"create table dialogue (" + " id varchar(5)," + " dialogue varchar(500)" + ")");
+					stmt15.executeUpdate();
+					
+					stmt16 = conn.prepareStatement( // dialogueTree table
+							"create table dialogueTrees (" + " newickString varchar(100)" + ")");
+					stmt16.executeUpdate();
 
 					return true;
 				} finally { // close the things
@@ -187,8 +198,10 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt10);
 					DBUtil.closeQuietly(stmt11);
 					DBUtil.closeQuietly(stmt12);
-          DBUtil.closeQuietly(stmt13);
+					DBUtil.closeQuietly(stmt13);
 					DBUtil.closeQuietly(stmt14);
+					DBUtil.closeQuietly(stmt15);
+					DBUtil.closeQuietly(stmt16);
 				}
 			}
 		});
@@ -209,6 +222,8 @@ public class DerbyDatabase {
 				List<Pair<String, String>> itemAction;
 				List<Pair<String, String>> shortcutList;
 				List<Pair<String, Pair<String, String>>> connections;
+				List<Pair<String, String>> dialogueList;
+				List<String> dialogueTreeList;
 
 				try { // get info from csvs
 					wordList = InitialData.getWords();
@@ -222,6 +237,8 @@ public class DerbyDatabase {
 					itemAction = InitialData.getItemActions();
 					shortcutList = InitialData.getShortcuts();
 					connections = InitialData.getConnections();
+					dialogueList = InitialData.getDialogue();
+					dialogueTreeList = InitialData.getDialogueTree();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -237,6 +254,8 @@ public class DerbyDatabase {
 				PreparedStatement insertItemAction = null;
 				PreparedStatement insertShortcut = null;
 				PreparedStatement insertConnection = null;
+				PreparedStatement insertDialogue = null;
+				PreparedStatement insertDialogueTree = null;
 
 				try {
 					// populate words table
@@ -366,6 +385,25 @@ public class DerbyDatabase {
 						insertConnection.addBatch();
 					}
 					insertConnection.executeBatch();
+					
+					// populate dialogue table
+					insertDialogue = conn.prepareStatement(
+							"insert into dialogue (id, dialogue)" + " values (?, ?)");
+					for (Pair<String, String> p : dialogueList) {
+						insertDialogue.setString(1, p.getLeft());
+						insertDialogue.setString(2, p.getRight());
+						insertDialogue.addBatch();
+					}
+					insertDialogue.executeBatch();
+					
+					// populate dialogueTrees table
+					insertDialogueTree = conn.prepareStatement(
+							"insert into dialogueTrees (newickString)" + " values (?)");
+					for (String s : dialogueTreeList) {
+						insertDialogueTree.setString(1, s);
+						insertDialogueTree.addBatch();
+					}
+					insertDialogueTree.executeBatch();
 
 					return true;
 				} finally { // close the things
@@ -380,6 +418,8 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertItemAction);
 					DBUtil.closeQuietly(insertShortcut);
 					DBUtil.closeQuietly(insertConnection);
+					DBUtil.closeQuietly(insertDialogue);
+					DBUtil.closeQuietly(insertDialogueTree);
 				}
 			}
 		});
@@ -403,6 +443,8 @@ public class DerbyDatabase {
 				PreparedStatement tblConnections = null;
 				PreparedStatement tblLog = null;
 				PreparedStatement tblActionLog = null;
+				PreparedStatement tblDialogue = null;
+				PreparedStatement tblDialogueTrees = null;
 
 				try {
 					tblWord = conn.prepareStatement("truncate table words");
@@ -447,6 +489,12 @@ public class DerbyDatabase {
 					tblActionLog = conn.prepareStatement("truncate table actionLog");
 					tblActionLog.executeUpdate();
 
+					tblDialogue = conn.prepareStatement("truncate table dialogue");
+					tblDialogue.executeUpdate();
+					
+					tblDialogueTrees = conn.prepareStatement("truncate table dialogueTrees");
+					tblDialogueTrees.executeUpdate();
+
 					System.out.println("Tables cleared!"); // messages are good
 
 				} finally { // close the things
@@ -464,6 +512,8 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblConnections);
 					DBUtil.closeQuietly(tblLog);
 					DBUtil.closeQuietly(tblActionLog);
+					DBUtil.closeQuietly(tblDialogue);
+					DBUtil.closeQuietly(tblDialogueTrees);
 				}
 				return true;
 			}
@@ -1152,6 +1202,7 @@ public class DerbyDatabase {
 		});
 	}
 	
+
 	public void addAction(Action a) throws SQLException {
 		Connection conn = connect();
 		PreparedStatement stmt = null;
@@ -1224,6 +1275,72 @@ public class DerbyDatabase {
 				return actions; // return all actions
 			}
 		});
+	}
+
+	// Dialogue functions
+	public ArrayList<Dialogue> getDialogue() throws SQLException { // get all dialogue
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		ArrayList<Dialogue> dialogue = new ArrayList<Dialogue>();
+
+		try { // get all the info from dialogue table
+			stmt = conn.prepareStatement("select * from dialogue");
+			resultSet = stmt.executeQuery();
+
+			// for testing that a result was returned
+			Boolean found = false;
+			while (resultSet.next()) {
+				found = true;
+				Dialogue d = new Dialogue();
+				d.setID(resultSet.getString("id"));
+				d.setDialogue(resultSet.getString("dialogue"));
+				dialogue.add(d);
+			}
+
+			// check if no dialogue found
+			if (!found) {
+				System.out.println("no dialogue found");
+			}
+			conn.commit();
+		} finally { // close the things
+			DBUtil.closeQuietly(resultSet);
+			DBUtil.closeQuietly(stmt);
+			DBUtil.closeQuietly(conn);
+		}
+		return dialogue;
+	}
+	
+	public ArrayList<String> getDialogueTree() throws SQLException { // get all dialogueTrees
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		ArrayList<String> dialogueTree = new ArrayList<String>();
+
+		try { // get all the info from dialogueTrees table
+			stmt = conn.prepareStatement("select * from dialogueTrees");
+			resultSet = stmt.executeQuery();
+
+			// for testing that a result was returned
+			Boolean found = false;
+			while (resultSet.next()) {
+				found = true;
+				Dialogue d = new Dialogue();
+				d.setNewickTree(resultSet.getString("newickString"));
+				dialogueTree.add(d.getNewickTree());
+			}
+
+			// check if no dialogueTrees found
+			if (!found) {
+				System.out.println("no dialogueTrees found");
+			}
+			conn.commit();
+		} finally { // close the things
+			DBUtil.closeQuietly(resultSet);
+			DBUtil.closeQuietly(stmt);
+			DBUtil.closeQuietly(conn);
+		}
+		return dialogueTree;
 	}
 
 	// The main method creates the database tables and loads the initial data.
