@@ -21,7 +21,7 @@ uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
           method="post"
         >
           <input name="username" placeholder="Username:" value="student" autofocus />
-          <input name="password" placeholder="Password:" value="ycp" />
+          <input type="password" name="password" placeholder="Password:" value="ycp" />
           <button type="submit" style="visibility: hidden;"></button>
         </form>
 

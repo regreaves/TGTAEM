@@ -1,39 +1,25 @@
 @font-face {
 	font-family: MyOutput;
-	font-weight: normal;
-	font-style: normal;
 	src: url('PrintChar21.ttf') format('truetype');
 }
 
-body {
-	background-color: black;
-	color: white;
+* {
+	padding: 0;
+	margin: auto;
+	border: 0;
+
+	--myFontSize: 2vw;
+	
+	font-family: MyOutput;
+	font-size: max(var(--myFontSize), 16px);
 }
 
-#outer {
-	display: flex;
-	justify-content: center;
-}
-
-#output {
-	resize: none;
+div {
+	height: 100vh;
+	width: min(35em, 100vw);
 	overflow: scroll;
-	border: 0 none;
-	display: block;
-	width: 35em;
-	min-width: 35em;
-	height: 24em;
-	background: transparent;
-	font-family: 'MyOutput';
 }
 
 input {
-	resize: none;
-	border: 0 none;
-  width: 100%;
-	display: block;
-	background: transparent;
-	font-family: 'MyOutput';
-	font-size: 1em;
-	color: inherit;
+
 }
