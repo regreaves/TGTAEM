@@ -103,11 +103,25 @@ public class InitialData {
 				if (x == 1) {
 					visited = true;
 				}
+				boolean dark = false;
+				x = Integer.parseInt(i.next());
+				if (x == 1) {
+					dark = true;
+				}
+				boolean locked = false;
+				x = Integer.parseInt(i.next());
+				if (x == 1) {
+					locked = true;
+				}
+				x = Integer.parseInt(i.next());
 				Room r = new Room();
 				r.setID(id);
 				r.setDisplayName(name);
 				r.setDescription(dscrpt);
 				r.setVisited(visited);
+				r.setDark(dark);
+				r.setLocked(locked);
+				r.setTemp(x);
 				roomList.add(r);
 			}
 			return roomList;
@@ -286,6 +300,7 @@ public class InitialData {
 			readPlayers.close();
 		}
 	}	
+	
 	public static List<Pair<String, String>> getPlayerMap() throws IOException {
 		List<Pair<String, String>> playerMap = new ArrayList<>();
 		ReadCSV readPlayers = new ReadCSV("player_loc.csv");

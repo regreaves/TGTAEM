@@ -119,7 +119,8 @@ public class DerbyDatabase {
 
 					stmt3 = conn.prepareStatement( // rooms table
 							"create table rooms (" + " id varchar(5) primary key," + " name varchar(42),"
-									+ " description varchar(200)," + "visited boolean" + ")");
+									+ " description varchar(200)," + " visited boolean," + " dark boolean," 
+									+ " locked boolean," + " temp varchar(42)" + ")");
 					stmt3.executeUpdate();
 
 					stmt4 = conn.prepareStatement( // items table
@@ -263,12 +264,15 @@ public class DerbyDatabase {
 
 					// populate rooms table
 					insertRoom = conn.prepareStatement(
-							"insert into rooms (id, name, description, visited)" + " values (?, ?, ?, ?)");
+							"insert into rooms (id, name, description, visited, dark, locked, temp)" + " values (?, ?, ?, ?, ?, ?, ?)");
 					for (Room room : roomList) {
 						insertRoom.setString(1, room.getID());
 						insertRoom.setString(2, room.getDisplayName());
 						insertRoom.setString(3, room.getDescription());
 						insertRoom.setBoolean(4, room.getVisited());
+						insertRoom.setBoolean(5, room.dark());
+						insertRoom.setBoolean(6, room.locked());
+						insertRoom.setString(7, room.temp());
 						insertRoom.addBatch();
 					}
 					insertRoom.executeBatch();
@@ -653,11 +657,17 @@ public class DerbyDatabase {
 						String name = resultSet.getString("name");
 						String dscrpt = resultSet.getString("description");
 						boolean visited = resultSet.getBoolean("visited");
+						boolean dark = resultSet.getBoolean("dark");
+						boolean locked = resultSet.getBoolean("locked");
+						String temp = resultSet.getString("temp");
 						Room r = new Room();
 						r.setID(id);
 						r.setDisplayName(name);
 						r.setDescription(dscrpt);
 						r.setVisited(visited);
+						r.setDark(dark);
+						r.setLocked(locked);
+						r.setTemp(temp);
 						map.put(id, r);
 					}
 
