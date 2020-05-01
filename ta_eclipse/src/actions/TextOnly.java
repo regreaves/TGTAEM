@@ -13,61 +13,110 @@ public class TextOnly implements Updater {
 		String s = a.getName();
 		switch (s) {
 		case "jump on bed":
-			g.setOutput("No one's looking. Why not? You jump on the bed. Wheeeeee!");
+			if (g.here().equals("1")) {
+				g.setOutput("No one's looking. Why not? You jump on the bed. Wheeeeee!");
+			} else {
+				g.setOutput("There's no bed here.");
+			}
 			break;
 		case "sleep in bed":
-			g.setOutput(
-					"A quick nap won't hurt anyone. <br> zzz <br> zzz <br> zzz <br> You wake up feeling refreshed.");
+			if (g.here().equals("1")) {
+				g.setOutput(
+						"A quick nap won't hurt anyone. <br> zzz <br> zzz <br> zzz <br> You wake up feeling refreshed.");
+			} else {
+				g.setOutput("There's no bed here.");
+			}
 			break;
 		case "jump out window":
-			g.setOutput(
-					"You look out the window first and remember you are on the second story. You decide this would be a bad idea.");
+			if (g.here().equals("1")) {
+				g.setOutput(
+						"You look out the window first and remember you are on the second story. You decide this would be a bad idea.");
+			} else {
+				g.setOutput("What window?");
+			}
 			break;
 		case "look in boxes":
-			g.setOutput(
-					"You have been putting off unpacking these for months. You don't even remember what's in them at this point. You should have probably labled them. You'd need to unpack them to figure it out.");
+			if (g.here().equals("2")) {
+				g.setOutput(
+						"You have been putting off unpacking these for months. You don't even remember what's in them at this point. You should have probably labled them. You'd need to unpack them to figure it out.");
+			} else {
+				g.setOutput("I don't know which boxes you are talking about.");
+			}
 			break;
 		case "unpack boxes":
-			g.setOutput(
-					"What's one more day of procrasinating when it comes to unpacking? You have no desire to start now.");
+			if (g.here().equals("2")) {
+				g.setOutput(
+						"What's one more day of procrasinating when it comes to unpacking? You have no desire to start now.");
+			} else {
+				g.setOutput("I don't know which boxes you are talking about.");
+			}
 			break;
 		case "appreciate painting":
-			g.setOutput(
-					"You stare at the painting. You stare long and hard. Nope. You can't do it. You do not know what your dad sees in this monstrosity.");
+			if (g.here().equals("3")) {
+				g.setOutput(
+						"You stare at the painting. You stare long and hard. Nope. You can't do it. You do not know what your dad sees in this monstrosity.");
+			} else {
+				g.setOutput("There's no painting here to appreciate.");
+			}
 			break;
 		case "destroy painting":
-			g.setOutput("You really, really want to destroy the painting, but you couldn't do that to your dad.");
-		case "wash hands":
-			if (g.s.sink) {
-				g.setOutput("You wash your hands. No viruses getting you today!");
+			if (g.here().equals("3")) {
+				g.setOutput("You really, really want to destroy the painting, but you couldn't do that to your dad.");
 			} else {
-				g.setOutput("Kinda hard to wash your hands when you haven't turned the sink on...");
+				g.setOutput("There's no painting here to destroy.");
+			}
+			break;
+		case "wash hands":
+			if (g.here().equals("4")) {
+				if (g.s.sink) {
+					g.setOutput("You wash your hands. No viruses getting you today!");
+				} else {
+					g.setOutput("Kinda hard to wash your hands when you haven't turned the sink on...");
+				}
+			} else {
+				g.setOutput("I'm not sure where you're planning on doing that...");
 			}
 			break;
 		case "wash face":
-			if (g.s.sink) {
-				g.setOutput("You wash your face. You feel refreshed.");
-			} else {
-				g.setOutput("Kinda hard to wash your face when you haven't turned the sink on...");
-			}
-			break;
-		case "flush toliet":
-			g.setOutput("Wooooooosh!");
-			break;
-		case "use toliet":
-			g.setOutput("Aaalllriiiight. I'll just go over here and let you do that.");
-			break;
-		case "get in shower":
-			if (g.s.shower) {
-				if (g.s.clothes) {
-					g.setOutput("It would be weird to take a shower with your clothes on.");
+			if (g.here().equals("4")) {
+				if (g.s.sink) {
+					g.setOutput("You wash your face. You feel refreshed.");
 				} else {
-					g.setOutput(
-							"It feels nice to let the water run over you. It's easy to let time pass in the shower.");
-					g.s.wet = true;
+					g.setOutput("Kinda hard to wash your face when you haven't turned the sink on...");
 				}
 			} else {
-				g.setOutput("You stand in the shower. The water is off. Why are you in the shower?");
+				g.setOutput("I'm not sure where you're planning on doing that...");
+			}
+			break;
+		case "flush toilet":
+			if (g.here().equals("4")) {
+				g.setOutput("Wooooooosh!");
+			} else {
+				g.setOutput("I don't see any toilets here.");
+			}
+			break;
+		case "use toilet":
+			if (g.here().equals("4")) {
+				g.setOutput("Aaalllriiiight. I'll just go over here and let you do that.");
+			} else {
+				g.setOutput("I don't see any toilets here.");
+			}
+			break;
+		case "get in shower":
+			if (g.here().equals("4")) {
+				if (g.s.shower) {
+					if (g.s.clothes) {
+						g.setOutput("It would be weird to take a shower with your clothes on.");
+					} else {
+						g.setOutput(
+								"It feels nice to let the water run over you. It's easy to let time pass in the shower.");
+						g.s.wet = true;
+					}
+				} else {
+					g.setOutput("You stand in the shower. The water is off. Why are you in the shower?");
+				}
+			} else {
+				g.setOutput("What shower?");
 			}
 			break;
 		case "dry off":
@@ -83,10 +132,18 @@ public class TextOnly implements Updater {
 			}
 			break;
 		case "sleep in couch":
-			g.setOutput("You stretch out on the couch and take a quick nap. You wake up feeling better.");
+			if (g.here().equals("6")) {
+				g.setOutput("You stretch out on the couch and take a quick nap. You wake up feeling better.");
+			} else {
+				g.setOutput("No couch and no naps here!");
+			}
 			break;
 		case "play piano":
-			g.setOutput("You fumble around the keys. Sound, but nothing really recognizable comes out.");
+			if (g.here().equals("7")) {
+				g.setOutput("You fumble around the keys. Sound, but nothing really recognizable comes out.");
+			} else {
+				g.setOutput("You have a piano in the study, if you want to play later.");
+			}
 			break;
 		case "eat apple":
 			if (g.inventory().hasItem("apple")) {
@@ -132,13 +189,21 @@ public class TextOnly implements Updater {
 			}
 			break;
 		case "swing":
-			g.setOutput(
-					"You push off the ground, kicking your legs out and getting your momentum going. Before long, it feels like gravity is a non-issue as you soar back and forth."
-							+ "You forgot how much you loved to do this. Everything you are worrying about slips away. But you can't escape forever.... <br> <br> <br>"
-							+ "After a while, you slow, and let gravity carry you back to earth and reality.");
+			if (g.here().equals("11")) {
+				g.setOutput(
+						"You push off the ground, kicking your legs out and getting your momentum going. Before long, it feels like gravity is a non-issue as you soar back and forth."
+								+ "You forgot how much you loved to do this. Everything you are worrying about slips away. But you can't escape forever.... <br> <br> <br>"
+								+ "After a while, you slow, and let gravity carry you back to earth and reality.");
+			} else {
+				g.setOutput("No swing here.");
+			}
 			break;
 		case "swing sword":
-			g.setOutput("<strong> SWIIIISHHH!!! <strong> Now that was satisfying.");
+			if (g.inventory().hasItem("sword")) {
+				g.setOutput("<strong> SWIIIISHHH!!! <strong> Now that was satisfying.");
+			} else {
+				g.setOutput("You don't have a sword. It would be cool if you did.");
+			}
 			break;
 		}
 
