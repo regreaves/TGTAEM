@@ -12,8 +12,10 @@ public class Room {
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
 	ArrayList<Player> players = new ArrayList<>();
-	ArrayList<Action> actions = new ArrayList<>();
 	boolean visited;
+	boolean dark;
+	boolean locked;
+	String temp;
 
 	public Room() {
 
@@ -22,6 +24,14 @@ public class Room {
 	public String loadRoom() {
 		String dscrpt = displayName;
 		if (!visited) {
+
+			if(dark) {
+				dscrpt += ":<br>" +  "It is dark here. You can see nothing. You are likely to be eaten by a grue.";
+				if(!temp.equals("")){
+					dscrpt += " " + temp;
+				}	
+				return dscrpt;
+			}
 			dscrpt += ":<br>" + this.description;
 			for (Item i : items) {
 				if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
@@ -39,12 +49,22 @@ public class Room {
 					dscrpt += " " + n.description;
 				}
 			}
+			if(!temp.equals("")){
+				dscrpt += " " + temp;
+			}	
 		}
 		return dscrpt;
 	}
 
 	public String look() {
 		String dscrpt = this.description;
+		if(!temp.equals("")){
+			dscrpt += " " + temp;
+		}	
+		if(dark) {
+			dscrpt += " It is dark here. You can see nothing. You are likely to be eaten by a grue.";
+			return dscrpt;
+		}
 		for (Item i : items) {
 			if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
 				dscrpt += " " + i.init_dscrpt;
@@ -108,20 +128,17 @@ public class Room {
 	}
 
 	public void addItems(ArrayList<Item> items) {
-		items.forEach(this::addItem);
-		// #swag
+		items.forEach(this::addItem); // #swag
 		return;
 	}
 
 	public void addItem(Item item) {
 		this.items.add(item);
-		this.actions.addAll(item.getActions());
 		return;
 	}
 
 	public Item removeItem(Item item) {
 		int x = this.items.indexOf(item);
-		actions.removeAll(item.getActions());
 		return this.items.remove(x);
 	}
 
@@ -139,27 +156,13 @@ public class Room {
 		this.npcs.remove(x);
 		return;
 	}
-	
+
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
 
 	public void addPlayer(Player player) {
 		this.players.add(player);
-		return;
-	}
-
-	public ArrayList<Action> getActions() {
-		return actions;
-	}
-
-	public void addActions(ArrayList<Action> newActions) {
-		actions.addAll(newActions);
-		return;
-	}
-
-	public void removeActions(ArrayList<Action> newActions) {
-		actions.removeAll(newActions);
 		return;
 	}
 
@@ -176,18 +179,51 @@ public class Room {
 		this.connections.put(action, destination);
 		return;
 	}
-	
-	public String getDestination(String action)
-	{
+
+	public String getDestination(String action) {
 		return this.connections.getDestination(action);
 	}
 
+	public boolean dark() {
+		return dark;
+	}
 
-	public String toString()
-	{
+	public void setDark(boolean d) {
+		this.dark = d;
+	}
+
+	public boolean locked() {
+		return locked;
+	}
+
+	public void setLocked(boolean l) {
+		this.locked = l;
+	}
+
+	public String temp() {
+		return temp;
+	}
+
+	public void setTemp(int t) {
+		if (t == 1) {
+			this.temp = "It is rather hot here.";
+		} else if (t == 0) {
+			this.temp = "";
+		} else if (t == -1) {
+			this.temp = "It is really cold here.";
+		} else {
+			System.out.println("temp error room: " + this.ID);
+		}
+	}
+	
+	public void setTemp(String t) {
+		this.temp = t;
+	}
+
+	public String toString() {
 		String out = "ID: " + ID + "Name: " + displayName;
 		return out;
-		
+
 	}
 	// TODO add NPC based methods
 }

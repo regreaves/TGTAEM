@@ -17,6 +17,10 @@ public class Move implements Updater {
 			g.setOutput("You can't move while you're sitting. Why don't you try to STAND UP?");
 		} else if (id.equals("0")) {
 			g.setOutput("You can't go that way.");
+		} else if (g.map.get(id).locked()){
+			g.setOutput(g.loadRoom(id));
+			g.addOutput("You can't go in a locked room. Try something else." + "<br><br>");
+			g.addOutput(g.room().getDisplayName());
 		} else {
 			g.setVisited();
 			g.movePlayer(id);
