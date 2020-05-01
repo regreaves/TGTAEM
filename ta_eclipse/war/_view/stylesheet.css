@@ -3,23 +3,28 @@
 	src: url('PrintChar21.ttf') format('truetype');
 }
 
-* {
+body {
+	background: black;
+	color: white;
 	padding: 0;
-	margin: auto;
-	border: 0;
-
-	--myFontSize: 2vw;
-	
-	font-family: MyOutput;
-	font-size: max(var(--myFontSize), 16px);
+	margin: 0;
 }
 
-div {
-	height: 100vh;
-	width: min(35em, 100vw);
+.myForm {
+	background: black;
+	color: white;
+	margin: auto;
+	border: 0;
+	font-family: MyOutput;
+	font-size: min(max(2vw, 16px), 20pt);
 	overflow: scroll;
 }
 
-input {
+.myForm-terminal {
+	height: 100vh;
+	width: min(35em, 100vw);
+}
 
+.myForm-input {
+	
 }

@@ -1,33 +1,22 @@
 <!DOCTYPE html>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <%@ taglib
-uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <html>
-  <head>
-    <title>Login</title>
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/_view/stylesheet.css"
-    />
-  </head>
+<head>
+<title>User</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/_view/stylesheet.css" />
+</head>
 
-  <body>
-    <div id="outer">
-      <div id="output">
-        <p>${log}</p>
-
-        <form
-          id="myForm"
-          action="${pageContext.servletContext.contextPath}/user"
-          method="post"
-        >
-          <input name="input" placeholder="command?" autofocus />
-          <button type="submit" style="visibility: hidden;"></button>
-        </form>
-				<c:if test="${! empty errorMessage}">
-          <div class="error">${errorMessage}</div>
-        </c:if>
-      </div>
-    </div>
-  </body>
+<body>
+	<form id="myForm" class="myForm"
+		action="${pageContext.servletContext.contextPath}/user" method="post">
+		<div class="myForm myForm-terminal">${log}
+			<input type="text" class="myForm myForm-input" name="input"
+				placeholder="Command?" autofocus /><br> <input type="submit"
+				style="visibility: hidden;">
+		</div>
+	</form>
+</body>
 </html>
