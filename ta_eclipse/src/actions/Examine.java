@@ -15,14 +15,14 @@ public class Examine implements Updater {
 		g.setOutput("");
 		String obj = a.noun();
 		if (obj.equals("room")) {
-			g.addOutput(g.map.get(g.here()).look());
+			g.setOutput(g.map.get(g.here()).look());
 		} else {
 			ArrayList<Item> roomItems = g.itemsHere();
 			for (Item i : roomItems) {
 				if (i.getName().equals(obj)) {
-					g.addOutput(i.getInventDscrpt());
+					g.setOutput(i.getInventDscrpt());
 				} else {
-					g.addOutput("There's no " + obj + " for you to examine.");
+					g.setOutput("There's no " + obj + " for you to examine.");
 
 				}
 			}
