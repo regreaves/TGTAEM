@@ -61,14 +61,14 @@ public class UserServlet extends HttpServlet {
 
 			}
 			String log = (String) req.getSession().getAttribute("log");
-			log += i + "<br> Loading new game... <br>";
+			log += i + "<br> Loading new game... <br><br>";
 			log += model.getGame().loadRoom("1") + "<br>";
 			req.getSession().setAttribute("log", log);
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			return;
 		} else if (i.equalsIgnoreCase("l")) {
 			String log = (String) req.getSession().getAttribute("log");
-			log += i + "<br> Loading saved game... <br>";
+			log += i + "<br> Loading saved game... <br><br>";
 			log += model.getGame().getLog();
 			req.getSession().setAttribute("log", log);
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);

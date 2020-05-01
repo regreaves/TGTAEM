@@ -14,7 +14,7 @@
 		action="${pageContext.servletContext.contextPath}/game" method="post">
 		<div class="myForm myForm-terminal">${log}
 			<input type="text" class="myForm myForm-input" name="command"
-				placeholder="Command?" autofocus /> <input type="submit"
+				placeholder="command?" autofocus /> <input type="submit"
 				style="visibility: hidden;">
 		</div>
 	</form>

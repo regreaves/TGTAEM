@@ -14,9 +14,9 @@
 		action="${pageContext.servletContext.contextPath}/login" method="post">
 		<div class="myForm myForm-terminal">${log}
 			<input type="text" class="myForm myForm-input" name="username"
-				placeholder="Username:" value="student" autofocus /><br> <input
+				placeholder="Username:" value="Arthur Dent" autofocus /><br> <input
 				type="password" class="myForm myForm-input" name="password"
-				placeholder="Password:" value="ycp" /> <input type="submit"
+				placeholder="Password:" value="hitchhiker" /> <input type="submit"
 				style="visibility: hidden;">
 		</div>
 	</form>

@@ -500,7 +500,7 @@ public class DerbyDatabase {
 					resultSet = stmt.executeQuery();
 
 					while (resultSet.next()) {
-						log += (resultSet.getString("log_row"));
+						log +=(resultSet.getString("log_row"));
 
 					}
 				} finally {
