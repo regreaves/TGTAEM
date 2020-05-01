@@ -14,7 +14,7 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Library model;
 	private LoginController controller;
-	private String log = "Welcome to TGTAEM. Please login.";
+	private String log = "Welcome to TGTAEM. Please login. <br>";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -53,7 +53,7 @@ public class GameServlet extends HttpServlet {
 
 		String log = (String) req.getSession().getAttribute("log");
 		try {
-		  log = log.concat("<br><br>> ").concat(req.getParameter("command")).concat("<br>").concat(model.getAction());
+		  log = log.concat("<br>> ").concat(req.getParameter("command")).concat("<br>").concat(model.getAction() + "<br>");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -32,7 +32,7 @@ public class UserServlet extends HttpServlet {
 		}
 		
 		String log = (String) req.getSession().getAttribute("log");
-		log += "<br>Welcome " + user + "<br>(N)ew Game or (L)oad Game?<br>";
+		log += "<br> Welcome " + user + "<br><br>(N)ew Game or (L)oad Game? <br>";
 		req.getSession().setAttribute("log", log);
 		// now we have the user's User object,
 		// proceed to handle request...
@@ -61,22 +61,22 @@ public class UserServlet extends HttpServlet {
 
 			}
 			String log = (String) req.getSession().getAttribute("log");
-			log += i + "<br> Loading new game... <br><br>";
-			log += model.getGame().loadRoom("1") + "<br>";
+			log += "<br>> " + i + "<br> Loading new game... <br>";
+			log += "<br>" + model.getGame().loadRoom("1") + "<br>";
 			req.getSession().setAttribute("log", log);
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			return;
 		} else if (i.equalsIgnoreCase("l")) {
 			String log = (String) req.getSession().getAttribute("log");
-			log += i + "<br> Loading saved game... <br><br>";
-			log += model.getGame().getLog();
+			log += "<br>> " + i + "<br> Loading saved game... <br>";
+			log += model.getGame().getLog() + "<br>";
 			req.getSession().setAttribute("log", log);
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 			return;
 		}
 		
 		String log = (String) req.getSession().getAttribute("log");
-		log += i + "<br>Input \"n\" for new game and \"l\" for load game.<br>";
+		log += "<br>> " + i + "<br>Input \"n\" for new game and \"l\" for load game.";
 		req.getSession().setAttribute("log", log);
 		req.getRequestDispatcher("/_view/user.jsp").forward(req, resp);
 
