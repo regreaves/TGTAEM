@@ -12,22 +12,24 @@ uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
   </head>
 
   <body>
-    <div id="outer">
       <div id="output">
-        <p>${log}</p>
+        <br>${log}</br>
 
         <form
-          id="myForm"
           action="${pageContext.servletContext.contextPath}/user"
           method="post"
         >
+        	<div class="split">
+				<div class="prompt">
+					&gt;
+				</div>
           <input name="input" placeholder="command?" autofocus />
           <button type="submit" style="visibility: hidden;"></button>
+          </div>
         </form>
 				<c:if test="${! empty errorMessage}">
           <div class="error">${errorMessage}</div>
         </c:if>
       </div>
-    </div>
   </body>
 </html>

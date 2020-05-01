@@ -12,7 +12,7 @@ public class Examine implements Updater {
 
 	@Override
 	public void update(Game g, Action a) throws SQLException {
-		g.setOutput("<br>>");
+		g.setOutput("");
 		String obj = a.noun();
 		if (obj.equals("room")) {
 			g.addOutput(g.map.get(g.here()).look());

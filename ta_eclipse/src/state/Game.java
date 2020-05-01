@@ -65,7 +65,7 @@ public class Game {
 		db.clearAll();
 		db.fillAll();
 		remake();
-		db.addRowToLog("<br>" + loadRoom("1"));
+		db.addRowToLog(loadRoom("1"));
 	}
 
 	public void remake() throws SQLException {
@@ -108,7 +108,7 @@ public class Game {
 
 	public void setCommand(String command) {
 		this.command = command;
-		db.addRowToLog("<br>>" + command);
+		db.addRowToLog("<br><br>>" + command);
 
 	}
 

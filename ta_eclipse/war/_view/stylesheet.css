@@ -1,39 +1,43 @@
 @font-face {
-	font-family: MyOutput;
+	font-family: terminal;
 	font-weight: normal;
 	font-style: normal;
 	src: url('PrintChar21.ttf') format('truetype');
 }
 
 body {
-	background-color: black;
-	color: white;
-}
-
-#outer {
 	display: flex;
 	justify-content: center;
+	background-color: black;
+	color: white;
+	font-size: min(max(2vw, 16px), 20pt);
+	font-family: 'terminal';
 }
 
 #output {
-	resize: none;
-	overflow: scroll;
 	border: 0 none;
 	display: block;
-	width: 35em;
-	min-width: 35em;
-	height: 24em;
-	background: transparent;
-	font-family: 'MyOutput';
+	width: min(35em, 100vw);
+}
+
+.split {
+	display: flex;
+}
+
+.prompt {
+	flex: 0;
+	padding-right: 1ch;
 }
 
 input {
-	resize: none;
-	border: 0 none;
-  width: 100%;
+	flex: 1; 
+	resize : none;
+	border: 0;
+	width: 100%;
 	display: block;
 	background: transparent;
-	font-family: 'MyOutput';
-	font-size: 1em;
+	font-family: inherit;
+	font-size: inherit;
 	color: inherit;
+	outline: 0;
 }
