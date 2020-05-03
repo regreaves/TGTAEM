@@ -1,33 +1,51 @@
 package objects;
-//WORK IN PROGRESS
+
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+//Tree class is partially based on code found at https://www.cs.dartmouth.edu/~cbk/classes/10/15spring/notes/7/code/BinaryTree.java
+//@author Chris Bailey-Kellogg, Dartmouth CS 10, Fall 2012
 public class Tree<T> {
-	private Node<T> root;
+	private Tree<T> left, right;
+	T data;
 
-    public Tree(T rootData) {
-        root = new Node<T>();
-        root.data = rootData;
-        root.left = null;
-        root.right = null;
-    }
-
-    public static class Node<T> {
-        T data;
-        Node<T> parent;
-        Node<T> left;
-        Node<T> right;
+	//Leaf node
+    public Tree(T data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
     }
     
-    public Node<T> addLeftNode(T left) {
-        Node<T> leftNode = new Node<T>();
-        leftNode.parent = this.root;
-        this.root.left.data = leftNode.data;
-        return leftNode;
+    //Inner node
+    public Tree(T data, Tree<T> left, Tree<T> right) {
+        this.data = data;
+        this.left = left;
+        this.right = right;
     }
     
-    public Node<T> addRightNode(T right) {
-        Node<T> rightNode = new Node<T>();
-        rightNode.parent = this.root;
-        this.root.right.data = rightNode.data;
-        return rightNode;
+    public static Tree<String> createNewickTree(String s){
+    	Tree<String> t = parseNewick(new StringTokenizer(s, "(,)", true));
+    	return t;
     }
+
+	private static Tree<String> parseNewick(StringTokenizer st) {
+		String token = st.nextToken();
+		if(token.equals("(")) {
+			Tree<String> left = parseNewick(st);
+			String comma = st.nextToken();
+			Tree<String> right = parseNewick(st);
+			String close = st.nextToken();
+			String parent = st.nextToken();
+			String[] pieces = parent.split(";");
+			return new Tree<String>(pieces[0], left, right);
+		}else{
+			String[] pieces = token.split(";");
+			return new Tree<String>(pieces[0]);
+		}
+	}
+	
+	public static void main(String[] args) throws IOException {
+		Tree<String> t = createNewickTree("(d02,d03)d01;");
+		System.out.println(t.data);
+	}
 }
