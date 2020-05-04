@@ -15,6 +15,7 @@ public class Item {
 	boolean moved;
 	boolean vowel;
 	boolean plural;
+	boolean isContainer;
 
 	int weight;
 	
@@ -109,6 +110,15 @@ public class Item {
 
 	public void setPlural(boolean plural) {
 		this.plural = plural;
+		return;
+	}
+	
+	public boolean isContainer() {
+		return isContainer;
+	}
+	
+	public void setIsContainer(boolean isContainer) {
+		this.isContainer = isContainer;
 		return;
 	}
 

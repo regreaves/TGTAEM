@@ -13,6 +13,7 @@ import java.util.List;
 import command.Action;
 import command.Word;
 import objects.Item;
+import objects.ItemContainer;
 import objects.NPC;
 import objects.Player;
 import objects.Room;
@@ -105,6 +106,7 @@ public class DerbyDatabase {
 				PreparedStatement stmt12 = null;
 				PreparedStatement stmt13 = null;
 				PreparedStatement stmt14 = null;
+				PreparedStatement stmt15 = null;
         
 				try {
 					stmt1 = conn.prepareStatement( // words table
@@ -125,7 +127,7 @@ public class DerbyDatabase {
 					stmt4 = conn.prepareStatement( // items table
 							"create table items (" + " id varchar(5) primary key," + " name varchar(42),"
 									+ " init_dscrpt varchar(500)," + " invent_dscrpt varchar(500)," + " hidden boolean,"
-									+ " moved boolean," + " vowel boolean," + " plural boolean," + " weight int" + ")");
+									+ " moved boolean," + " vowel boolean," + " plural boolean," + " container boolean," + " weight int" + ")");
 					stmt4.executeUpdate();
 
 					stmt5 = conn.prepareStatement( // itemMap table
@@ -168,6 +170,10 @@ public class DerbyDatabase {
 							"create table actionLog (" + "	name varchar(42)," + " verb varchar(42),"
 									+ " noun varchar(42)," + " method varchar(42) " + ")");
 					stmt14.executeUpdate();
+					
+					stmt15 = conn.prepareStatement( //item containers table
+							"create table itemContainers (" + " id varchar(5)," + " maxWeight int" + ")");
+					stmt15.executeUpdate();
 
 					return true;
 				} finally { // close the things
@@ -182,8 +188,9 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt10);
 					DBUtil.closeQuietly(stmt11);
 					DBUtil.closeQuietly(stmt12);
-          DBUtil.closeQuietly(stmt13);
+					DBUtil.closeQuietly(stmt13);
 					DBUtil.closeQuietly(stmt14);
+					DBUtil.closeQuietly(stmt15);
 				}
 			}
 		});
@@ -203,6 +210,7 @@ public class DerbyDatabase {
 				List<Pair<String, String>> npcMap;
 				List<Pair<String, String>> shortcutList;
 				List<Pair<String, Pair<String, String>>> connections;
+				List<ItemContainer> containers;
 
 				try { // get info from csvs
 					wordList = InitialData.getWords();
@@ -215,6 +223,7 @@ public class DerbyDatabase {
 					npcMap = InitialData.getNPCMap();
 					shortcutList = InitialData.getShortcuts();
 					connections = InitialData.getConnections();
+					containers = InitialData.getItemContainers();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -229,6 +238,7 @@ public class DerbyDatabase {
 				PreparedStatement insertNpcMap = null;
 				PreparedStatement insertShortcut = null;
 				PreparedStatement insertConnection = null;
+				PreparedStatement insertContainer = null;
 
 				try {
 					// populate words table
@@ -270,8 +280,8 @@ public class DerbyDatabase {
 
 					// populate items table
 					insertItem = conn.prepareStatement(
-							"insert into items (id, name, init_dscrpt, invent_dscrpt, hidden, moved, vowel, plural, weight)"
-									+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+							"insert into items (id, name, init_dscrpt, invent_dscrpt, hidden, moved, vowel, plural, container, weight)"
+									+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 					for (Item item : itemList) {
 						insertItem.setString(1, item.getID());
 						insertItem.setString(2, item.getName());
@@ -281,7 +291,8 @@ public class DerbyDatabase {
 						insertItem.setBoolean(6, item.moved());
 						insertItem.setBoolean(7, item.vowel());
 						insertItem.setBoolean(8, item.plural());
-						insertItem.setInt(9, item.getWeight());
+						insertItem.setBoolean(9, item.isContainer());
+						insertItem.setInt(10, item.getWeight());
 						insertItem.addBatch();
 					}
 					insertItem.executeBatch();
@@ -352,6 +363,16 @@ public class DerbyDatabase {
 						insertConnection.addBatch();
 					}
 					insertConnection.executeBatch();
+					
+					// populate itemContainers table
+					insertContainer = conn.prepareStatement(
+							"insert into itemContainers (id, maxWeight)" + " values (?, ?)");
+					for (ItemContainer i : containers) {
+						insertContainer.setString(1, i.getID());
+						insertContainer.setInt(2, i.getMaxWeight());
+						insertContainer.addBatch();
+					}
+					insertContainer.executeBatch();
 
 					return true;
 				} finally { // close the things
@@ -365,6 +386,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertNpcMap);
 					DBUtil.closeQuietly(insertShortcut);
 					DBUtil.closeQuietly(insertConnection);
+					DBUtil.closeQuietly(insertContainer);
 				}
 			}
 		});
@@ -387,6 +409,7 @@ public class DerbyDatabase {
 				PreparedStatement tblConnections = null;
 				PreparedStatement tblLog = null;
 				PreparedStatement tblActionLog = null;
+				PreparedStatement tblItemContainers = null;
 
 				try {
 					tblWord = conn.prepareStatement("truncate table words");
@@ -427,6 +450,9 @@ public class DerbyDatabase {
 					
 					tblActionLog = conn.prepareStatement("truncate table actionLog");
 					tblActionLog.executeUpdate();
+					
+					tblItemContainers = conn.prepareStatement("truncate table itemContainers");
+					tblItemContainers.executeUpdate();
 
 					System.out.println("Tables cleared!"); // messages are good
 
@@ -444,6 +470,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblConnections);
 					DBUtil.closeQuietly(tblLog);
 					DBUtil.closeQuietly(tblActionLog);
+					DBUtil.closeQuietly(tblItemContainers);
 				}
 				return true;
 			}
@@ -682,7 +709,9 @@ public class DerbyDatabase {
 		return executeTransaction(new Transaction<ArrayList<Item>>() {
 			public ArrayList<Item> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
 				ResultSet resultSet = null;
+				ResultSet resultSet2 = null;
 				ArrayList<Item> items = new ArrayList<>();
 
 				try {
@@ -690,6 +719,7 @@ public class DerbyDatabase {
 					resultSet = stmt.executeQuery();
 
 					Boolean found = false; // for testing that a result was returned
+					Boolean found2 = false;
 					while (resultSet.next()) {
 						found = true;
 						Item i = new Item(); // create item
@@ -703,18 +733,49 @@ public class DerbyDatabase {
 						i.setMoved(resultSet.getBoolean("moved"));
 						i.setVowel(resultSet.getBoolean("vowel"));
 						i.setPlural(resultSet.getBoolean("plural"));
+						i.setIsContainer(resultSet.getBoolean("container"));
 						i.setWeight(resultSet.getInt("weight"));
+						
+						if (i.isContainer()) {
+							stmt2 = conn.prepareStatement("select * from itemContainers"); 
+							resultSet2 = stmt2.executeQuery();
+							
+							while (resultSet2.next()) {
+								found2 = true;
+								ItemContainer ic = new ItemContainer();
+								ic.setID(resultSet.getString("id"));
+								ic.setName(resultSet.getString("name"));
+								ic.setInitDscrpt(resultSet.getString("init_dscrpt"));
+								ic.setInventDscrpt(resultSet.getString("invent_dscrpt"));
+								ic.setHidden(resultSet.getBoolean("hidden"));
+								ic.setMoved(resultSet.getBoolean("moved"));
+								ic.setVowel(resultSet.getBoolean("vowel"));
+								ic.setPlural(resultSet.getBoolean("plural"));
+								ic.setIsContainer(resultSet.getBoolean("container"));
+								ic.setWeight(resultSet.getInt("weight"));
+								ic.setMaxWeight(resultSet2.getInt("maxWeight"));
+								
+								items.add(ic);
+							}
+						}
+						else {
 						items.add(i); // add item to list
+						}
 					}
 
 					// check items were found
 					if (!found) {
 						System.out.println("no items found");
 					}
+					if (!found2) {
+						System.out.println("no item containers found");
+					}
 					return items;
 				} finally { // close the things
 					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(resultSet2);
 					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2);
 				}
 			}
 		});
@@ -723,8 +784,11 @@ public class DerbyDatabase {
 	public void placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException { // place items in map
 		Connection conn = connect();
 		PreparedStatement stmt = null;
+		PreparedStatement stmt2 = null;
 		ResultSet resultSet = null;
+		ResultSet resultSet2 = null;
 		String itemID;
+		ArrayList<Pair<String, Item>> al = new ArrayList<>();
 
 		for (Item i : items) {
 			itemID = i.getID(); // get the item id
@@ -736,12 +800,36 @@ public class DerbyDatabase {
 
 				while (resultSet.next()) {
 					String loc = resultSet.getString("location"); // get the location id from the result
-					Room r = map.get(loc); // retrieve the room related to the id
-					r.addItem(i); // add the item to the room
+					if(loc.startsWith("i")) { 
+						Pair<String, Item> e = new Pair<>(loc, i); //create a new pair of IC ids and items
+						al.add(e); //add pair to arraylist
+					}
+					else {
+						Room r = map.get(loc); // retrieve the room related to the id
+						r.addItem(i); // add the item to the room
+					}
+				}
+				for (Pair<String, Item> p : al) { 
+					stmt2 = conn.prepareStatement("select location from itemMap where id = ?");
+					stmt2.setString(1, p.getLeft()); // set the blank as the IC id
+					resultSet2 = stmt2.executeQuery();
+					
+					while (resultSet2.next()) {
+						String loc2 = resultSet2.getString("location"); //get the location id from the result
+						Room r2 = map.get(loc2); 
+						ArrayList<Item> al2 = r2.getItems(); //get items from room
+						for (Item i2 : al2) {
+							if(i2.getID() == p.getLeft()) { 
+								((ItemContainer) i2).addItem(p.getRight()); //add item to itemContainer
+							}
+						}
+					}
 				}
 			} finally { // close the things
 				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(resultSet2);
 				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2);
 			}
 		}
 		conn.commit();
@@ -895,7 +983,7 @@ public class DerbyDatabase {
 
 					for (String id : ids) {
 						stmt2 = conn.prepareStatement(
-								"select name, init_dscrpt, invent_dscrpt, hidden, moved, vowel, plural, weight from items where id = ?");
+								"select name, init_dscrpt, invent_dscrpt, hidden, moved, vowel, plural, container, weight from items where id = ?");
 						stmt2.setString(1, id);
 						resultSet2 = stmt2.executeQuery();
 						Boolean found = false; // for testing that a result was returned
@@ -912,6 +1000,7 @@ public class DerbyDatabase {
 							i.setMoved(resultSet2.getBoolean("moved"));
 							i.setVowel(resultSet2.getBoolean("vowel"));
 							i.setPlural(resultSet2.getBoolean("plural"));
+							i.setIsContainer(resultSet2.getBoolean("container"));
 							i.setWeight(resultSet2.getInt("weight"));
 
 							inventory.add(i); // add item to list
@@ -1222,6 +1311,14 @@ public class DerbyDatabase {
 		db.loadInitialData();
 
 		System.out.println("Success!");
+		
+//		ArrayList<Item> items = db.getItems();
+//		for (Item i : items) {
+//			System.out.println("isContainer: " + i.isContainer() + "");
+//			if(i.isContainer()) {
+//				System.out.println("maxWeight: " + ((ItemContainer) i).getMaxWeight() + "");
+//			}
+//		}
 	}
 
 }
