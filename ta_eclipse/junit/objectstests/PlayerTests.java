@@ -19,7 +19,7 @@ public class PlayerTests {
 	
 	@Test
 	public void testCheckAlive() throws Exception {
-		assertEquals(true, player.checkAlive());
+		assertEquals(true, player.alive());
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class PlayerTests {
 	@Test
 	public void testKill() throws Exception {
 		player.kill();
-		assertEquals(false, player.checkAlive());
+		assertEquals(false, player.alive());
 	}
 	
 	@Test
