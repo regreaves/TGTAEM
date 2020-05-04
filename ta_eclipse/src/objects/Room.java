@@ -11,7 +11,6 @@ public class Room {
 	Connections connections = new Connections();
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
-	ArrayList<Player> players = new ArrayList<>();
 	boolean visited;
 	boolean dark;
 	boolean locked;
@@ -154,15 +153,6 @@ public class Room {
 	public void removeNPC(NPC npc) {
 		int x = this.npcs.indexOf(npc);
 		this.npcs.remove(x);
-		return;
-	}
-
-	public ArrayList<Player> getPlayers() {
-		return players;
-	}
-
-	public void addPlayer(Player player) {
-		this.players.add(player);
 		return;
 	}
 

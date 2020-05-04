@@ -17,10 +17,7 @@ public class Item {
 	boolean plural;
 
 	int weight;
-
-	ArrayList<Action> actions = new ArrayList<>();
-	ArrayList<Action> actionsDone = new ArrayList<>();
-
+	
 	public Item() {
 	}
 
@@ -67,19 +64,6 @@ public class Item {
 		return;
 	}
 
-	public ArrayList<Action> getActions() {
-		return actions;
-	}
-
-	public void addActions(ArrayList<Action> actions) {
-		this.actions.addAll(actions);
-		return;
-	}
-
-	public void removeAction(Action action) {
-		actions.remove(action);
-	}
-
 	public boolean critical() {
 		return critical;
 	}
@@ -108,15 +92,6 @@ public class Item {
 
 	public void move() {
 		moved = true;
-	}
-
-	public ArrayList<Action> getActionsDone() {
-		return actionsDone;
-	}
-
-	public void addActionDone(Action actionDone) {
-		this.actionsDone.add(actionDone);
-		return;
 	}
 
 	public boolean vowel() {

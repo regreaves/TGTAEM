@@ -14,7 +14,6 @@ import objects.Room;
 
 public class InitialData {
 	
-	//R
 	public static List<Pair<String, String>> getShortcuts() throws IOException {
 		List<Pair<String, String>> shortcutList = new ArrayList<>();
 		ReadCSV readShortcuts = new ReadCSV("shortcuts.csv");

@@ -1,7 +1,5 @@
 package objects;
 
-import java.util.ArrayList;
-
 public class Player extends Actor {
 	Inventory inventory;
 
@@ -14,30 +12,6 @@ public class Player extends Actor {
 		location = roomID;
 	}
 
-	public void checkInventory() {
-		System.out.println(inventory.displayInventory());
-		return;
-	}
-
-	// TODO: here or in inventory: max size check
-	public void get(Item i) {
-		inventory.addItem(i);
-	}
-
-	public void getAll(ArrayList<Item> i) {
-		inventory.addItems(i);
-	}
-
-	public Item drop(Item i) {
-		return inventory.dropItem(i);
-	}
-
-	public ArrayList<Item> dropAll() {
-		ArrayList<Item> i = inventory.getItems();
-		ArrayList<Item> x = new ArrayList<>();
-		inventory.setItems(x);
-		return i;
-	}
 
 	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
@@ -47,15 +21,7 @@ public class Player extends Actor {
 	public Inventory getInventory() {
 		return inventory;
 	}
-	
-	public void setLocation(String location) {
-		this.location = location;
-		return;
-	}
-	
-	public String getLocation() {
-		return this.location;
-	}
+
 	
 	public String toString()
 	{
