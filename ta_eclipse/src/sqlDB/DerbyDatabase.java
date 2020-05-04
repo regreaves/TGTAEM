@@ -97,7 +97,6 @@ public class DerbyDatabase {
 				PreparedStatement stmt3 = null;
 				PreparedStatement stmt4 = null;
 				PreparedStatement stmt5 = null;
-				PreparedStatement stmt6 = null;
 				PreparedStatement stmt7 = null;
 				PreparedStatement stmt8 = null;
 				PreparedStatement stmt9 = null;
@@ -132,10 +131,6 @@ public class DerbyDatabase {
 					stmt5 = conn.prepareStatement( // itemMap table
 							"create table itemMap (" + " id varchar(5) primary key," + " location varchar(5)" + ")");
 					stmt5.executeUpdate();
-
-					stmt6 = conn.prepareStatement( // itemAct table
-							"create table itemAct (" + " id varchar(5)," + " action varchar(42)" + ")");
-					stmt6.executeUpdate();
 
 					stmt7 = conn.prepareStatement( // inventory table
 							"create table invent ( id varchar(5))");
@@ -181,7 +176,6 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt3);
 					DBUtil.closeQuietly(stmt4);
 					DBUtil.closeQuietly(stmt5);
-					DBUtil.closeQuietly(stmt6);
 					DBUtil.closeQuietly(stmt7);
 					DBUtil.closeQuietly(stmt8);
 					DBUtil.closeQuietly(stmt9);
@@ -207,7 +201,6 @@ public class DerbyDatabase {
 				List<Player> playerList;
 				List<Pair<String, String>> itemMap;
 				List<Pair<String, String>> npcMap;
-				List<Pair<String, String>> itemAction;
 				List<Pair<String, String>> shortcutList;
 				List<Pair<String, Pair<String, String>>> connections;
 
@@ -220,7 +213,6 @@ public class DerbyDatabase {
 					playerList = InitialData.getPlayers();
 					itemMap = InitialData.getItemMap();
 					npcMap = InitialData.getNPCMap();
-					itemAction = InitialData.getItemActions();
 					shortcutList = InitialData.getShortcuts();
 					connections = InitialData.getConnections();
 				} catch (IOException e) {
@@ -235,7 +227,6 @@ public class DerbyDatabase {
 				PreparedStatement insertPlayer = null;
 				PreparedStatement insertItemMap = null;
 				PreparedStatement insertNpcMap = null;
-				PreparedStatement insertItemAction = null;
 				PreparedStatement insertShortcut = null;
 				PreparedStatement insertConnection = null;
 
@@ -341,15 +332,6 @@ public class DerbyDatabase {
 					}
 					insertNpcMap.executeBatch();
 
-					// populate item action table
-					insertItemAction = conn.prepareStatement("insert into itemAct (id, action)" + " values (?, ?)");
-					for (Pair<String, String> p : itemAction) {
-						insertItemAction.setString(1, p.getLeft());
-						insertItemAction.setString(2, p.getRight());
-						insertItemAction.addBatch();
-					}
-					insertItemAction.executeBatch();
-
 					// populate shortcut table
 					insertShortcut = conn
 							.prepareStatement("insert into shortcuts (shortcut, action)" + " values (?, ?)");
@@ -381,7 +363,6 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(insertPlayer);
 					DBUtil.closeQuietly(insertItemMap);
 					DBUtil.closeQuietly(insertNpcMap);
-					DBUtil.closeQuietly(insertItemAction);
 					DBUtil.closeQuietly(insertShortcut);
 					DBUtil.closeQuietly(insertConnection);
 				}
@@ -398,7 +379,6 @@ public class DerbyDatabase {
 				PreparedStatement tblRoom = null;
 				PreparedStatement tblItem = null;
 				PreparedStatement tblItemMap = null;
-				PreparedStatement tblItemAct = null;
 				PreparedStatement tblNpcs = null;
 				PreparedStatement tblPlayers = null;
 				PreparedStatement tblNpcMap = null;
@@ -423,9 +403,6 @@ public class DerbyDatabase {
 
 					tblItemMap = conn.prepareStatement("truncate table itemMap");
 					tblItemMap.executeUpdate();
-
-					tblItemAct = conn.prepareStatement("truncate table itemAct");
-					tblItemAct.executeUpdate();
 
 					tblNpcs = conn.prepareStatement("truncate table npcs");
 					tblNpcs.executeUpdate();
@@ -459,7 +436,6 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblRoom);
 					DBUtil.closeQuietly(tblItem);
 					DBUtil.closeQuietly(tblItemMap);
-					DBUtil.closeQuietly(tblItemAct);
 					DBUtil.closeQuietly(tblNpcs);
 					DBUtil.closeQuietly(tblPlayers);
 					DBUtil.closeQuietly(tblNpcMap);

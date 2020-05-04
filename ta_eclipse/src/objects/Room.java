@@ -156,7 +156,7 @@ public class Room {
 		this.npcs.remove(x);
 		return;
 	}
-
+	
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}

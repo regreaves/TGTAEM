@@ -97,7 +97,7 @@ public class Game {
 		return db.getLog();
 	}
 
-	public boolean isDone() {
+	public boolean done() {
 		return done;
 	}
 
