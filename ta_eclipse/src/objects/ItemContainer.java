@@ -28,8 +28,7 @@ public class ItemContainer extends Item {
 	}
 	
 	public void addItem(Item i) {
-		int x = weight + i.getWeight();
-		if(x <= maxWeight) {
+		if(i.getWeight() <= maxWeight) {
 			this.items.add(i);
 			weight += i.getWeight();
 			i.move();
@@ -38,12 +37,15 @@ public class ItemContainer extends Item {
 	
 	public Item removeItem(Item item) {
 		int x = this.items.indexOf(item);
-		weight -= item.getWeight();
 		return this.items.remove(x);
 	}
 	
 	public boolean hasSpace(Item item) {
-		int x = item.getWeight() + getWeight();
+		int x = 0;
+		for (Item i : items) {
+			x += i.getWeight();
+		}
+		x += item.getWeight();
 		if (x < this.maxWeight) {
 			return true;
 		} else {

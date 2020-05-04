@@ -1,26 +1,26 @@
-id|name|init|invent|hidden|moved|vowel|plural|weight
-i01|bed|Your bed is in the corner. It's very comfy.|It's calling you. You feel your eyes getting heavy.|0|0|0|0|1000
-i02|desk|Your desk is next to the window. It's bare, like the rest of your room. You still have a lot to unpack.|A cheap desk. Probably an ikea knockoff.|0|0|0|0|1000
-i03|laptop|Your trusty laptop is on your desk. You don't get internet or cell service out here though, so it's usefulness has been limited.|Your laptop. Surprisingly still has full charge.|0|0|0|0|3
-i04|window|null|Looking out the window you see your childhood swing set, the source of many fond memories. Maybe going outside would do you good. It looks like your dad has let the grass get long while you've been gone.|0|0|0|0|1000
-i05|jacket|You at least managed to hang up your jacket.|A sturdy jacket that protects you from the elements|0|0|0|0|3
-i06|flashlight|A flashlight sits on the shelf. Electricity isn't always a given out here, so it's always good to have a source of light.|A heavy duty flashlight. Probably could be used as a weapon in a pinch.|0|0|0|0|2
-i07|boxes|All the boxes you haven't unpacked yet are shoved in here too. You really should unpack them but you have no desire to.|You really should have labeled these boxes. You have no idea what's even in them any more. |0|0|0|1|1000
-i08|painting|A painting you made when you were four hangs on the wall. You don't even remember what is was supposed to be, but your dad loves it and refuses to take it down, despite your best efforts.|Exactly what most four year old's handiwork looks like; a random assortment of squiggly lines and colors.|0|0|0|0|1000
-i09|sink|null|It's a sink.|0|0|0|0|1000
-i10|toilet|null|It's a toilet. Probably could use a deep cleaning, but you aren't going to think about that too hard.|0|0|0|0|1000
-i11|shower|null|It's a shower.|0|0|0|0|1000
-i12|couch|There's an overstuffed couch here that you have definitely never fallen asleep on.|It's the comfiest couch in existence.|0|0|0|0|1000
-i13|TV|The TV is on some business channel. The host is droning on about numbers and statistics.|Your dad only ever watches one channel.|0|0|0|0|1000
-i14|remote|Where is the remote?|The remote for your living room TV. Generally useless without the TV.|1|0|0|0|1
-i15|desk|Your dad's desk sits in the corner.|A fancy hardwood desk. Probably an heirloom.|0|0|0|0|1000
-i16|piano|A piano sits against a wall. You took lessons once upon time.|An upright piano. You haven't played it in ages.|0|0|0|0|1000
-i17|PC|Your dad is always busy on his fancy PC, which makes no sense, since you don't have internet. You've never been able to figure out what he does on it though, as it is password protected.| Your dad's top-of-the-line PC. Can't use it without a password.|0|0|0|0|1000
-i18|table|Your kitchen table sits in the middle of the room.|A simple, blue table.|0|0|0|0|1000
-i19|apple|An apple waits for you on the table.|A delicious apple, left for you by your dad.|0|0|1|0|2
-i20|bench|A bench is pushed up against the house. Presumably one could watch the street from here. But again, nothing ever happens here.|A wooden bench. Kinda hard.|0|0|0|0|1000
-i21|mailbox|A standard white mailbox with a red flag stands at the end of the driveway. You wonder if you have any mail...|It's a mailbox.|0|0|0|0|1000
-i22|letter|null|A letter to you... from your dad? Why did he go through the trouble of mailing it?|0|0|0|1|1
-i23|swings|You spent many days on these swings, but you haven't been on them in ages. Hopefully they aren't rusted up.|Your childhood swing set.|0|0|0|0|1000
-i24|pikachu|null|A pikachu toy you thought you lost long ago. You swore it was real when you were a kid.|1|0|0|0|1
-i25|sword|null|A sword. An honest to goodness sword, you just found lying in your yard.|1|0|0|0|5
+id|name|init|invent|hidden|moved|vowel|plural|container|weight
+i01|bed|Your bed is in the corner. It's very comfy.|It's calling you. You feel your eyes getting heavy.|0|0|0|0|0|1000
+i02|desk|Your desk is next to the window. It's bare, like the rest of your room. You still have a lot to unpack.|A cheap desk. Probably an ikea knockoff.|0|0|0|0|0|1000
+i03|laptop|Your trusty laptop is on your desk. You don't get internet or cell service out here though, so it's usefulness has been limited.|Your laptop. Surprisingly still has full charge.|0|0|0|0|0|3
+i04|window|null|Looking out the window you see your childhood swing set, the source of many fond memories. Maybe going outside would do you good. It looks like your dad has let the grass get long while you've been gone.|0|0|0|0|0|1000
+i05|jacket|You at least managed to hang up your jacket.|A sturdy jacket that protects you from the elements|0|0|0|0|0|3
+i06|flashlight|A flashlight sits on the shelf. Electricity isn't always a given out here, so it's always good to have a source of light.|A heavy duty flashlight. Probably could be used as a weapon in a pinch.|0|0|0|0|0|2
+i07|boxes|All the boxes you haven't unpacked yet are shoved in here too. You really should unpack them but you have no desire to.|You really should have labeled these boxes. You have no idea what's even in them any more. |0|0|0|1|0|1000
+i08|painting|A painting you made when you were four hangs on the wall. You don't even remember what is was supposed to be, but your dad loves it and refuses to take it down, despite your best efforts.|Exactly what most four year old's handiwork looks like; a random assortment of squiggly lines and colors.|0|0|0|0|0|1000
+i09|sink|null|It's a sink.|0|0|0|0|0|1000
+i10|toilet|null|It's a toilet. Probably could use a deep cleaning, but you aren't going to think about that too hard.|0|0|0|0|0|1000
+i11|shower|null|It's a shower.|0|0|0|0|0|1000
+i12|couch|There's an overstuffed couch here that you have definitely never fallen asleep on.|It's the comfiest couch in existence.|0|0|0|0|0|1000
+i13|TV|The TV is on some business channel. The host is droning on about numbers and statistics.|Your dad only ever watches one channel.|0|0|0|0|0|1000
+i14|remote|Where is the remote?|The remote for your living room TV. Generally useless without the TV.|1|0|0|0|0|1
+i15|desk|Your dad's desk sits in the corner.|A fancy hardwood desk. Probably an heirloom.|0|0|0|0|0|1000
+i16|piano|A piano sits against a wall. You took lessons once upon time.|An upright piano. You haven't played it in ages.|0|0|0|0|0|1000
+i17|PC|Your dad is always busy on his fancy PC, which makes no sense, since you don't have internet. You've never been able to figure out what he does on it though, as it is password protected.| Your dad's top-of-the-line PC. Can't use it without a password.|0|0|0|0|0|1000
+i18|table|Your kitchen table sits in the middle of the room.|A simple, blue table.|0|0|0|0|0|1000
+i19|apple|An apple waits for you on the table.|A delicious apple, left for you by your dad.|0|0|1|0|0|2
+i20|bench|A bench is pushed up against the house. Presumably one could watch the street from here. But again, nothing ever happens here.|A wooden bench. Kinda hard.|0|0|0|0|0|1000
+i21|mailbox|A standard white mailbox with a red flag stands at the end of the driveway. You wonder if you have any mail...|It's a mailbox.|0|0|0|0|1|1000
+i22|letter|null|A letter to you... from your dad? Why did he go through the trouble of mailing it?|0|0|0|1|0|1
+i23|swings|You spent many days on these swings, but you haven't been on them in ages. Hopefully they aren't rusted up.|Your childhood swing set.|0|0|0|0|0|1000
+i24|pikachu|null|A pikachu toy you thought you lost long ago. You swore it was real when you were a kid.|1|0|0|0|0|1
+i25|sword|null|A sword. An honest to goodness sword, you just found lying in your yard.|1|0|0|0|0|5
