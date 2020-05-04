@@ -251,28 +251,6 @@ public class InitialData {
 			readNPCs.close();
 		}
 	}
-
-	public static List<Pair<String, String>> getItemActions() throws IOException {
-		List<Pair<String, String>> itemMap = new ArrayList<>();
-		ReadCSV readItems = new ReadCSV("items_actions.csv");
-		try {
-			readItems.next(); // skip headings
-			while (true) {
-				List<String> tuple = readItems.next();
-				if (tuple == null) {
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				String id = i.next();
-				String action = i.next();
-				Pair<String, String> p = new Pair<>(id, action);
-				itemMap.add(p);
-			}
-			return itemMap;
-		} finally {
-			readItems.close();
-		}
-	}
 	
 	public static List<Player> getPlayers() throws IOException {
 		List<Player> playerList = new ArrayList<Player>();
