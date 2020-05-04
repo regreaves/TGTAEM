@@ -21,7 +21,7 @@ public class ActorTests {
 	
 	@Test
 	public void testCheckAlive() throws Exception {
-		assertEquals(true, actor.checkAlive());
+		assertEquals(true, actor.alive());
 	}
 	
 	@Test
@@ -37,7 +37,7 @@ public class ActorTests {
 	@Test
 	public void testKill() throws Exception {
 		actor.kill();
-		assertEquals(false, actor.checkAlive());
+		assertEquals(false, actor.alive());
 	}
 	
 	@Test
