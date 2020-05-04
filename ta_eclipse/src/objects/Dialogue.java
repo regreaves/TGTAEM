@@ -1,26 +1,34 @@
 package objects;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.StringTokenizer;
 
+import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 //WORK IN PROGRESS
 public class Dialogue {
 	String id;
 	String dialogue;
 	String newickTree;
-	Tree<?> tree;
+	ArrayList<String> newickTreeList;
+	ArrayList<Tree<String>> tree;
 	HashMap<String, String> dialogueMap;
 	DerbyDatabase db;
 	
-	public Dialogue(){
-		tree = Tree.createNewickTree(newickTree);
+	public Dialogue() throws SQLException{
+		for(int i = 0; i < newickTreeList.size(); i++) {
+			newickTree = newickTreeList.get(i);
+			tree.add(i, Tree.createNewickTree(newickTree));
+			for(int j = 0; j < tree.size(); j++) {
+				id = tree.get(j).data;
+				if(id == db.getDialogue().get(j).getID()) {
+					dialogue = db.getDialogue().get(j).getDialogue();
+					dialogueMap.put(id, dialogue);
+				}
+			}
+		} 
 	}
 	
 	public void setID(String id){
@@ -43,11 +51,18 @@ public class Dialogue {
 	
 	public void setNewickTree(String newickTree){
 		this.newickTree = newickTree;
+		Tree.createNewickTree(newickTree);
 		return;
 	}
 	
 	public String getNewickTree(){
 		return this.newickTree;
 	}
-
+	
+	public static void main(String[] args) throws IOException, SQLException {
+		DatabaseProvider.setInstance(new DerbyDatabase());
+		DerbyDatabase db = DatabaseProvider.getInstance();
+		Dialogue d = new Dialogue(db);
+		System.out.println(d.getDialogue());
+	}
 }
