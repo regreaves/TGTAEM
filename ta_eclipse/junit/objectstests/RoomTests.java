@@ -44,6 +44,18 @@ public class RoomTests {
 		room1.setConnections(conn1);
 		room2.setConnections(conn2);
 		room3.setConnections(conn3);
+		
+		room1.setDark(false);
+		room2.setDark(false);
+		room3.setDark(false);
+		
+		room1.setLocked(false);
+		room2.setLocked(false);
+		room3.setLocked(false);
+		
+		room1.setTemp(0);
+		room2.setTemp(0);
+		room3.setTemp(0);
 	}
 	
 	@Test
@@ -116,5 +128,70 @@ public class RoomTests {
 		assertTrue(room1.getVisited());
 		assertTrue(room2.getVisited());
 		assertFalse(room3.getVisited());
+	}
+	
+	@Test
+	public void testDark() throws Exception {
+		assertFalse(room1.dark());
+		assertFalse(room2.dark());
+		assertFalse(room3.dark());
+	}
+	
+	@Test
+	public void testSetDark() throws Exception {
+		room1.setDark(true);
+		room2.setDark(true);
+		room3.setDark(true);
+		
+		assertTrue(room1.dark());
+		assertTrue(room2.dark());
+		assertTrue(room3.dark());
+	}
+	
+	@Test
+	public void testLocked() throws Exception {
+		assertFalse(room1.locked());
+		assertFalse(room2.locked());
+		assertFalse(room3.locked());
+	}
+	
+	@Test
+	public void testSetLocked() throws Exception {
+		room1.setLocked(true);
+		room2.setLocked(true);
+		room3.setLocked(true);
+		
+		assertTrue(room1.locked());
+		assertTrue(room2.locked());
+		assertTrue(room3.locked());
+	}
+	
+	@Test
+	public void testTemp() throws Exception {
+		assertEquals("", room1.temp());
+		assertEquals("", room2.temp());
+		assertEquals("", room3.temp());
+	}
+	
+	@Test
+	public void testSetTempInt() throws Exception {
+		room1.setTemp(1);
+		room2.setTemp(0);
+		room3.setTemp(-1);
+		
+		assertEquals("It is rather hot here.", room1.temp());
+		assertEquals("", room2.temp());
+		assertEquals("It is really cold here.", room3.temp());
+	}
+	
+	@Test
+	public void testSetTempString() throws Exception {
+		room1.setTemp("hot");
+		room2.setTemp("normal");
+		room3.setTemp("cold");
+		
+		assertEquals("hot", room1.temp());
+		assertEquals("normal", room2.temp());
+		assertEquals("cold", room3.temp());
 	}
 }

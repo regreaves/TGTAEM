@@ -3,7 +3,7 @@ package state;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
+
 
 import command.Action;
 import command.ActionLog;
@@ -13,7 +13,6 @@ import objects.Item;
 import objects.NPC;
 import objects.Player;
 import objects.Room;
-import sqlDB.DBUtil;
 import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 import actions.*;
@@ -65,7 +64,7 @@ public class Game {
 		db.clearAll();
 		db.fillAll();
 		remake();
-		db.addRowToLog("<br>" + loadRoom("1"));
+		db.addRowToLog(loadRoom("1"));
 	}
 
 	public void remake() throws SQLException {
@@ -98,7 +97,7 @@ public class Game {
 		return db.getLog();
 	}
 
-	public boolean isDone() {
+	public boolean done() {
 		return done;
 	}
 
@@ -108,7 +107,7 @@ public class Game {
 
 	public void setCommand(String command) {
 		this.command = command;
-		db.addRowToLog("<br>>" + command);
+		db.addRowToLog("<br><br>>" + command);
 
 	}
 

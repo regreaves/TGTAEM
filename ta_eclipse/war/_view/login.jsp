@@ -12,16 +12,14 @@ uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
   </head>
 
   <body>
-    <div id="outer">
       <div id="output">
-        <p>${log}</p>
+        <br>${log}</br>
         <form
-          id="myForm"
           action="${pageContext.servletContext.contextPath}/login"
           method="post"
         >
-          <input name="username" placeholder="Username:" value="student" autofocus />
-          <input name="password" placeholder="Password:" value="ycp" />
+          <input name="username" placeholder="Username:" value="Arthur Dent" />
+          <input name="password" type="password" placeholder="Password:" value="hitchhiker" autofocus/>
           <button type="submit" style="visibility: hidden;"></button>
         </form>
 
@@ -30,6 +28,5 @@ uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
         </c:if>
 
       </div>
-    </div>
   </body>
 </html>

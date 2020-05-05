@@ -15,12 +15,10 @@ public class Item {
 	boolean moved;
 	boolean vowel;
 	boolean plural;
+	boolean isContainer;
 
 	int weight;
-
-	ArrayList<Action> actions = new ArrayList<>();
-	ArrayList<Action> actionsDone = new ArrayList<>();
-
+	
 	public Item() {
 	}
 
@@ -67,19 +65,6 @@ public class Item {
 		return;
 	}
 
-	public ArrayList<Action> getActions() {
-		return actions;
-	}
-
-	public void addActions(ArrayList<Action> actions) {
-		this.actions.addAll(actions);
-		return;
-	}
-
-	public void removeAction(Action action) {
-		actions.remove(action);
-	}
-
 	public boolean critical() {
 		return critical;
 	}
@@ -110,15 +95,6 @@ public class Item {
 		moved = true;
 	}
 
-	public ArrayList<Action> getActionsDone() {
-		return actionsDone;
-	}
-
-	public void addActionDone(Action actionDone) {
-		this.actionsDone.add(actionDone);
-		return;
-	}
-
 	public boolean vowel() {
 		return vowel;
 	}
@@ -134,6 +110,15 @@ public class Item {
 
 	public void setPlural(boolean plural) {
 		this.plural = plural;
+		return;
+	}
+	
+	public boolean isContainer() {
+		return isContainer;
+	}
+	
+	public void setIsContainer(boolean isContainer) {
+		this.isContainer = isContainer;
 		return;
 	}
 

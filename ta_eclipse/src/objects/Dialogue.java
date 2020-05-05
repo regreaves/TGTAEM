@@ -13,16 +13,16 @@ public class Dialogue {
 	String dialogue;
 	String newickTree;
 	ArrayList<String> newickTreeList;
-	ArrayList<Tree<String>> tree;
+	ArrayList<Tree<String>> treeList;
 	HashMap<String, String> dialogueMap;
 	DerbyDatabase db;
 	
 	public Dialogue() throws SQLException{
 		for(int i = 0; i < newickTreeList.size(); i++) {
 			newickTree = newickTreeList.get(i);
-			tree.add(i, Tree.createNewickTree(newickTree));
-			for(int j = 0; j < tree.size(); j++) {
-				id = tree.get(j).data;
+			treeList.add(i, Tree.createNewickTree(newickTree));
+			for(int j = 0; j < treeList.size(); j++) {
+				id = treeList.get(j).data;
 				if(id == db.getDialogue().get(j).getID()) {
 					dialogue = db.getDialogue().get(j).getDialogue();
 					dialogueMap.put(id, dialogue);
@@ -62,7 +62,5 @@ public class Dialogue {
 	public static void main(String[] args) throws IOException, SQLException {
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		DerbyDatabase db = DatabaseProvider.getInstance();
-		Dialogue d = new Dialogue(db);
-		System.out.println(d.getDialogue());
 	}
 }

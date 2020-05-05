@@ -57,6 +57,10 @@ public class ItemTests {
 		axe.setPlural(false);
 		flower.setPlural(false);
 		
+		sword.setIsContainer(false);
+		axe.setIsContainer(false);
+		flower.setIsContainer(false);
+		
 		sword.setWeight(10);
 		axe.setWeight(20);
 		flower.setWeight(5);
@@ -200,6 +204,24 @@ public class ItemTests {
 		assertTrue(sword.plural());
 		assertTrue(axe.plural());
 		assertTrue(flower.plural());
+	}
+	
+	@Test
+	public void testGetIsContainer() throws Exception {
+		assertFalse(sword.isContainer());
+		assertFalse(axe.isContainer());
+		assertFalse(flower.isContainer());
+	}
+	
+	@Test
+	public void testSetIsContainer() throws Exception {
+		sword.setIsContainer(true);
+		axe.setIsContainer(true);
+		flower.setIsContainer(true);
+		
+		assertTrue(sword.isContainer());
+		assertTrue(axe.isContainer());
+		assertTrue(flower.isContainer());
 	}
 	
 	@Test

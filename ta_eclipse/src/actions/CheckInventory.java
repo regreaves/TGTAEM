@@ -12,7 +12,7 @@ public class CheckInventory implements Updater {
 	public void update(Game g, Action a) throws SQLException {
 		boolean empty = true;
 		if (a.noun().equals("inventory")) {
-			g.setOutput("<br>>Inventory: <br>");
+			g.setOutput("Inventory: <br>");
 			ArrayList<String> items = g.db.listInventory();
 			for (String i : items) {
 				empty = false;

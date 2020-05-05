@@ -8,13 +8,13 @@ import java.util.List;
 import command.Action;
 import command.Word;
 import objects.Item;
+import objects.ItemContainer;
 import objects.NPC;
 import objects.Player;
 import objects.Room;
 
 public class InitialData {
 	
-	//R
 	public static List<Pair<String, String>> getShortcuts() throws IOException {
 		List<Pair<String, String>> shortcutList = new ArrayList<>();
 		ReadCSV readShortcuts = new ReadCSV("shortcuts.csv");
@@ -103,11 +103,25 @@ public class InitialData {
 				if (x == 1) {
 					visited = true;
 				}
+				boolean dark = false;
+				x = Integer.parseInt(i.next());
+				if (x == 1) {
+					dark = true;
+				}
+				boolean locked = false;
+				x = Integer.parseInt(i.next());
+				if (x == 1) {
+					locked = true;
+				}
+				x = Integer.parseInt(i.next());
 				Room r = new Room();
 				r.setID(id);
 				r.setDisplayName(name);
 				r.setDescription(dscrpt);
 				r.setVisited(visited);
+				r.setDark(dark);
+				r.setLocked(locked);
+				r.setTemp(x);
 				roomList.add(r);
 			}
 			return roomList;
@@ -116,7 +130,7 @@ public class InitialData {
 		}
 	}
 
-	public static List<Item> getItems() throws IOException {
+	public static List<Item> getItems() throws IOException { 
 		List<Item> itemList = new ArrayList<Item>();
 		ReadCSV readItems = new ReadCSV("items.csv");
 		try {
@@ -138,6 +152,7 @@ public class InitialData {
 				boolean moved = false;
 				boolean vowel = false;
 				boolean plural = false;
+				boolean container = false;
 				int x = Integer.parseInt(i.next());
 				if (x == 1) {
 					hidden = true;
@@ -154,11 +169,17 @@ public class InitialData {
 				if (x == 1) {
 					plural = true;
 				}
+				x = Integer.parseInt(i.next());
+				if (x == 1) {
+					container = true;
+				}
 				item.setHidden(hidden);
 				item.setMoved(moved);
 				item.setVowel(vowel);
 				item.setPlural(plural);
+				item.setIsContainer(container);
 				item.setWeight(Integer.parseInt(i.next()));
+				
 				itemList.add(item);
 			}
 			return itemList;
@@ -238,28 +259,6 @@ public class InitialData {
 			readNPCs.close();
 		}
 	}
-
-	public static List<Pair<String, String>> getItemActions() throws IOException {
-		List<Pair<String, String>> itemMap = new ArrayList<>();
-		ReadCSV readItems = new ReadCSV("items_actions.csv");
-		try {
-			readItems.next(); // skip headings
-			while (true) {
-				List<String> tuple = readItems.next();
-				if (tuple == null) {
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				String id = i.next();
-				String action = i.next();
-				Pair<String, String> p = new Pair<>(id, action);
-				itemMap.add(p);
-			}
-			return itemMap;
-		} finally {
-			readItems.close();
-		}
-	}
 	
 	public static List<Player> getPlayers() throws IOException {
 		List<Player> playerList = new ArrayList<Player>();
@@ -286,6 +285,7 @@ public class InitialData {
 			readPlayers.close();
 		}
 	}	
+	
 	public static List<Pair<String, String>> getPlayerMap() throws IOException {
 		List<Pair<String, String>> playerMap = new ArrayList<>();
 		ReadCSV readPlayers = new ReadCSV("player_loc.csv");
@@ -381,12 +381,63 @@ public class InitialData {
 		}
 	}
 	
+	public static List<ItemContainer> getItemContainers() throws IOException {
+		List<ItemContainer> containers = new ArrayList<>();
+		ReadCSV readItemContainers = new ReadCSV("itemContainers.csv");
+		try {
+			while (true) {
+			readItemContainers.next(); //skip headings
+			List<String> tuple = readItemContainers.next();
+			if (tuple == null) {
+				break;
+			}
+			Iterator<String> i = tuple.iterator();
+			
+			ItemContainer ic = new ItemContainer();
+			
+			String id = i.next();
+			ic.setID(id);
+			ic.setMaxWeight(Integer.parseInt(i.next()));
+			containers.add(ic);
+			}
+			return containers;
+		} finally {
+			readItemContainers.close();
+		}
+	}
+	
+	public static List<Pair<String, String>> getNPCDialogueMap() throws IOException {
+		List<Pair<String, String>> npcDialogueMap = new ArrayList<>();
+		ReadCSV readDialogueMap = new ReadCSV("npcDialogueMap.csv");
+		try {
+			readDialogueMap.next(); // skip headings
+			while (true) {
+				List<String> tuple = readDialogueMap.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String npcID = i.next();
+				String dialogueID = i.next();
+				Pair<String, String> p = new Pair<>(npcID, dialogueID);
+				npcDialogueMap.add(p);
+			}
+			return npcDialogueMap;
+		} finally {
+			readDialogueMap.close();
+		}
+	}
+	
 	public static void main(String[] args) throws IOException {
-		List<Pair<String, String>> list = getShortcuts();
-		for(Pair<String, String> i : list) {
-			String s = i.getLeft();
-			String s2 = i.getRight();
-			System.out.println("-"+s + "-" + s2 + "-");
+		//List<Pair<String, String>> list = getShortcuts();
+		//for(Pair<String, String> i : list) {
+			//String s = i.getLeft();
+			//String s2 = i.getRight();
+			//System.out.println("-"+s + "-" + s2 + "-");
+		//}
+		List<Item> list = getItems();
+		for(Item i : list) {
+			System.out.println("" + i.isContainer() + "");
 		}
 		return;
 	}
