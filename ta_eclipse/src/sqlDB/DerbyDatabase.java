@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import command.Action;
 import command.Word;
 import objects.Dialogue;
@@ -18,6 +21,7 @@ import objects.ItemContainer;
 import objects.NPC;
 import objects.Player;
 import objects.Room;
+import state.Status;
 
 public class DerbyDatabase {
 	static {
@@ -178,6 +182,9 @@ public class DerbyDatabase {
 					stmt15 = conn.prepareStatement( //item containers table
 							"create table itemContainers (" + " id varchar(5)," + " maxWeight int" + ")");
 					stmt15.executeUpdate();
+					
+					stmt16 = conn.prepareStatement("create table status (" + "json varchar(10000)" + ")");
+					stmt16.executeUpdate();
 
 					stmt6 = conn.prepareStatement( // dialogue table
 							"create table dialogue (" + " id varchar(5)," + " dialogue varchar(500)" + ")");
@@ -471,7 +478,8 @@ public class DerbyDatabase {
 				PreparedStatement tblDialogueTrees = null;
 				PreparedStatement tblItemContainers = null;
 				PreparedStatement tblNpcDialogueMap = null;
-
+				PreparedStatement tblStatus = null;
+				
 				try {
 					tblWord = conn.prepareStatement("truncate table words");
 					tblWord.executeUpdate();
@@ -514,6 +522,9 @@ public class DerbyDatabase {
 					
 					tblItemContainers = conn.prepareStatement("truncate table itemContainers");
 					tblItemContainers.executeUpdate();
+					
+					tblStatus = conn.prepareStatement("truncate table status");
+					tblStatus.executeUpdate();
 
 					tblDialogue = conn.prepareStatement("truncate table dialogue");
 					tblDialogue.executeUpdate();
@@ -544,6 +555,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblDialogueTrees);
 					DBUtil.closeQuietly(tblItemContainers);
 					DBUtil.closeQuietly(tblNpcDialogueMap);
+					DBUtil.closeQuietly(tblStatus);
 				}
 				return true;
 			}
@@ -1371,6 +1383,59 @@ public class DerbyDatabase {
 				}
 
 				return actions; // return all actions
+			}
+		});
+	}
+	
+	public Integer saveStatus(String s) {
+		return executeTransaction(new Transaction<Integer>() {
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt0 = null;
+				PreparedStatement stmt = null;
+				System.out.println("Saving: " + s);
+				try {
+					stmt0 = conn.prepareStatement("truncate table status");
+					stmt0.executeUpdate();
+					stmt = conn.prepareStatement("insert into status (json) values (?)");
+					stmt.setString(1, s);
+					stmt.executeUpdate();
+					
+				} finally {
+					DBUtil.closeQuietly(stmt0);
+					DBUtil.closeQuietly(stmt);
+				}
+				return 1;
+			}
+		});
+	}
+	
+	public Status loadStatus() {
+		return executeTransaction(new Transaction<Status>() {
+			public Status execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet rs = null;
+				Status s = new Status();
+				try {
+					stmt = conn.prepareStatement("select json from status");
+					rs = stmt.executeQuery();
+					while(rs.next()) {
+						s = s.fromJSON(rs.getString("json"));
+					}
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				} finally {
+					DBUtil.closeQuietly(rs);
+					DBUtil.closeQuietly(stmt);
+				}
+				try {
+					System.out.println("Loaded: " + s.toJSON());
+				} catch (JsonProcessingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return s;
 			}
 		});
 	}

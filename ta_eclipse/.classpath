@@ -1,37 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="web"/>
-	<classpathentry kind="src" path="junit"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/jarLib"/>
-	<classpathentry kind="lib" path="lib/annotations/asm-5.1.jar"/>
-	<classpathentry kind="lib" path="lib/annotations/asm-commons-5.1.jar"/>
-	<classpathentry kind="lib" path="lib/annotations/javax.annotation-api-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/apache-jsp/org.eclipse.jdt.core.compiler.ecj-4.4.2.jar"/>
-	<classpathentry kind="lib" path="lib/apache-jsp/org.eclipse.jetty.apache-jsp-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/apache-jsp/org.mortbay.jasper.apache-el-8.5.9.1.jar"/>
-	<classpathentry kind="lib" path="lib/apache-jsp/org.mortbay.jasper.apache-jsp-8.5.9.1.jar"/>
-	<classpathentry kind="lib" path="lib/apache-jstl/org.apache.taglibs.taglibs-standard-impl-1.2.5.jar"/>
-	<classpathentry kind="lib" path="lib/apache-jstl/org.apache.taglibs.taglibs-standard-spec-1.2.5.jar"/>
-	<classpathentry kind="lib" path="lib/derby.jar"/>
-	<classpathentry kind="lib" path="lib/derbyclient.jar"/>
-	<classpathentry kind="lib" path="lib/derbynet.jar"/>
-	<classpathentry kind="lib" path="lib/derbyrun.jar"/>
-	<classpathentry kind="lib" path="lib/derbytools.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-annotations-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-http-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-io-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-jmx-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-plus-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-schemas-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-security-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-server-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-servlet-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-util-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-webapp-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-xml-9.4.3.v20170317.jar"/>
-	<classpathentry kind="lib" path="lib/servlet-api-3.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jarLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
