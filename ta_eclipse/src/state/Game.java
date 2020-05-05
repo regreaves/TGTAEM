@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import command.Action;
 import command.ActionLog;
@@ -30,7 +31,7 @@ public class Game {
 	ArrayList<NPC> npcs = new ArrayList<>();
 
 	public ActionLog al = new ActionLog();
-	public Status s = new Status();
+	public Status status = new Status();
 
 	boolean done = false;
 
@@ -54,6 +55,7 @@ public class Game {
 			db.addConnections(map);
 			inventory().addItems(db.getInventory());
 			al.setHistory(db.getActionLog());
+			status = db.loadStatus();
 			getUpdates();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -159,7 +161,7 @@ public class Game {
 	}
 
 	// get output from action
-	public String getAction() throws SQLException {
+	public String getAction() throws SQLException, JsonProcessingException {
 		String s = "";
 		Action a = parse(command);
 		if (a != null) {
@@ -169,7 +171,9 @@ public class Game {
 		} else {
 			s = "I don't understand \"" + command + "." + '\"' + " Please try something else.";
 		}
+		status.advance();
 		db.addRowToLog("<br>" + s);
+		db.saveStatus(status.toJSON());
 		return s;
 	}
 
