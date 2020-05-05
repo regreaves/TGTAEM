@@ -68,7 +68,7 @@ public class TextOnly implements Updater {
 			break;
 		case "wash hands":
 			if (g.here().equals("4")) {
-				if (g.s.sink) {
+				if (g.status.isSink()) {
 					g.setOutput("You wash your hands. No viruses getting you today!");
 				} else {
 					g.setOutput("Kinda hard to wash your hands when you haven't turned the sink on...");
@@ -79,7 +79,7 @@ public class TextOnly implements Updater {
 			break;
 		case "wash face":
 			if (g.here().equals("4")) {
-				if (g.s.sink) {
+				if (g.status.isSink()) {
 					g.setOutput("You wash your face. You feel refreshed.");
 				} else {
 					g.setOutput("Kinda hard to wash your face when you haven't turned the sink on...");
@@ -104,13 +104,13 @@ public class TextOnly implements Updater {
 			break;
 		case "get in shower":
 			if (g.here().equals("4")) {
-				if (g.s.shower) {
-					if (g.s.clothes) {
+				if (g.status.isShower()) {
+					if (g.status.isClothes()) {
 						g.setOutput("It would be weird to take a shower with your clothes on.");
 					} else {
 						g.setOutput(
 								"It feels nice to let the water run over you. It's easy to let time pass in the shower.");
-						g.s.wet = true;
+						g.status.setWet(true);
 					}
 				} else {
 					g.setOutput("You stand in the shower. The water is off. Why are you in the shower?");
@@ -120,12 +120,12 @@ public class TextOnly implements Updater {
 			}
 			break;
 		case "dry off":
-			if (g.s.wet) {
+			if (g.status.isWet()) {
 				if (!g.inventory().hasItem("towel")) {
 					g.setOutput("You need a towel to dry off.");
 				} else {
 					g.setOutput("You are now dry and clean. You feel great.");
-					g.s.wet = false;
+					g.status.setWet(false);
 				}
 			} else {
 				g.setOutput("How are you going to dry off if you aren't wet?");
@@ -181,7 +181,7 @@ public class TextOnly implements Updater {
 								+ "-- If you have a key, it will automatically open its door when you GO through it."
 								+ "<br>" + "There is more that you will discover along the way, kiddo. You'll do great."
 								+ "<br>" + "Good Luck," + "<br>" + "Dad" + "</em>" + "<br>"
-								+ "Well that was a lot. Some of it you definitely wish you had known " + g.s.move
+								+ "Well that was a lot. Some of it you definitely wish you had known " + g.status.getMove()
 								+ " turns ago. Some of it made no sense at all."
 								+ "But that's Dad for you. You put the letter back in your pocket.");
 			} else {

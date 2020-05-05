@@ -18,8 +18,8 @@ uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
           action="${pageContext.servletContext.contextPath}/login"
           method="post"
         >
-          <input name="username" placeholder="Username:" value="Arthur Dent" />
-          <input name="password" type="password" placeholder="Password:" value="hitchhiker" autofocus/>
+          <input name="username" placeholder="Username:" value="Arthur Dent" autofocus/>
+          <input name="password" type="password" placeholder="Password:" value="hitchhiker"/>
           <button type="submit" style="visibility: hidden;"></button>
         </form>
 

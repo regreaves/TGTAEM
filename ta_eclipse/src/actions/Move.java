@@ -11,9 +11,9 @@ public class Move implements Updater {
 	@Override
 	public void update(Game g, Action a) throws SQLException {
 		String id = g.room().getDestination(a.getName());
-		if (!g.s.clothes) {
+		if (!g.status.isClothes()) {
 			g.setOutput("You aren't going anywhere until you put your clothes back on.");
-		} else if (g.s.sitting) {
+		} else if (g.status.isSitting()) {
 			g.setOutput("You can't move while you're sitting. Why don't you try to STAND UP?");
 		} else if (id.equals("0")) {
 			g.setOutput("You can't go that way.");

@@ -33,6 +33,8 @@ public class Status {
 	boolean flood;
 
 	public Status() {
+		clothes = true;
+		TV = true;
 	}
 
 	public boolean advance() {
