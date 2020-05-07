@@ -168,7 +168,7 @@ public class DerbyDatabase {
 					stmt12.executeUpdate();
 
 					stmt13 = conn.prepareStatement( // log table
-							"create table log (" + "log_row varchar(1000)" + ")");
+							"create table log (" + "log_row varchar(10000)" + ")");
 					stmt13.executeUpdate();
 					
 					stmt14 = conn.prepareStatement( // action log table
@@ -795,59 +795,64 @@ public class DerbyDatabase {
 		});
 	}
 
-	public void placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException { // place items in map
-		Connection conn = connect();
-		PreparedStatement stmt = null;
-		PreparedStatement stmt2 = null;
-		ResultSet resultSet = null;
-		ResultSet resultSet2 = null;
-		String itemID;
-		ArrayList<Pair<String, Item>> al = new ArrayList<>();
+	public Integer placeItems(HashMap<String, Room> map, ArrayList<Item> items) { // place items in map
+		return executeTransaction(new Transaction<Integer>() {
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+				ResultSet resultSet2 = null;
+				String itemID;
+				ArrayList<Pair<String, Item>> al = new ArrayList<>();
 
-		for (Item i : items) {
-			itemID = i.getID(); // get the item id
+				for (Item i : items) {
+					itemID = i.getID(); // get the item id
 
-			try { // get the location for the given id
-				stmt = conn.prepareStatement("select location from itemMap where id = ?");
-				stmt.setString(1, itemID); // set the blank as the id
-				resultSet = stmt.executeQuery();
+					try { // get the location for the given id
+						stmt = conn.prepareStatement("select location from itemMap where id = ?");
+						stmt.setString(1, itemID); // set the blank as the id
+						resultSet = stmt.executeQuery();
 
-				while (resultSet.next()) {
-					String loc = resultSet.getString("location"); // get the location id from the result
-					if(loc.startsWith("i")) { 
-						Pair<String, Item> e = new Pair<>(loc, i); //create a new pair of IC ids and items
-						al.add(e); //add pair to arraylist
-					}
-					else {
-						Room r = map.get(loc); // retrieve the room related to the id
-						r.addItem(i); // add the item to the room
-					}
-				}
-				for (Pair<String, Item> p : al) { 
-					stmt2 = conn.prepareStatement("select location from itemMap where id = ?");
-					stmt2.setString(1, p.getLeft()); // set the blank as the IC id
-					resultSet2 = stmt2.executeQuery();
-					
-					while (resultSet2.next()) {
-						String loc2 = resultSet2.getString("location"); //get the location id from the result
-						Room r2 = map.get(loc2); 
-						ArrayList<Item> al2 = r2.getItems(); //get items from room
-						for (Item i2 : al2) {
-							if(i2.getID() == p.getLeft()) { 
-								((ItemContainer) i2).addItem(p.getRight()); //add item to itemContainer
+						while (resultSet.next()) {
+							String loc = resultSet.getString("location"); // get the location id from the result
+							if(loc.startsWith("i")) { 
+								Pair<String, Item> e = new Pair<>(loc, i); //create a new pair of IC ids and items
+								al.add(e); //add pair to arraylist
+							} else {
+								Room r = map.get(loc); // retrieve the room related to the id
+								r.addItem(i); // add the item to the room
 							}
 						}
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					} 
+				}
+				for (Pair<String, Item> p : al) { 
+					try {
+						stmt2 = conn.prepareStatement("select location from itemMap where id = ?");
+						stmt2.setString(1, p.getLeft()); // set the blank as the IC id
+						resultSet2 = stmt2.executeQuery();
+					
+						while (resultSet2.next()) {
+							String loc2 = resultSet2.getString("location"); //get the location id from the result
+							Room r2 = map.get(loc2); 
+							ArrayList<Item> al2 = r2.getItems(); //get items from room
+							for (Item i2 : al2) {
+								if(i2.getID().equals(p.getLeft())) { 
+									((ItemContainer)i2).addItem(p.getRight()); //add item to itemContainer
+								}
+							}
+						}
+					} finally { // close the things
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(resultSet2);
+						DBUtil.closeQuietly(stmt);
+						DBUtil.closeQuietly(stmt2);
 					}
 				}
-			} finally { // close the things
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(resultSet2);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(stmt2);
-			}
-		}
-		conn.commit();
-		DBUtil.closeQuietly(conn);
+				return 1;
+			}});
 	}
 
 	public String takeItem(String id) { // let player take item into inventory

@@ -93,6 +93,7 @@ public class Game {
 		updates.put(Examine.name, new Examine());
 		updates.put(TextOnly.name, new TextOnly());
 		updates.put(Switch.name, new Switch());
+		updates.put(OpenContainer.name, new OpenContainer());
 	}
 	
 	public String getLog() {

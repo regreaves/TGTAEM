@@ -130,5 +130,21 @@ public class Item {
 		this.weight = itemWeight;
 		return;
 	}
+	
+	static public ItemContainer makeItemContainer(Item item) {
+		ItemContainer ic = new ItemContainer();
+		ic.setName(item.name);
+		ic.setID(item.id);
+		ic.setInitDscrpt(item.init_dscrpt);
+		ic.setInventDscrpt(item.invent_dscrpt);
+		ic.setCritical(item.critical);
+		ic.setHidden(item.hidden);
+		ic.setMoved(item.moved);
+		ic.setVowel(item.vowel);
+		ic.setPlural(item.plural);
+		ic.setIsContainer(item.isContainer);
+		ic.setWeight(item.weight);
+		return ic;
+	}
 
 }
