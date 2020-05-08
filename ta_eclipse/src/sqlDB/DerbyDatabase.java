@@ -168,7 +168,7 @@ public class DerbyDatabase {
 					stmt12.executeUpdate();
 
 					stmt13 = conn.prepareStatement( // log table
-							"create table log (" + "log_row varchar(10000)" + ")");
+							"create table log (" + "log_row varchar(1000)" + ")");
 					stmt13.executeUpdate();
 					
 					stmt14 = conn.prepareStatement( // action log table
@@ -496,6 +496,96 @@ public class DerbyDatabase {
 		System.out.println("Tables made!"); // messages are good
 	}
 
+	public void dropTables() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement tblWord = null;
+				PreparedStatement tblAct = null;
+				PreparedStatement tblRoom = null;
+				PreparedStatement tblItem = null;
+				PreparedStatement tblItemMap = null;
+				PreparedStatement tblNpcs = null;
+				PreparedStatement tblPlayers = null;
+				PreparedStatement tblNpcMap = null;
+				PreparedStatement tblInvent = null;
+				PreparedStatement tblShortcut = null;
+				PreparedStatement tblConnections = null;
+				PreparedStatement tblLog = null;
+				PreparedStatement tblActionLog = null;
+				PreparedStatement tblItemContainers = null;
+				PreparedStatement tblStatus = null;
+
+				try {
+					tblWord = conn.prepareStatement("drop table words");
+					tblWord.executeUpdate();
+
+					tblAct = conn.prepareStatement("drop table actions");
+					tblAct.executeUpdate();
+
+					tblRoom = conn.prepareStatement("drop table rooms");
+					tblRoom.executeUpdate();
+
+					tblItem = conn.prepareStatement("drop table items");
+					tblItem.executeUpdate();
+
+					tblItemMap = conn.prepareStatement("drop table itemMap");
+					tblItemMap.executeUpdate();
+
+					tblNpcs = conn.prepareStatement("drop table npcs");
+					tblNpcs.executeUpdate();
+
+					tblPlayers = conn.prepareStatement("drop table player");
+					tblPlayers.executeUpdate();
+
+					tblNpcMap = conn.prepareStatement("drop table npcMap");
+					tblNpcMap.executeUpdate();
+
+					tblInvent = conn.prepareStatement("drop table invent");
+					tblInvent.executeUpdate();
+
+					tblShortcut = conn.prepareStatement("drop table shortcuts");
+					tblShortcut.execute();
+
+					tblConnections = conn.prepareStatement("drop table connections");
+					tblConnections.executeUpdate();
+
+					tblLog = conn.prepareStatement("drop table log");
+					tblLog.executeUpdate();
+					
+					tblActionLog = conn.prepareStatement("drop table actionLog");
+					tblActionLog.executeUpdate();
+					
+					tblItemContainers = conn.prepareStatement("drop table itemContainers");
+					tblItemContainers.executeUpdate();
+					
+					tblStatus = conn.prepareStatement("drop table status");
+					tblStatus.executeUpdate();
+
+					System.out.println("Tables dropped!"); // messages are good
+
+				} finally { // close the things
+					DBUtil.closeQuietly(tblWord);
+					DBUtil.closeQuietly(tblAct);
+					DBUtil.closeQuietly(tblRoom);
+					DBUtil.closeQuietly(tblItem);
+					DBUtil.closeQuietly(tblItemMap);
+					DBUtil.closeQuietly(tblNpcs);
+					DBUtil.closeQuietly(tblPlayers);
+					DBUtil.closeQuietly(tblNpcMap);
+					DBUtil.closeQuietly(tblInvent);
+					DBUtil.closeQuietly(tblShortcut);
+					DBUtil.closeQuietly(tblConnections);
+					DBUtil.closeQuietly(tblLog);
+					DBUtil.closeQuietly(tblActionLog);
+					DBUtil.closeQuietly(tblItemContainers);
+					DBUtil.closeQuietly(tblStatus);
+				}
+				return true;
+			}
+		});
+	}
+	
 	public void addRowToLog(String row) {
 		executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
@@ -795,64 +885,61 @@ public class DerbyDatabase {
 		});
 	}
 
-	public Integer placeItems(HashMap<String, Room> map, ArrayList<Item> items) { // place items in map
-		return executeTransaction(new Transaction<Integer>() {
-			public Integer execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-				ResultSet resultSet2 = null;
-				String itemID;
-				ArrayList<Pair<String, Item>> al = new ArrayList<>();
+	public boolean placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException { // place items in map
+		Connection conn = connect();
+		PreparedStatement stmt = null;
+		PreparedStatement stmt2 = null;
+		ResultSet resultSet = null;
+		ResultSet resultSet2 = null;
+		String itemID;
+		ArrayList<Pair<String, Item>> al = new ArrayList<>();
 
-				for (Item i : items) {
-					itemID = i.getID(); // get the item id
+		for (Item i : items) {
+			itemID = i.getID(); // get the item id
 
-					try { // get the location for the given id
-						stmt = conn.prepareStatement("select location from itemMap where id = ?");
-						stmt.setString(1, itemID); // set the blank as the id
-						resultSet = stmt.executeQuery();
+			try { // get the location for the given id
+				stmt = conn.prepareStatement("select location from itemMap where id = ?");
+				stmt.setString(1, itemID); // set the blank as the id
+				resultSet = stmt.executeQuery();
 
-						while (resultSet.next()) {
-							String loc = resultSet.getString("location"); // get the location id from the result
-							if(loc.startsWith("i")) { 
-								Pair<String, Item> e = new Pair<>(loc, i); //create a new pair of IC ids and items
-								al.add(e); //add pair to arraylist
-							} else {
-								Room r = map.get(loc); // retrieve the room related to the id
-								r.addItem(i); // add the item to the room
-							}
-						}
-					} finally {
-						DBUtil.closeQuietly(resultSet);
-						DBUtil.closeQuietly(stmt);
-					} 
-				}
-				for (Pair<String, Item> p : al) { 
-					try {
-						stmt2 = conn.prepareStatement("select location from itemMap where id = ?");
-						stmt2.setString(1, p.getLeft()); // set the blank as the IC id
-						resultSet2 = stmt2.executeQuery();
-					
-						while (resultSet2.next()) {
-							String loc2 = resultSet2.getString("location"); //get the location id from the result
-							Room r2 = map.get(loc2); 
-							ArrayList<Item> al2 = r2.getItems(); //get items from room
-							for (Item i2 : al2) {
-								if(i2.getID().equals(p.getLeft())) { 
-									((ItemContainer)i2).addItem(p.getRight()); //add item to itemContainer
-								}
-							}
-						}
-					} finally { // close the things
-						DBUtil.closeQuietly(resultSet);
-						DBUtil.closeQuietly(resultSet2);
-						DBUtil.closeQuietly(stmt);
-						DBUtil.closeQuietly(stmt2);
+				while (resultSet.next()) {
+					String loc = resultSet.getString("location"); // get the location id from the result
+					if(loc.startsWith("i")) { 
+						Pair<String, Item> e = new Pair<>(loc, i); //create a new pair of IC ids and items
+						al.add(e); //add pair to arraylist
+					}
+					else {
+						Room r = map.get(loc); // retrieve the room related to the id
+						r.addItem(i); // add the item to the room
 					}
 				}
-				return 1;
-			}});
+				for (Pair<String, Item> p : al) { 
+					stmt2 = conn.prepareStatement("select location from itemMap where id = ?");
+					stmt2.setString(1, p.getLeft()); // set the blank as the IC id
+					resultSet2 = stmt2.executeQuery();
+					
+					while (resultSet2.next()) {
+						String loc2 = resultSet2.getString("location"); //get the location id from the result
+						Room r2 = map.get(loc2); 
+						ArrayList<Item> al2 = r2.getItems(); //get items from room
+						for (Item i2 : al2) {
+							if(i2.getID() == p.getLeft()) { 
+								((ItemContainer) i2).addItem(p.getRight()); //add item to itemContainer
+							}
+						}
+					}
+				}
+			} finally { // close the things
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(resultSet2);
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2);
+			}
+		}
+		conn.commit();
+		DBUtil.closeQuietly(conn);
+		
+		return true;
 	}
 
 	public String takeItem(String id) { // let player take item into inventory
