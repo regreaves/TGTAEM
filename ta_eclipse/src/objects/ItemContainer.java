@@ -28,11 +28,11 @@ public class ItemContainer extends Item {
 	}
 	
 	public void addItem(Item i) {
-		if(i.getWeight() <= maxWeight) {
+		//if(i.getWeight() <= maxWeight) {
 			this.items.add(i);
-			weight += i.getWeight();
+			//weight += i.getWeight();
 			i.move();
-		}
+		//}
 	}
 	
 	public Item removeItem(Item item) {
