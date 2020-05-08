@@ -1458,22 +1458,10 @@ public class DerbyDatabase {
 
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
-		System.out.println("Creating tables...");
 		DerbyDatabase db = new DerbyDatabase();
+
 		db.createTables();
-
-		System.out.println("Loading initial data...");
 		db.loadInitialData();
-
-		System.out.println("Success!");
-		
-//		ArrayList<Item> items = db.getItems();
-//		for (Item i : items) {
-//			System.out.println("isContainer: " + i.isContainer() + "");
-//			if(i.isContainer()) {
-//				System.out.println("maxWeight: " + ((ItemContainer) i).getMaxWeight() + "");
-//			}
-//		}
 	}
 
 }

@@ -21,7 +21,7 @@ import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 
 public class DerbyDatabaseTests {
-
+	
 	private static DerbyDatabase db = new DerbyDatabase();
 
 	private ArrayList<Action> actionList = null;
@@ -32,6 +32,10 @@ public class DerbyDatabaseTests {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		System.out.println(">><<>><<>><<>><><<>><<>><<>><<");
+		System.out.println("<<    DERBYDATABASETESTS    >>");
+		System.out.println(">><<>><<>><<>><><<>><<>><<>><<");
+
 		db.createTables();
 		db.fillAll();
 	}
@@ -58,12 +62,11 @@ public class DerbyDatabaseTests {
 		System.out.println("\n> TESTING String sqlDB.DerbyDatabase.getVerbs():\n");
 
 		System.out.println("  Trying db.getVerbs(\"tenderize\")...");
-
 		System.out.println("  " + db.getVerbs("tenderize"));
+
 		System.out.println();
 
 		System.out.println("  Trying db.getVerbs(\"wear\")...");
-
 		System.out.println("  " + db.getVerbs("wear"));
 
 		System.out.println();
