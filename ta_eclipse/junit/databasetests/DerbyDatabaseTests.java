@@ -21,7 +21,7 @@ import sqlDB.DatabaseProvider;
 import sqlDB.DerbyDatabase;
 
 public class DerbyDatabaseTests {
-	
+
 	private static DerbyDatabase db = new DerbyDatabase();
 
 	private ArrayList<Action> actionList = null;
@@ -32,17 +32,25 @@ public class DerbyDatabaseTests {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		System.out.println(">><<>><<>><<>><><<>><<>><<>><<");
-		System.out.println("<<    DERBYDATABASETESTS    >>");
-		System.out.println(">><<>><<>><<>><><<>><<>><<>><<");
+		System.out.println("  " + "******************************");
+		System.out.println("  " + "**    DERBYDATABASETESTS    **");
+		System.out.println("  " + "******************************");
+		System.out.println("\n");
 
+		System.out.print("- " + "Creating the database tables..." + " ");
 		db.createTables();
+		System.out.print("Created.\n");
+
+		System.out.print("- " + "Filling the database tables..." + " ");
 		db.fillAll();
+		System.out.print("Filled.\n\n");
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
+		System.out.print("- " + "Dropping the database tables..." + " ");
 		db.dropTables();
+		System.out.print("Dropped.\n");
 	}
 
 	@Before
@@ -53,8 +61,13 @@ public class DerbyDatabaseTests {
 
 	@After
 	public void tearDown() throws Exception {
+		System.out.print("- " + "Clearing the database tables..." + " ");
 		db.clearAll();
+		System.out.print("Cleared.\n");
+
+		System.out.print("- " + "Filling the database tables..." + " ");
 		db.fillAll();
+		System.out.print("Filled.\n\n");
 	}
 
 	@Test
@@ -62,12 +75,23 @@ public class DerbyDatabaseTests {
 		System.out.println("\n> TESTING String sqlDB.DerbyDatabase.getVerbs():\n");
 
 		System.out.println("  Trying db.getVerbs(\"tenderize\")...");
-		System.out.println("  " + db.getVerbs("tenderize"));
+		System.out.println("  " + "Result: " + "<" + db.getVerbs("tenderize") + ">");
 
 		System.out.println();
 
 		System.out.println("  Trying db.getVerbs(\"wear\")...");
-		System.out.println("  " + db.getVerbs("wear"));
+		System.out.println("  " + "Result: " + "<" + db.getVerbs("wear") + ">");
+
+		System.out.println();
+
+		if ((db.getVerbs("tenderize").isEmpty()) && (!db.getVerbs("wear").isEmpty())) {
+			System.out.println("  " + "Test successful!");
+		} else {
+			System.out.println("  " + "Test failed.");
+		}
+
+		assertEquals(db.getVerbs("tenderize").isEmpty(), true);
+		assertEquals(db.getVerbs("wear").isEmpty(), false);
 
 		System.out.println();
 	}
@@ -92,7 +116,8 @@ public class DerbyDatabaseTests {
 			if ((i == 1) || (i == 2) || (i == 3) || (i == (map.size() - 2)) || (i == (map.size() - 1))
 					|| (i == map.size())) {
 				System.out.format(
-						"  " + "%2s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + "%n",
+						"  " + "%2s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s"
+								+ "%n",
 						map.get(Integer.toString(i)).getID(), map.get(Integer.toString(i)).getDisplayName(),
 						map.get(Integer.toString(i)).getDescription(), map.get(Integer.toString(i)).getVisited(),
 						map.get(Integer.toString(i)).dark(), map.get(Integer.toString(i)).locked(),
@@ -108,17 +133,19 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testSetVisited() {
 		System.out.println("\n> TESTING String sqlDB.DerbyDatabase.setVisited(String id):\n");
-		
-		System.out.println("  Trying db.setVisited(\"1\")...\n");
-		
+
+		System.out.println("  " + "Trying db.setVisited(\"1\")...\n");
+
 		db.setVisited("1");
-		
-		System.out.println("  db.getMap().get(\"1\").getVisited() = " + "<" + db.getMap().get("1").getVisited() + ">");
-		
+
+		System.out.println("  " + "Result: " + "<" + db.getMap().get("1").getVisited() + ">");
+
+		System.out.println();
+
 		if (db.getMap().get("1").getVisited()) {
-			System.out.println("      Success!");
+			System.out.println("  " + "Test successful!");
 		} else {
-			System.out.println("      Failure.");
+			System.out.println("  " + "Test failed.");
 		}
 
 		System.out.println();
@@ -135,8 +162,8 @@ public class DerbyDatabaseTests {
 		for (int i = 0; i < actionList.size(); i++) {
 			if ((i == 0) || (i == 1) || (i == 2) || (i == (actionList.size() - 3)) || (i == (actionList.size() - 2))
 					|| (i == (actionList.size() - 1))) {
-				System.out.format("  " + "%03d" + ". " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + "%n",
-						i, actionList.get(i).getName(), actionList.get(i).getVerb().getPrime(),
+				System.out.format("  " + "%03d" + ". " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + "%n", i,
+						actionList.get(i).getName(), actionList.get(i).getVerb().getPrime(),
 						actionList.get(i).getNoun().getPrime(), actionList.get(i).getMethod());
 			} else if (i == (actionList.size() / 2)) {
 				System.out.println("         ...");
@@ -168,11 +195,13 @@ public class DerbyDatabaseTests {
 		for (int i = 0; i < itemList.size(); i++) {
 			if ((i == 0) || (i == 1) || (i == 2) || (i == (itemList.size() - 3)) || (i == (itemList.size() - 2))
 					|| (i == (itemList.size() - 1))) {
-			System.out.format(
-					"  " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", "
-							+ "%s" + ", " + "%s" + ", " + "%s" + "%n",
-							itemList.get(i).getID(), itemList.get(i).getName(), itemList.get(i).getInitDscrpt(), itemList.get(i).getInventDscrpt(), itemList.get(i).hidden(),
-					itemList.get(i).moved(), itemList.get(i).vowel(), itemList.get(i).plural(), itemList.get(i).isContainer(), itemList.get(i).getWeight());
+				System.out.format(
+						"  " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s"
+								+ ", " + "%s" + ", " + "%s" + ", " + "%s" + "%n",
+						itemList.get(i).getID(), itemList.get(i).getName(), itemList.get(i).getInitDscrpt(),
+						itemList.get(i).getInventDscrpt(), itemList.get(i).hidden(), itemList.get(i).moved(),
+						itemList.get(i).vowel(), itemList.get(i).plural(), itemList.get(i).isContainer(),
+						itemList.get(i).getWeight());
 			} else if (i == (itemList.size() / 2)) {
 				System.out.println("         ...");
 			}
@@ -186,13 +215,14 @@ public class DerbyDatabaseTests {
 	 */
 	@Test
 	public void testPlaceItems() throws SQLException {
-		System.out.println("\n> TESTING boolean sqlDB.DerbyDatabase.placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException:\n");
+		System.out.println(
+				"\n> TESTING boolean sqlDB.DerbyDatabase.placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException:\n");
 
 		map = db.getMap();
 		itemList = db.getItems();
 
 		System.out.println("  ** See DerbyDatabaseTests.testPlaceItems() comment. **");
-		
+
 		System.out.println();
 
 		assertTrue(db.placeItems(map, itemList));
