@@ -699,10 +699,6 @@ public class DerbyDatabase {
 						words.add(resultSet.getString(1)); // add result to word list
 					}
 
-					// check if no verbs found
-					if (!found) {
-						System.out.println("<" + prime + "> was not found in the words table");
-					}
 					return words; // return the words
 				} finally { // close the things
 					DBUtil.closeQuietly(resultSet);

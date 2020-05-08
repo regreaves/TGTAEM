@@ -53,8 +53,28 @@ public class DerbyDatabaseTests {
 		db.fillAll();
 	}
 
+	@Test
+	public void testGetVerbs() {
+		System.out.println("\n> TESTING String sqlDB.DerbyDatabase.getVerbs():\n");
+
+		System.out.println("  Trying db.getVerbs(\"tenderize\")...");
+
+		System.out.println("  " + db.getVerbs("tenderize"));
+		System.out.println();
+
+		System.out.println("  Trying db.getVerbs(\"wear\")...");
+
+		System.out.println("  " + db.getVerbs("wear"));
+
+		System.out.println();
+	}
+
+	@Test
 	public void testGetLog() {
 		System.out.println("\n> TESTING String sqlDB.DerbyDatabase.getLog():\n");
+
+		db.addRowToLog("  " + "ha!");
+		System.out.println(db.getLog());
 
 		System.out.println();
 	}
