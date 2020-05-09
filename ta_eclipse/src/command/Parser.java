@@ -6,29 +6,22 @@ import java.util.HashMap;
 import sqlDB.DerbyDatabase;
 
 public class Parser {
-	ArrayList<Action> actionBank = new ArrayList<>();
-	HashMap<String, Action> actionBankMap = new HashMap<>();
-	DerbyDatabase db;
+	ArrayList<Action> actionBank = new ArrayList<>(); // list of all actions
+	HashMap<String, Action> actionBankMap = new HashMap<>(); // map of <action.name, actions>
+	DerbyDatabase db; // database reference
 
-	public Parser(DerbyDatabase db) {
+	public Parser(DerbyDatabase db) { // constructor
 		this.db = db;
-		this.actionBank = db.getActions();
-
-		// wjen map make sure all keys are lowercase
+		this.actionBank = db.getActions(); // get actions from database
 	}
 
-	public void printActions() {
+	public void printActions() { // print all actions in the actionBank
 		for (Action a : actionBank) {
 			System.out.println(a.toString());
 		}
 	}
 
-	// this is a terrible way to search
-	// if you have a better idea lemme know.
-	public Action getAction(String input) {
-		// make input lowercase
-//		then only map.get is needed to lookup action
-
+	public Action getAction(String input) { // match input to action or alt name, return matching action
 		for (Action a : actionBank) {
 			for (String alt : a.getAltNames()) {
 				if (input.equalsIgnoreCase(alt)) {
@@ -38,12 +31,4 @@ public class Parser {
 		}
 		return null;
 	}
-	
-
-	public static void main(String[] args) {
-		//Parser p = new Parser();
-		//Action a = p.getAction("Jump on bed");
-		//System.out.println(a);
-	}
-
 }

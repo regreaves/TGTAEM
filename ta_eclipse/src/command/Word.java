@@ -8,7 +8,7 @@ public class Word {
 	boolean isNoun = false;
 	boolean isPrime = false;
 
-	public Word(String name, String prime, int type) {
+	public Word(String name, String prime, int type) { // constructor
 		this.name = name;
 		this.prime = prime;
 		this.type = type;
