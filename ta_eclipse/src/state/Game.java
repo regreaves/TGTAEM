@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import command.Action;
 import command.ActionLog;
 import command.Parser;
+import objects.Dialogue;
 import objects.Inventory;
 import objects.Item;
 import objects.NPC;
@@ -26,9 +27,11 @@ public class Game {
 	HashMap<String, String> shortcuts = new HashMap<>(); // Map of <shortcut, action.name>
 	public HashMap<String, Room> map = new HashMap<>(); // Map of <Room.id, Room>
 	HashMap<String, Updater> updates = new HashMap<>(); // map of <Updater.name, Updater>
+	public HashMap<String, Dialogue> dialogue = new HashMap<>();
 
 	ArrayList<Item> items = new ArrayList<>(); // all items in game
 	ArrayList<NPC> npcs = new ArrayList<>(); // all NPCs in game
+	public ArrayList<String> dialogueTrees = new ArrayList<>();
 
 	public ActionLog al = new ActionLog(); // log of all actions performed by user
 	public Status status = new Status(); // the current status of the game
@@ -48,6 +51,9 @@ public class Game {
 			map = db.getMap();
 			items = db.getItems();
 			npcs = db.getNPCs();
+			dialogue = db.getDialogue();
+			dialogueTrees = db.getDialogueTree();
+			db.placeDialogue(dialogue, npcs);
 			db.placePlayer(map, player); // place player in map
 			db.placeItems(map, items); // place items in rooms
 			db.placeNPCs(map, npcs); // place npcs in rooms
@@ -92,6 +98,8 @@ public class Game {
 		updates.put(Examine.name, new Examine());
 		updates.put(TextOnly.name, new TextOnly());
 		updates.put(Switch.name, new Switch());
+		updates.put(Talk.name, new Talk());
+		updates.put(DialogueHandler.name, new DialogueHandler());
 		updates.put(OpenContainer.name, new OpenContainer());
 	}
 
@@ -164,7 +172,11 @@ public class Game {
 	public String getAction() throws SQLException, JsonProcessingException {
 		String s = "";
 		Action a = parse(command);
-		if (a != null) {
+		if(status.isDialogue() == true) {
+			Updater u = updates.get("dialogue");
+			u.update(this, al.lastAction());
+			s = output;
+		} else if (a != null) {
 			al.addAction(a);
 			db.addAction(a);
 			s = performAction(a);
