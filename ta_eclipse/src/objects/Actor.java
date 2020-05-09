@@ -7,14 +7,14 @@ import java.util.ArrayList;
 
 public class Actor
 {
-  String location;
-  String id;
-  int health;
-  int attack;
-  int defense;
-  boolean alive;
+  String location; //room where the actor is
+  String id; // reference to the actor
+  int health; // health stat
+  int attack; // attack stat
+  int defense; // defense stat
+  boolean alive; // living or dead boolean
 
-  public Actor() {
+  public Actor() { //POJO
 	
   }
 
@@ -67,7 +67,7 @@ public class Actor
 	return;
   }
 
-  public void kill() {
+  public void kill() { // sets alive to false, effectively killing the Actor
 	this.alive = false;
     return;
   }

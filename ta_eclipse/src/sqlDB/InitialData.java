@@ -339,6 +339,48 @@ public class InitialData {
 		}
 	}
 	
+	public static List<Pair<String, String>> getDialogue() throws IOException {
+		List<Pair<String, String>> dialogueList = new ArrayList<Pair<String, String>>();
+		ReadCSV readDialogue = new ReadCSV("dialogue.csv");
+		try {
+			readDialogue.next(); // skip headings
+			while (true) {
+				List<String> tuple = readDialogue.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String id = i.next();
+				String dialogue = i.next();
+				Pair<String, String> p = new Pair<>(id, dialogue);
+				dialogueList.add(p);
+			}
+			return dialogueList;
+		} finally {
+			readDialogue.close();
+		}
+	}
+	
+	public static List<String> getDialogueTree() throws IOException {
+		List<String> dialogueTreeList = new ArrayList<String>();
+		ReadCSV readDialogueTree = new ReadCSV("dialogue_tree.csv");
+		try {
+			readDialogueTree.next(); // skip headings
+			while (true) {
+				List<String> tuple = readDialogueTree.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String newickTree = i.next();
+				dialogueTreeList.add(newickTree);
+			}
+			return dialogueTreeList;
+		} finally {
+			readDialogueTree.close();
+		}
+	}
+	
 	public static List<ItemContainer> getItemContainers() throws IOException {
 		List<ItemContainer> containers = new ArrayList<>();
 		ReadCSV readItemContainers = new ReadCSV("itemContainers.csv");
@@ -361,6 +403,28 @@ public class InitialData {
 			return containers;
 		} finally {
 			readItemContainers.close();
+		}
+	}
+	
+	public static List<Pair<String, String>> getNPCDialogueMap() throws IOException {
+		List<Pair<String, String>> npcDialogueMap = new ArrayList<>();
+		ReadCSV readDialogueMap = new ReadCSV("npcDialogueMap.csv");
+		try {
+			readDialogueMap.next(); // skip headings
+			while (true) {
+				List<String> tuple = readDialogueMap.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				String npcID = i.next();
+				String dialogueID = i.next();
+				Pair<String, String> p = new Pair<>(npcID, dialogueID);
+				npcDialogueMap.add(p);
+			}
+			return npcDialogueMap;
+		} finally {
+			readDialogueMap.close();
 		}
 	}
 	

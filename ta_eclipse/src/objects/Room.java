@@ -5,81 +5,81 @@ import java.util.ArrayList;
 import command.Action;
 
 public class Room {
-	String ID;
-	String displayName;
-	String description;
-	Connections connections = new Connections();
-	ArrayList<Item> items = new ArrayList<>();
-	ArrayList<NPC> npcs = new ArrayList<>();
-	ArrayList<Player> players = new ArrayList<>();
-	boolean visited;
-	boolean dark;
-	boolean locked;
-	String temp;
+	String ID; //the room's id
+	String displayName; //the room's display name
+	String description; //the room's description
+	Connections connections = new Connections(); //the room's connections to other rooms
+	ArrayList<Item> items = new ArrayList<>(); //an arraylist of items in the room
+	ArrayList<NPC> npcs = new ArrayList<>(); //an arraylist of npcs in the room
+	ArrayList<Player> players = new ArrayList<>(); //an arraylist of players in the room
+	boolean visited; //whether the room has been visited by the player or not
+	boolean dark; //whether the room is dark or not
+	boolean locked; //whether the room is locked or not
+	String temp; //the room's temperature description
 
 	public Room() {
 
 	}
 
-	public String loadRoom() {
+	public String loadRoom() { //returns the description the player sees when first visiting a room
 		String dscrpt = displayName;
-		if (!visited) {
+		if (!visited) { //if the room hasn't been visited
 
-			if(dark) {
+			if(dark) { //if the room is dark, add related text
 				dscrpt += ":<br>" +  "It is dark here. You can see nothing. You are likely to be eaten by a grue.";
-				if(!temp.equals("")){
+				if(!temp.equals("")){ //if temperature doesn't equal nothing, output related text
 					dscrpt += " " + temp;
 				}	
-				return dscrpt;
+				return dscrpt; //return the description
 			}
-			dscrpt += ":<br>" + this.description;
-			for (Item i : items) {
-				if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
-					dscrpt += " " + i.init_dscrpt;
-				} else if (i.moved() && !(i.vowel()) && !(i.plural())) {
-					dscrpt += " There is a " + i.getName() + " here.";
-				} else if (i.moved() && i.vowel() && !(i.plural())) {
-					dscrpt += " There is an " + i.getName() + " here.";
-				} else if (i.moved() && i.plural()) {
-					dscrpt += " There are " + i.getName() + " here.";
+			dscrpt += ":<br>" + this.description; //add the room description after the display name
+			for (Item i : items) { //for each item within items
+				if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) { //if there is an initial description and the item hasn't been moved
+					dscrpt += " " + i.init_dscrpt; //add the item's initial description to the room's description
+				} else if (i.moved() && !(i.vowel()) && !(i.plural())) { //if the item has been moved and isn't a vowel or plural
+					dscrpt += " There is a " + i.getName() + " here."; //add the appropriate text
+				} else if (i.moved() && i.vowel() && !(i.plural())) { //if the item has been moved and is a vowel but not plural
+					dscrpt += " There is an " + i.getName() + " here."; //add the appropriate text
+				} else if (i.moved() && i.plural()) { //if the item has been moved and is plural
+					dscrpt += " There are " + i.getName() + " here."; //add the appropriate text 
 				}
 			}
-			for (NPC n : npcs) {
-				if (!(n.description.contentEquals("null"))) {
-					dscrpt += " " + n.description;
+			for (NPC n : npcs) { //for each npc with npcs
+				if (!(n.description.contentEquals("null"))) { //if npc has a description
+					dscrpt += " " + n.description; //add npc description
 				}
 			}
-			if(!temp.equals("")){
-				dscrpt += " " + temp;
+			if(!temp.equals("")){ //if temp does not equal nothing
+				dscrpt += " " + temp; //add temp description
 			}	
 		}
-		return dscrpt;
+		return dscrpt; //return the description
 	}
 
-	public String look() {
-		String dscrpt = this.description;
-		if(!temp.equals("")){
-			dscrpt += " " + temp;
+	public String look() { //returns the description of the room + items + npcs seen by the player
+		String dscrpt = this.description; //get the room's description
+		if(!temp.equals("")){ //if temp does not equal nothing
+			dscrpt += " " + temp; //add temp description
 		}	
-		if(dark) {
+		if(dark) { //if the room is dark, add related text
 			dscrpt += " It is dark here. You can see nothing. You are likely to be eaten by a grue.";
-			return dscrpt;
+			return dscrpt; //return the description
 		}
-		for (Item i : items) {
-			if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) {
-				dscrpt += " " + i.init_dscrpt;
-			} else if (i.moved() && !(i.vowel()) && !(i.plural())) {
-				dscrpt += " There is a " + i.getName() + " here.";
-			} else if (i.moved() && i.vowel() && !(i.plural())) {
-				dscrpt += " There is an " + i.getName() + " here.";
-			} else if (i.moved() && i.plural()) {
-				dscrpt += " There are " + i.getName() + " here.";
+		for (Item i : items) { //for each item within items
+			if (!(i.init_dscrpt.contentEquals("null")) && !(i.moved())) { //if there is an initial description and the item hasn't been moved
+				dscrpt += " " + i.init_dscrpt; //add the item's initial description to the room's description
+			} else if (i.moved() && !(i.vowel()) && !(i.plural())) { //if the item has been moved and isn't a vowel or plural
+				dscrpt += " There is a " + i.getName() + " here."; //add the appropriate text
+			} else if (i.moved() && i.vowel() && !(i.plural())) { //if the item has been moved and is a vowel but not plural
+				dscrpt += " There is an " + i.getName() + " here."; //add the appropriate text
+			} else if (i.moved() && i.plural()) { //if the item has been moved and is plural
+				dscrpt += " There are " + i.getName() + " here."; //add the appropriate text
 			}
 		}
-		for (NPC n : npcs) {
-			dscrpt += " There is a " + n.getName() + " here.";
+		for (NPC n : npcs) { //for each npc in npcs
+			dscrpt += " There is a " + n.getName() + " here."; //add the appropriate text
 		}
-		return dscrpt;
+		return dscrpt; //return the description
 	}
 
 	public String getID() {
@@ -109,7 +109,7 @@ public class Room {
 		return;
 	}
 
-	public void addDescription(String description) {
+	public void addDescription(String description) { //adds description to the room's current description
 		this.description += description;
 		return;
 	}
@@ -127,17 +127,17 @@ public class Room {
 		return items;
 	}
 
-	public void addItems(ArrayList<Item> items) {
+	public void addItems(ArrayList<Item> items) { //adds items to the room
 		items.forEach(this::addItem); // #swag
 		return;
 	}
 
-	public void addItem(Item item) {
+	public void addItem(Item item) { //adds an item to the room
 		this.items.add(item);
 		return;
 	}
 
-	public Item removeItem(Item item) {
+	public Item removeItem(Item item) { //removes an item from the room
 		int x = this.items.indexOf(item);
 		return this.items.remove(x);
 	}
@@ -146,12 +146,12 @@ public class Room {
 		return npcs;
 	}
 
-	public void addNPC(NPC npc) {
+	public void addNPC(NPC npc) { //adds an npc to the room
 		this.npcs.add(npc);
 		return;
 	}
 
-	public void removeNPC(NPC npc) {
+	public void removeNPC(NPC npc) { //removes an npc from the room
 		int x = this.npcs.indexOf(npc);
 		this.npcs.remove(x);
 		return;
@@ -161,7 +161,7 @@ public class Room {
 		return players;
 	}
 
-	public void addPlayer(Player player) {
+	public void addPlayer(Player player) { //adds a player to the room
 		this.players.add(player);
 		return;
 	}
@@ -175,7 +175,7 @@ public class Room {
 		return;
 	}
 
-	public void addConnection(String action, String destination) {
+	public void addConnection(String action, String destination) { //adds a connection to the room
 		this.connections.put(action, destination);
 		return;
 	}

@@ -3,20 +3,20 @@ package command;
 import java.util.ArrayList;
 
 public class Action {
-	String name;
-	Word verb;
-	Word noun;
-	ArrayList<String> altNames = new ArrayList<>();
-	String method;
+	String name; // the verb+noun combo
+	Word verb;	// verb part, can include preposition
+	Word noun;	// noun part, can include adjective
+	ArrayList<String> altNames = new ArrayList<>(); // names constructed of synonyms that will trigger the same action
+	String method;	// reference to the updater method that the action triggers
 
-	public Action(String name, Word verb, Word noun, String method) {
+	public Action(String name, Word verb, Word noun, String method) { // constructor
 		this.name = name;
 		this.verb = verb;
 		this.noun = noun;
 		this.method = method;
 	}
 
-	public String getName() {
+	public String getName() { 
 		return name;
 	}
 
@@ -28,11 +28,11 @@ public class Action {
 		return noun;
 	}
 
-	public String verb() {
+	public String verb() {  // get the stringified verb
 		return verb.getPrime();
 	}
 
-	public String noun() {
+	public String noun() { // get the stringified noun 
 		return noun.getPrime();
 	}
 
@@ -50,7 +50,7 @@ public class Action {
 	}
 
 	@Override
-	public String toString() {
+	public String toString() { // returns name | verb | noun | method, followed by all alt names
 		String a = this.name + " | " + this.verb.getName() + " | " + this.noun.getName() + " | " + this.method + "\n";
 		a += "Alt: ";
 		for (String alt : this.altNames) {
