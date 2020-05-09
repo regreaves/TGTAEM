@@ -81,9 +81,12 @@ public class Game {
 		player = db.getPlayer();
 		items = db.getItems();
 		npcs = db.getNPCs();
+		dialogue = db.getDialogue();
+		dialogueTrees = db.getDialogueTree();
 		db.placePlayer(map, player);
 		db.placeItems(map, items);
 		db.placeNPCs(map, npcs);
+		db.placeDialogue(dialogue, npcs);
 		shortcuts = db.getShortcuts();
 		db.addConnections(map);
 		getUpdates();
