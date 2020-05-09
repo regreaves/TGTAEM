@@ -1,27 +1,26 @@
 package objects;
 
-import java.util.ArrayList;
-
-import command.Action;
-import objects.Room;
-
 public class NPC extends Actor
 {
+	//Name of npc, used in actions
 	String name;
+	//Description of npc, used in examining npc
 	String description;
+	//ID of the initial line of dialogue for the npc
 	String dialogueID;
+	//The initial dialogue objects for the npc
 	Dialogue dialogue;
 
   public NPC() {
 
-  	}
+  }
 
-  
   public void setDescription(String description) {
 	this.description = description;
     return;
   }
 
+  //This does not do anything
   public void addDescription(String description) {
     return;
   }
@@ -49,23 +48,11 @@ public class NPC extends Actor
   }
   
   public void setDialogue(Dialogue dialogue) {
-		this.dialogue = dialogue;
-	    return;
-	  }
-
-	  public Dialogue getDialogue() {
-	    return this.dialogue;
-	  }
-  
-  
-/*
-  public void setFriendly(boolean friend) {
-	this.friend = friend;
+	this.dialogue = dialogue;
     return;
   }
 
-  public ArrayList<String> getDialogue() {
-    return this.dialogueBank;
+  public Dialogue getDialogue() {
+    return this.dialogue;
   }
-*/
 }

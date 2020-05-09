@@ -3,32 +3,23 @@ package objects;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import sqlDB.DatabaseProvider;
-import sqlDB.DerbyDatabase;
-//WORK IN PROGRESS
 public class Dialogue {
+	//Unique ID for each line of dialogue
 	String id;
+	//The actual dialogue string
 	String dialogue;
+	//Newick tree that gets parsed into a tree
 	String newickTree;
-	ArrayList<String> newickTreeList;
-	ArrayList<Tree<String>> treeList;
-	HashMap<String, String> dialogueMap;
-	DerbyDatabase db;
+	//List of newick tree strings, this is not used
+	ArrayList<String> newickTreeList = new ArrayList<String>();
+	//List of all trees with strings, used after iterating a tree
+	ArrayList<Tree<String>> treeList = new ArrayList<Tree<String>>();
+	//List of all dialogue strings
+	ArrayList<String> dialogueList = new ArrayList<String>();
 	
-	public Dialogue() throws SQLException{
-		for(int i = 0; i < newickTreeList.size(); i++) {
-			newickTree = newickTreeList.get(i);
-			treeList.add(i, Tree.createNewickTree(newickTree));
-			for(int j = 0; j < treeList.size(); j++) {
-				id = treeList.get(j).data;
-				if(id == db.getDialogue().get(j).getID()) {
-					dialogue = db.getDialogue().get(j).getDialogue();
-					dialogueMap.put(id, dialogue);
-				}
-			}
-		} 
+	public Dialogue(){
+		
 	}
 	
 	public void setID(String id){
@@ -51,7 +42,6 @@ public class Dialogue {
 	
 	public void setNewickTree(String newickTree){
 		this.newickTree = newickTree;
-		Tree.createNewickTree(newickTree);
 		return;
 	}
 	
@@ -59,8 +49,45 @@ public class Dialogue {
 		return this.newickTree;
 	}
 	
+	//Takes newick tree string, creates a tree with it, iterates the tree into a list, pulls all the strings from the list
+	public void parseNewickTree(String newickTree) {
+		Tree<String> t = Tree.createNewickTree(newickTree);
+		this.setTreeList(Tree.iterateTree(t));
+		for(int i = 0; i < this.treeList.size(); i++) {
+			this.dialogueList.add(this.treeList.get(i).data);
+		}
+		return;
+	}
+	
+	public void setTreeList(ArrayList<Tree<String>> treeList){
+		this.treeList = treeList;
+		return;
+	}
+	
+	public ArrayList<Tree<String>> getTreeList(){
+		return this.treeList;
+	}
+	
+	
+	public void setDialogueList(ArrayList<String> dialogueList){
+		this.dialogueList = dialogueList;
+		return;
+	}
+	
+	public ArrayList<String> getDialogueList(){
+		return this.dialogueList;
+	}
+	
+	//This is not used
+	public String getDialogueFromId(String id){
+		if(this.id.equals(id)) {
+			return this.dialogue;
+		} else {
+			return null;
+		}
+	}
+	
 	public static void main(String[] args) throws IOException, SQLException {
-		DatabaseProvider.setInstance(new DerbyDatabase());
-		DerbyDatabase db = DatabaseProvider.getInstance();
+
 	}
 }

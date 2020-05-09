@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import command.Action;
 import command.ActionLog;
 import command.Parser;
+import objects.Dialogue;
 import objects.Inventory;
 import objects.Item;
 import objects.NPC;
@@ -26,9 +27,12 @@ public class Game {
 	HashMap<String, String> shortcuts = new HashMap<>();
 	public HashMap<String, Room> map = new HashMap<>();
 	HashMap<String, Updater> updates = new HashMap<>();
+	public HashMap<String, Dialogue> dialogue = new HashMap<>();
 
 	ArrayList<Item> items = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<>();
+	public ArrayList<String> dialogueTrees = new ArrayList<>();
+	
 
 	public ActionLog al = new ActionLog();
 	public Status status = new Status();
@@ -48,9 +52,12 @@ public class Game {
 			map = db.getMap();
 			items = db.getItems();
 			npcs = db.getNPCs();
+			dialogue = db.getDialogue();
+			dialogueTrees = db.getDialogueTree();
 			db.placePlayer(map, player);
 			db.placeItems(map, items);
 			db.placeNPCs(map, npcs);
+			db.placeDialogue(dialogue, npcs);
 			shortcuts = db.getShortcuts();
 			db.addConnections(map);
 			inventory().addItems(db.getInventory());
@@ -93,6 +100,8 @@ public class Game {
 		updates.put(Examine.name, new Examine());
 		updates.put(TextOnly.name, new TextOnly());
 		updates.put(Switch.name, new Switch());
+		updates.put(Talk.name, new Talk());
+		updates.put(DialogueHandler.name, new DialogueHandler());
 	}
 	
 	public String getLog() {
@@ -164,7 +173,11 @@ public class Game {
 	public String getAction() throws SQLException, JsonProcessingException {
 		String s = "";
 		Action a = parse(command);
-		if (a != null) {
+		if(status.isDialogue() == true) {
+			Updater u = updates.get("dialogue");
+			u.update(this, al.lastAction());
+			s = output;
+		} else if (a != null) {
 			al.addAction(a);
 			db.addAction(a);
 			s = performAction(a);

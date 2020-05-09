@@ -1,4 +1,4 @@
 id|dialogue
-d01|Dad: Good morning, kiddo! You wanna get some fresh air?
-d02|Dad: Cool! While you’re out, you should head into town and see what they’re selling today.
-d03|Dad: No? Well, that’s alright, we can have plenty of fun at home!
+d01|Dad: Good morning, kiddo! You wanna get some fresh air?<br>1. Yes<br>2. No
+d02|Dad: Cool! While you're out, you should head into town and see what they're selling today.
+d03|Dad: No? Well, that's alright, we can have plenty of fun at home!

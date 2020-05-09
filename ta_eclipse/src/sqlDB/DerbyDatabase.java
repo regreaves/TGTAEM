@@ -115,6 +115,7 @@ public class DerbyDatabase {
 				PreparedStatement stmt15 = null;
 				PreparedStatement stmt16 = null;
 				PreparedStatement stmt17 = null;
+				PreparedStatement stmt18 = null;
 
 				try {
 					stmt1 = conn.prepareStatement( // words table
@@ -190,13 +191,13 @@ public class DerbyDatabase {
 							"create table dialogue (" + " id varchar(5)," + " dialogue varchar(500)" + ")");
 					stmt6.executeUpdate();
 					
-					stmt16 = conn.prepareStatement( // dialogueTree table
+					stmt17 = conn.prepareStatement( // dialogueTree table
 							"create table dialogueTrees (" + " newickString varchar(100)" + ")");
-					stmt16.executeUpdate();
-					
-					stmt17 = conn.prepareStatement( // npcDialogueMap table
-							"create table npcDialogueMap (" + " npcID varchar(5)," + " dialogueID varchar(5)" + ")");
 					stmt17.executeUpdate();
+					
+					stmt18 = conn.prepareStatement( // npcDialogueMap table
+							"create table npcDialogueMap (" + " npcID varchar(5)," + " dialogueID varchar(5)" + ")");
+					stmt18.executeUpdate();
 
 					return true;
 				} finally { // close the things
@@ -217,6 +218,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt15);
 					DBUtil.closeQuietly(stmt16);
 					DBUtil.closeQuietly(stmt17);
+					DBUtil.closeQuietly(stmt18);
 				}
 			}
 		});
@@ -1165,6 +1167,7 @@ public class DerbyDatabase {
 				while (resultSet.next()) {
 					String loc = resultSet.getString("location"); // get the location id from the result
 					Room r = map.get(loc); // retrieve the room related to the id
+					n.setLocation(loc);
 					r.addNPC(n); // add the npc to the room
 				}
 				conn.commit();
@@ -1178,38 +1181,40 @@ public class DerbyDatabase {
 
 	// Player Functions
 	public Player getPlayer() throws SQLException { // get the player character
-		Connection conn = connect();
-		PreparedStatement stmt = null;
-		ResultSet resultSet = null;
-		Player p = new Player();
-
-		try { // get all the info from Player table
-			stmt = conn.prepareStatement("select * from player");
-			resultSet = stmt.executeQuery();
-
-			// for testing that a result was returned
-			Boolean found = false;
-			while (resultSet.next()) {
-				found = true;
-				p.setID(resultSet.getString("id"));
-				p.setLocation(resultSet.getString("location"));
-				p.setHealth(Integer.parseInt(resultSet.getString("health")));
-				p.setAttack(Integer.parseInt(resultSet.getString("attack")));
-				p.setDefense(Integer.parseInt(resultSet.getString("defense")));
-
+		return executeTransaction(new Transaction<Player>() {
+			public Player execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				Player p = new Player();
+		
+				try { // get all the info from Player table
+					stmt = conn.prepareStatement("select * from player");
+					resultSet = stmt.executeQuery();
+		
+					// for testing that a result was returned
+					Boolean found = false;
+					while (resultSet.next()) {
+						found = true;
+						p.setID(resultSet.getString("id"));
+						p.setLocation(resultSet.getString("location"));
+						p.setHealth(Integer.parseInt(resultSet.getString("health")));
+						p.setAttack(Integer.parseInt(resultSet.getString("attack")));
+						p.setDefense(Integer.parseInt(resultSet.getString("defense")));
+		
+					}
+		
+					// check if no player found
+					if (!found) {
+						System.out.println("no player found");
+					}
+					conn.commit();
+				} finally { // close the things
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+				return p;
 			}
-
-			// check if no player found
-			if (!found) {
-				System.out.println("no player found");
-			}
-			conn.commit();
-		} finally { // close the things
-			DBUtil.closeQuietly(resultSet);
-			DBUtil.closeQuietly(stmt);
-			DBUtil.closeQuietly(conn);
-		}
-		return p;
+		});
 	}
 
 	// place player in map
@@ -1441,61 +1446,71 @@ public class DerbyDatabase {
 	}
 
 	// Dialogue functions
-	public ArrayList<Dialogue> getDialogue() throws SQLException { // get all dialogue
-		Connection conn = connect();
-		PreparedStatement stmt = null;
-		PreparedStatement stmt2 = null;
-		ResultSet resultSet = null;
-		ResultSet resultSet2 = null;
-		ArrayList<Dialogue> dialogue = new ArrayList<Dialogue>();
+	public HashMap<String, Dialogue> getDialogue() throws SQLException { // get all dialogue
+		return executeTransaction(new Transaction<HashMap<String, Dialogue>>() {
+			public HashMap<String, Dialogue> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+					HashMap<String, Dialogue> dialogue = new HashMap<>();
 
-		try { // get all the info from dialogue table
-			stmt = conn.prepareStatement("select * from dialogue");
-			resultSet = stmt.executeQuery();
+					try { // get all the info from dialogue table
+						stmt = conn.prepareStatement("select * from dialogue");
+						resultSet = stmt.executeQuery();
 
-			// for testing that a result was returned
-			Boolean found = false;
-			while (resultSet.next()) {
-				found = true;
-				Dialogue d = new Dialogue();
-				d.setID(resultSet.getString("id"));
-				d.setDialogue(resultSet.getString("dialogue"));
-				dialogue.add(d);
-			}
+						// for testing that a result was returned
+						Boolean found = false;
+						while (resultSet.next()) {
+							found = true;
+							Dialogue d = new Dialogue();
+							d.setID(resultSet.getString("id"));
+							d.setDialogue(resultSet.getString("dialogue"));
+							dialogue.put(d.getID(), d);
+						}
 			
-			// check if no dialogue found
-			if (!found) {
-				System.out.println("no dialogue found");
-			}
-			
-			// get all the info from dialogueTrees table
-			stmt2 = conn.prepareStatement("select * from dialogueTrees");
-			resultSet2 = stmt2.executeQuery();
-
-			// for testing that a result was returned
-			Boolean found2 = false;
-			while (resultSet2.next()) {
-				found2 = true;
-				Dialogue d = new Dialogue();
-				d.setNewickTree(resultSet2.getString("newickString"));
-				dialogue.add(d);
-			}
-			
-			// check if no dialogue found
-			if (!found2) {
-				System.out.println("no dialogue found");
-			}
-			
-			
-			conn.commit();
-		} finally { // close the things
-			DBUtil.closeQuietly(resultSet);
-			DBUtil.closeQuietly(resultSet2);
-			DBUtil.closeQuietly(stmt);
-			DBUtil.closeQuietly(stmt2);
-			DBUtil.closeQuietly(conn);
+						// check if no dialogue found
+						if (!found) {
+							System.out.println("no dialogue found");
+						}
+					} finally { // close the things
+						DBUtil.closeQuietly(stmt);
+						DBUtil.closeQuietly(resultSet);
+					}
+					return dialogue;
+				}
+			});
 		}
-		return dialogue;
+	
+	public ArrayList<String> getDialogueTree() throws SQLException { // get all dialogueTrees
+		return executeTransaction(new Transaction<ArrayList<String>>() {
+			public ArrayList<String> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				ArrayList<String> dialogueTree = new ArrayList<String>();
+		
+				try { // get all the info from dialogueTrees table
+					stmt = conn.prepareStatement("select * from dialogueTrees");
+					resultSet = stmt.executeQuery();
+		
+					// for testing that a result was returned
+					Boolean found = false;
+					while (resultSet.next()) {
+						found = true;
+						Dialogue d = new Dialogue();
+						d.setNewickTree(resultSet.getString("newickString"));
+						dialogueTree.add(d.getNewickTree());
+					}
+		
+					// check if no dialogueTrees found
+					if (!found) {
+						System.out.println("no dialogueTrees found");
+					}
+				} finally { // close the things
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+				return dialogueTree;
+			}
+		});
 	}
 	
 	public void placeDialogue(HashMap<String, Dialogue> dialogue, ArrayList<NPC> npcs) throws SQLException { // set dialogue to npcs
