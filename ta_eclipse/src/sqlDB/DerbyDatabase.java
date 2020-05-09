@@ -715,7 +715,7 @@ public class DerbyDatabase {
 					while (resultSet.next()) {
 						words.add(resultSet.getString(1)); // add result to word list
 					}
-					
+
 					return words; // return the nouns
 				} finally { // close the things
 					DBUtil.closeQuietly(resultSet);
@@ -1392,5 +1392,4 @@ public class DerbyDatabase {
 		db.createTables();
 		db.loadInitialData();
 	}
-
 }

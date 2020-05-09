@@ -68,6 +68,9 @@ public class DerbyDatabaseTests {
 		System.out.print("- " + "Filling the database tables..." + " ");
 		db.fillAll();
 		System.out.print("Filled.\n\n");
+		
+		tearDownAfterClass();
+		System.exit(0);
 	}
 
 	@Test
