@@ -142,6 +142,10 @@ public class DerbyDatabase {
 					stmt5 = conn.prepareStatement( // itemMap table
 							"create table itemMap (" + " id varchar(5) primary key," + " location varchar(5)" + ")");
 					stmt5.executeUpdate();
+					
+					stmt6 = conn.prepareStatement( // dialogue table
+							"create table dialogue (" + " id varchar(5)," + " dialogue varchar(500)" + ")");
+					stmt6.executeUpdate();
 
 					stmt7 = conn.prepareStatement( // inventory table
 							"create table invent ( id varchar(5))");
@@ -187,9 +191,7 @@ public class DerbyDatabase {
 					stmt16 = conn.prepareStatement("create table status (" + "json varchar(10000)" + ")");
 					stmt16.executeUpdate();
 
-					stmt6 = conn.prepareStatement( // dialogue table
-							"create table dialogue (" + " id varchar(5)," + " dialogue varchar(500)" + ")");
-					stmt6.executeUpdate();
+
 					
 					stmt17 = conn.prepareStatement( // dialogueTree table
 							"create table dialogueTrees (" + " newickString varchar(100)" + ")");
@@ -199,7 +201,7 @@ public class DerbyDatabase {
 							"create table npcDialogueMap (" + " npcID varchar(5)," + " dialogueID varchar(5)" + ")");
 					stmt18.executeUpdate();
 
-					return true;
+//					return true;
 				} finally { // close the things
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
@@ -220,6 +222,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt17);
 					DBUtil.closeQuietly(stmt18);
 				}
+				return true;
 			}
 		});
 	}
@@ -586,8 +589,12 @@ public class DerbyDatabase {
 				PreparedStatement tblConnections = null;
 				PreparedStatement tblLog = null;
 				PreparedStatement tblActionLog = null;
+				PreparedStatement tblDialogue = null;
+				PreparedStatement tblDialogueTrees = null;
 				PreparedStatement tblItemContainers = null;
+				PreparedStatement tblNpcDialogueMap = null;
 				PreparedStatement tblStatus = null;
+				
 
 				try {
 					tblWord = conn.prepareStatement("drop table words");
@@ -628,9 +635,18 @@ public class DerbyDatabase {
 					
 					tblActionLog = conn.prepareStatement("drop table actionLog");
 					tblActionLog.executeUpdate();
+
+					tblDialogue = conn.prepareStatement("drop table dialogue");
+					tblDialogue.executeUpdate();
+
+					tblDialogueTrees = conn.prepareStatement("drop table dialogueTrees");
+					tblDialogueTrees.executeUpdate();
 					
 					tblItemContainers = conn.prepareStatement("drop table itemContainers");
 					tblItemContainers.executeUpdate();
+					
+					tblNpcDialogueMap = conn.prepareStatement("drop table npcDialogueMap");
+					tblNpcDialogueMap.executeUpdate();
 					
 					tblStatus = conn.prepareStatement("drop table status");
 					tblStatus.executeUpdate();
@@ -651,7 +667,10 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(tblConnections);
 					DBUtil.closeQuietly(tblLog);
 					DBUtil.closeQuietly(tblActionLog);
+					DBUtil.closeQuietly(tblDialogue);
+					DBUtil.closeQuietly(tblDialogueTrees);					
 					DBUtil.closeQuietly(tblItemContainers);
+					DBUtil.closeQuietly(tblNpcDialogueMap);
 					DBUtil.closeQuietly(tblStatus);
 				}
 				return true;
