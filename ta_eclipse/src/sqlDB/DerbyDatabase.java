@@ -200,8 +200,6 @@ public class DerbyDatabase {
 					stmt18 = conn.prepareStatement( // npcDialogueMap table
 							"create table npcDialogueMap (" + " npcID varchar(5)," + " dialogueID varchar(5)" + ")");
 					stmt18.executeUpdate();
-
-//					return true;
 				} finally { // close the things
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
@@ -540,7 +538,7 @@ public class DerbyDatabase {
 					tblNpcDialogueMap = conn.prepareStatement("truncate table npcDialogueMap");
 					tblNpcDialogueMap.executeUpdate();
 
-					System.out.println("Tables cleared!"); // messages are good
+					System.out.print("Tables cleared!"); // messages are good
 
 				} finally { // close the things
 					DBUtil.closeQuietly(tblWord);
@@ -569,7 +567,7 @@ public class DerbyDatabase {
 
 	public void fillAll() { // refill tables
 		loadInitialData(); // don't judge me
-		System.out.println("Tables made!"); // messages are good
+		System.out.print("Tables filled!"); // messages are good
 	}
 	
 	public void dropTables() {

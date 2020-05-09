@@ -33,18 +33,17 @@ public class DerbyDatabaseTests {
 		System.out.println("  " + "******************************");
 		System.out.println("  " + "**    DERBYDATABASETESTS    **");
 		System.out.println("  " + "******************************");
-		System.out.println("\n");
 
-		System.out.println("- " + "Creating the database tables..." + " ");
+		System.out.println("- " + "Creating the database tables...");
 		db.createTables();
 
-		System.out.println("- " + "Filling the database tables..." + " ");
+		System.out.println("- " + "Filling the database tables...");
 		db.fillAll();
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		System.out.println("- " + "Dropping the database tables..." + " ");
+		System.out.println("- " + "Dropping the database tables...");
 		db.dropTables();
 	}
 
@@ -56,10 +55,10 @@ public class DerbyDatabaseTests {
 
 	@After
 	public void tearDown() throws Exception {
-		System.out.println("- " + "Clearing the database tables..." + " ");
+		System.out.println("- " + "Clearing the database tables...");
 		db.clearAll();
 
-		System.out.println("- " + "Filling the database tables..." + " ");
+		System.out.println("- " + "Filling the database tables...");
 		db.fillAll();
 	}
 
