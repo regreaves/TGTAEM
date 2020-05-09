@@ -568,7 +568,97 @@ public class DerbyDatabase {
 		loadInitialData(); // don't judge me
 		System.out.println("Tables made!"); // messages are good
 	}
+	
+	public void dropTables() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement tblWord = null;
+				PreparedStatement tblAct = null;
+				PreparedStatement tblRoom = null;
+				PreparedStatement tblItem = null;
+				PreparedStatement tblItemMap = null;
+				PreparedStatement tblNpcs = null;
+				PreparedStatement tblPlayers = null;
+				PreparedStatement tblNpcMap = null;
+				PreparedStatement tblInvent = null;
+				PreparedStatement tblShortcut = null;
+				PreparedStatement tblConnections = null;
+				PreparedStatement tblLog = null;
+				PreparedStatement tblActionLog = null;
+				PreparedStatement tblItemContainers = null;
+				PreparedStatement tblStatus = null;
 
+				try {
+					tblWord = conn.prepareStatement("drop table words");
+					tblWord.executeUpdate();
+
+					tblAct = conn.prepareStatement("drop table actions");
+					tblAct.executeUpdate();
+
+					tblRoom = conn.prepareStatement("drop table rooms");
+					tblRoom.executeUpdate();
+
+					tblItem = conn.prepareStatement("drop table items");
+					tblItem.executeUpdate();
+
+					tblItemMap = conn.prepareStatement("drop table itemMap");
+					tblItemMap.executeUpdate();
+
+					tblNpcs = conn.prepareStatement("drop table npcs");
+					tblNpcs.executeUpdate();
+
+					tblPlayers = conn.prepareStatement("drop table player");
+					tblPlayers.executeUpdate();
+
+					tblNpcMap = conn.prepareStatement("drop table npcMap");
+					tblNpcMap.executeUpdate();
+
+					tblInvent = conn.prepareStatement("drop table invent");
+					tblInvent.executeUpdate();
+
+					tblShortcut = conn.prepareStatement("drop table shortcuts");
+					tblShortcut.execute();
+
+					tblConnections = conn.prepareStatement("drop table connections");
+					tblConnections.executeUpdate();
+
+					tblLog = conn.prepareStatement("drop table log");
+					tblLog.executeUpdate();
+					
+					tblActionLog = conn.prepareStatement("drop table actionLog");
+					tblActionLog.executeUpdate();
+					
+					tblItemContainers = conn.prepareStatement("drop table itemContainers");
+					tblItemContainers.executeUpdate();
+					
+					tblStatus = conn.prepareStatement("drop table status");
+					tblStatus.executeUpdate();
+
+					System.out.println("Tables dropped!"); // messages are good
+
+				} finally { // close the things
+					DBUtil.closeQuietly(tblWord);
+					DBUtil.closeQuietly(tblAct);
+					DBUtil.closeQuietly(tblRoom);
+					DBUtil.closeQuietly(tblItem);
+					DBUtil.closeQuietly(tblItemMap);
+					DBUtil.closeQuietly(tblNpcs);
+					DBUtil.closeQuietly(tblPlayers);
+					DBUtil.closeQuietly(tblNpcMap);
+					DBUtil.closeQuietly(tblInvent);
+					DBUtil.closeQuietly(tblShortcut);
+					DBUtil.closeQuietly(tblConnections);
+					DBUtil.closeQuietly(tblLog);
+					DBUtil.closeQuietly(tblActionLog);
+					DBUtil.closeQuietly(tblItemContainers);
+					DBUtil.closeQuietly(tblStatus);
+				}
+				return true;
+			}
+		});
+	}
+	
 	public void addRowToLog(String row) {
 		executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
