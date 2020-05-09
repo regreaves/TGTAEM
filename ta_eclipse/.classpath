@@ -3,6 +3,8 @@
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jarLib"/>
+	<classpathentry kind="lib" path="lib/jackson-annotations-2.10.4.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core-2.10.4.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-databind-2.10.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

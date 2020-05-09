@@ -3,44 +3,45 @@ package objects;
 import java.util.ArrayList;
 
 public class ItemContainer extends Item {
-	int maxWeight;
-	ArrayList<Item> items = new ArrayList<>();
+	int maxWeight; // maximum allowed weight
+	ArrayList<Item> items = new ArrayList<>(); // items in container
 
-	public ItemContainer() {
+	public ItemContainer() { // POJO
 	}
-	
+
 	public int getMaxWeight() {
 		return maxWeight;
 	}
-	
+
 	public void setMaxWeight(int maxWeight) {
 		this.maxWeight = maxWeight;
 		return;
 	}
-	
+
 	public ArrayList<Item> getItems() {
 		return items;
 	}
-	
+
 	public void setItems(ArrayList<Item> items) {
 		this.items = items;
 		return;
 	}
-	
-	public void addItem(Item i) {
-		if(i.getWeight() <= maxWeight) {
-			this.items.add(i);
-			weight += i.getWeight();
-			i.move();
-		}
+
+	public void addItem(Item i) { // add item to container
+		// if(i.getWeight() <= maxWeight) { // maxWeight check currently still buggy,
+		// but low priority
+		this.items.add(i);
+		// weight += i.getWeight();
+		i.move();
+		// }
 	}
-	
-	public Item removeItem(Item item) {
+
+	public Item removeItem(Item item) { // remove and return specified Item
 		int x = this.items.indexOf(item);
 		return this.items.remove(x);
 	}
-	
-	public boolean hasSpace(Item item) {
+
+	public boolean hasSpace(Item item) { // check if there is space for the specified item by weight
 		int x = 0;
 		for (Item i : items) {
 			x += i.getWeight();
@@ -52,5 +53,5 @@ public class ItemContainer extends Item {
 			return false;
 		}
 	}
-	
+
 }

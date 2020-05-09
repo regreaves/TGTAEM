@@ -3,7 +3,9 @@ package actions;
 import java.util.ArrayList;
 
 import command.Action;
+import objects.Inventory;
 import objects.Item;
+import objects.ItemContainer;
 import state.Game;
 
 public class TakeItem implements Updater {
@@ -30,6 +32,34 @@ public class TakeItem implements Updater {
 						g.setOutput("That's too heavy to carry. You can't take that.");
 						return;
 					}
+				}
+			} else if (obj.equals("letter") && g.here().equals("10")) {
+				Item item = null;
+				for(Item j : roomItems) {
+					if (j.isContainer()) {
+						item = j; //get itemContainer from room
+					}
+				}
+				ArrayList<Item> icItems = ((ItemContainer) item).getItems(); //get items in itemContainer
+				Item letter = null;
+				for (Item l : icItems) {
+					if(l.getName().equals("letter")) { //get letter item out of ic
+						letter = l;
+					}
+				}
+				if(letter.hidden() == false) {
+					if (letter.getWeight()<30 && g.inventory().hasSpace(letter)) {
+						g.takeItem(letter);
+						g.setOutput("You take the " + obj + ".");
+						return;
+					} else {
+						g.setOutput("That's too heavy to carry. You can't take that.");
+						return;
+					}
+				}
+				else { //letter is hidden
+					g.setOutput("What letter?");
+					return;
 				}
 			} else {
 				g.setOutput("You can't do that.");
