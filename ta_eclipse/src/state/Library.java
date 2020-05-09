@@ -9,29 +9,29 @@ public class Library {
 	private ArrayList<String> passwords;
 	private Map<String, String> credentials;
 	
-	// create model - test version
+	//courtesy of Prof Hake, YCP CS
+	
+	// create model
 	public Library() {
 		usernames = new ArrayList<String>();
 		passwords = new ArrayList<String>();
 		credentials = new TreeMap<String, String>();
 		
 		usernames.add("Arthur Dent");
-		usernames.add("faculty");
 		
 		passwords.add("hitchhiker");
-		passwords.add("E&CS");
 		
 		for (int i = 0; i < usernames.size(); i++) {
 			credentials.put(usernames.get(i), passwords.get(i));
 		}
 	}		
 
-	// login name - test version
+	// login name
 	public boolean validateUserName(String name) {
 		return credentials.containsKey(name);
 	}
 
-	// login credentials - test version
+	// login credentials
 	public boolean validatePW(String name, String pw) {
 		if (credentials.containsKey(name)) {
 			if  (credentials.get(name).equals(pw)) {

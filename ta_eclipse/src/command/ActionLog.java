@@ -2,35 +2,30 @@ package command;
 
 import java.util.ArrayList;
 
-import objects.Inventory;
-import objects.Item;
-import objects.Room;
-
-public class ActionLog {
+public class ActionLog { // stores all actions performed
 	ArrayList<Action> history = new ArrayList<>();
-	
-	public ActionLog() {
+
+	public ActionLog() { // POJO
 
 	}
 
-	public void setHistory(ArrayList<Action> history) {
+	public void setHistory(ArrayList<Action> history) { // set past history, used when seting from table
 		this.history = history;
 	}
 
-	public void addAction(Action a) {
+	public void addAction(Action a) { // add an action to table
 		history.add(a);
 	}
-	
-	public Action lastAction() {
-		return history.get(history.size()-1);
+
+	public Action lastAction() { // return very last action performed
+		return history.get(history.size() - 1);
 	}
-	
-	public boolean prevAction(String name) {
-		int i = history.size()-1;
-		while(i>=0) {
+
+	public boolean prevAction(String name) { // check if action matching name specified was previously performed.
+		int i = history.size() - 1;
+		while (i >= 0) {
 			Action a = history.get(i);
-			if(a.getName().equalsIgnoreCase(name))
-			{
+			if (a.getName().equalsIgnoreCase(name)) {
 				return true;
 			}
 			i--;

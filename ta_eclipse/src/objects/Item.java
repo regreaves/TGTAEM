@@ -5,21 +5,21 @@ import java.util.ArrayList;
 import command.Action;
 
 public class Item {
-	String name;
-	String id;
-	String init_dscrpt;
-	String invent_dscrpt;
+	String name; // basic name
+	String id; // reference id
+	String init_dscrpt; // initial description displayed
+	String invent_dscrpt; // alternate description displayed in inventory or on EXAMINE
 
-	boolean critical;
-	boolean hidden;
-	boolean moved;
-	boolean vowel;
-	boolean plural;
-	boolean isContainer;
+	boolean critical; // is game critical (to winning/points)
+	boolean hidden; // is not visible to player
+	boolean moved; // has moved from original location
+	boolean vowel; // starts with vowel
+	boolean plural; // is plural form
+	boolean isContainer; // is am ItemContainer
 
-	int weight;
+	int weight; // weight 
 	
-	public Item() {
+	public Item() { // POJO
 	}
 
 	public String getID() {
@@ -47,7 +47,7 @@ public class Item {
 	}
 
 	public void addInitDscrpt(String init_dscrpt) {
-		this.init_dscrpt = init_dscrpt;
+		this.init_dscrpt += init_dscrpt;
 		return;
 	}
 
@@ -130,21 +130,4 @@ public class Item {
 		this.weight = itemWeight;
 		return;
 	}
-	
-	static public ItemContainer makeItemContainer(Item item) {
-		ItemContainer ic = new ItemContainer();
-		ic.setName(item.name);
-		ic.setID(item.id);
-		ic.setInitDscrpt(item.init_dscrpt);
-		ic.setInventDscrpt(item.invent_dscrpt);
-		ic.setCritical(item.critical);
-		ic.setHidden(item.hidden);
-		ic.setMoved(item.moved);
-		ic.setVowel(item.vowel);
-		ic.setPlural(item.plural);
-		ic.setIsContainer(item.isContainer);
-		ic.setWeight(item.weight);
-		return ic;
-	}
-
 }
