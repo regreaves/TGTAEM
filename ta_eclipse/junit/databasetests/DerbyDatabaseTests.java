@@ -39,18 +39,15 @@ public class DerbyDatabaseTests {
 
 		System.out.print("- " + "Creating the database tables..." + " ");
 		db.createTables();
-		System.out.print("Created.\n");
 
 		System.out.print("- " + "Filling the database tables..." + " ");
 		db.fillAll();
-		System.out.print("Filled.\n\n");
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		System.out.print("- " + "Dropping the database tables..." + " ");
 		db.dropTables();
-		System.out.print("Dropped.\n");
 	}
 
 	@Before
@@ -63,14 +60,9 @@ public class DerbyDatabaseTests {
 	public void tearDown() throws Exception {
 		System.out.print("- " + "Clearing the database tables..." + " ");
 		db.clearAll();
-		System.out.print("Cleared.\n");
 
 		System.out.print("- " + "Filling the database tables..." + " ");
 		db.fillAll();
-		System.out.print("Filled.\n\n");
-		
-		tearDownAfterClass();
-		System.exit(0);
 	}
 
 	@Test
