@@ -12,6 +12,7 @@ body {
 	color: white;
 	font-size: min(max(2vw, 16px), 20pt);
 	font-family: 'terminal';
+	line-height: 1.2;
 }
 
 #output {
