@@ -13,7 +13,7 @@ uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
   <body>
       <div id="output">
-        <br>${log}</br>
+        <br>${log}
         <form
           action="${pageContext.servletContext.contextPath}/login"
           method="post"

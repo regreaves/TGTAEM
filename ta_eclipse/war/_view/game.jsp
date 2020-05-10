@@ -12,7 +12,7 @@
 
 <body>
 		<div id="output">
-			<br>${log}</br>
+			<br>${log}
 				<form
 					action="${pageContext.servletContext.contextPath}/game"
 					method="post">
