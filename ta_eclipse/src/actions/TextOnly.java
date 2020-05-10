@@ -216,7 +216,7 @@ public class TextOnly implements Updater {
 			if(g.here().equals("31") || g.inventory().hasItem("flowers")) {
 				g.setOutput("You smell the flowers. The smell reminds you of spring.");
 			} else {
-				g.setOutput("There's no flowers here.");
+				g.setOutput("There are no flowers here.");
 			}
 			break;
 		}
