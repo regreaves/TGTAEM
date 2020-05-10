@@ -27,7 +27,7 @@ uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
           <button type="submit" style="visibility: hidden;"></button>
           </div>
         </form>
-				<c:if test="${! empty errorMessage}">
+		<c:if test="${! empty errorMessage}">
           <div class="error">${errorMessage}</div>
         </c:if>
       </div>
