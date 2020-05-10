@@ -142,6 +142,10 @@ public class DerbyDatabase {
 					stmt5 = conn.prepareStatement( // itemMap table
 							"create table itemMap (" + " id varchar(5) primary key," + " location varchar(5)" + ")");
 					stmt5.executeUpdate();
+					
+					stmt6 = conn.prepareStatement( // dialogue table
+							"create table dialogue (" + " id varchar(5)," + " dialogue varchar(500)" + ")");
+					stmt6.executeUpdate();
 
 					stmt7 = conn.prepareStatement( // inventory table
 							"create table invent ( id varchar(5))");
@@ -187,9 +191,7 @@ public class DerbyDatabase {
 					stmt16 = conn.prepareStatement("create table status (" + "json varchar(10000)" + ")");
 					stmt16.executeUpdate();
 
-					stmt6 = conn.prepareStatement( // dialogue table
-							"create table dialogue (" + " id varchar(5)," + " dialogue varchar(500)" + ")");
-					stmt6.executeUpdate();
+
 					
 					stmt17 = conn.prepareStatement( // dialogueTree table
 							"create table dialogueTrees (" + " newickString varchar(100)" + ")");
@@ -198,8 +200,6 @@ public class DerbyDatabase {
 					stmt18 = conn.prepareStatement( // npcDialogueMap table
 							"create table npcDialogueMap (" + " npcID varchar(5)," + " dialogueID varchar(5)" + ")");
 					stmt18.executeUpdate();
-
-					return true;
 				} finally { // close the things
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
@@ -220,6 +220,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(stmt17);
 					DBUtil.closeQuietly(stmt18);
 				}
+				return true;
 			}
 		});
 	}
@@ -537,7 +538,7 @@ public class DerbyDatabase {
 					tblNpcDialogueMap = conn.prepareStatement("truncate table npcDialogueMap");
 					tblNpcDialogueMap.executeUpdate();
 
-					System.out.println("Tables cleared!"); // messages are good
+					System.out.print("Tables cleared!"); // messages are good
 
 				} finally { // close the things
 					DBUtil.closeQuietly(tblWord);
@@ -566,9 +567,115 @@ public class DerbyDatabase {
 
 	public void fillAll() { // refill tables
 		loadInitialData(); // don't judge me
-		System.out.println("Tables made!"); // messages are good
+		System.out.print("Tables filled!"); // messages are good
 	}
+	
+	public void dropTables() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement tblWord = null;
+				PreparedStatement tblAct = null;
+				PreparedStatement tblRoom = null;
+				PreparedStatement tblItem = null;
+				PreparedStatement tblItemMap = null;
+				PreparedStatement tblNpcs = null;
+				PreparedStatement tblPlayers = null;
+				PreparedStatement tblNpcMap = null;
+				PreparedStatement tblInvent = null;
+				PreparedStatement tblShortcut = null;
+				PreparedStatement tblConnections = null;
+				PreparedStatement tblLog = null;
+				PreparedStatement tblActionLog = null;
+				PreparedStatement tblDialogue = null;
+				PreparedStatement tblDialogueTrees = null;
+				PreparedStatement tblItemContainers = null;
+				PreparedStatement tblNpcDialogueMap = null;
+				PreparedStatement tblStatus = null;
+				
 
+				try {
+					tblWord = conn.prepareStatement("drop table words");
+					tblWord.executeUpdate();
+
+					tblAct = conn.prepareStatement("drop table actions");
+					tblAct.executeUpdate();
+
+					tblRoom = conn.prepareStatement("drop table rooms");
+					tblRoom.executeUpdate();
+
+					tblItem = conn.prepareStatement("drop table items");
+					tblItem.executeUpdate();
+
+					tblItemMap = conn.prepareStatement("drop table itemMap");
+					tblItemMap.executeUpdate();
+
+					tblNpcs = conn.prepareStatement("drop table npcs");
+					tblNpcs.executeUpdate();
+
+					tblPlayers = conn.prepareStatement("drop table player");
+					tblPlayers.executeUpdate();
+
+					tblNpcMap = conn.prepareStatement("drop table npcMap");
+					tblNpcMap.executeUpdate();
+
+					tblInvent = conn.prepareStatement("drop table invent");
+					tblInvent.executeUpdate();
+
+					tblShortcut = conn.prepareStatement("drop table shortcuts");
+					tblShortcut.execute();
+
+					tblConnections = conn.prepareStatement("drop table connections");
+					tblConnections.executeUpdate();
+
+					tblLog = conn.prepareStatement("drop table log");
+					tblLog.executeUpdate();
+					
+					tblActionLog = conn.prepareStatement("drop table actionLog");
+					tblActionLog.executeUpdate();
+
+					tblDialogue = conn.prepareStatement("drop table dialogue");
+					tblDialogue.executeUpdate();
+
+					tblDialogueTrees = conn.prepareStatement("drop table dialogueTrees");
+					tblDialogueTrees.executeUpdate();
+					
+					tblItemContainers = conn.prepareStatement("drop table itemContainers");
+					tblItemContainers.executeUpdate();
+					
+					tblNpcDialogueMap = conn.prepareStatement("drop table npcDialogueMap");
+					tblNpcDialogueMap.executeUpdate();
+					
+					tblStatus = conn.prepareStatement("drop table status");
+					tblStatus.executeUpdate();
+
+					System.out.println("Tables dropped!"); // messages are good
+
+				} finally { // close the things
+					DBUtil.closeQuietly(tblWord);
+					DBUtil.closeQuietly(tblAct);
+					DBUtil.closeQuietly(tblRoom);
+					DBUtil.closeQuietly(tblItem);
+					DBUtil.closeQuietly(tblItemMap);
+					DBUtil.closeQuietly(tblNpcs);
+					DBUtil.closeQuietly(tblPlayers);
+					DBUtil.closeQuietly(tblNpcMap);
+					DBUtil.closeQuietly(tblInvent);
+					DBUtil.closeQuietly(tblShortcut);
+					DBUtil.closeQuietly(tblConnections);
+					DBUtil.closeQuietly(tblLog);
+					DBUtil.closeQuietly(tblActionLog);
+					DBUtil.closeQuietly(tblDialogue);
+					DBUtil.closeQuietly(tblDialogueTrees);					
+					DBUtil.closeQuietly(tblItemContainers);
+					DBUtil.closeQuietly(tblNpcDialogueMap);
+					DBUtil.closeQuietly(tblStatus);
+				}
+				return true;
+			}
+		});
+	}
+	
 	public void addRowToLog(String row) {
 		executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
