@@ -205,8 +205,21 @@ public class TextOnly implements Updater {
 				g.setOutput("You don't have a sword. It would be cool if you did.");
 			}
 			break;
+		case "jump in puddle":
+			if (g.here().equals("22")) {
+				g.setOutput("You jump in the puddle. You had forgotten how much fun that was.");
+			} else {
+				g.setOutput("There's no puddle here to jump in.");
+			}
+			break;
+		case "smell flowers":
+			if(g.here().equals("31") || g.inventory().hasItem("flowers")) {
+				g.setOutput("You smell the flowers. The smell reminds you of spring.");
+			} else {
+				g.setOutput("There are no flowers here.");
+			}
+			break;
 		}
-
 	}
 
 }

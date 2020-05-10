@@ -105,13 +105,6 @@ public class InventoryTests {
 	}
 	
 	@Test
-	public void testGetNumberItems() throws Exception {
-		assertEquals(2, inv1.getNumberItems());
-		assertEquals(1, inv2.getNumberItems());
-		assertEquals(0, inv3.getNumberItems());
-	}
-	
-	@Test
 	public void testSetMaxSize() throws Exception {
 		inv1.setMaxWeight(5);
 		inv2.setMaxWeight(10);
