@@ -538,7 +538,7 @@ public class DerbyDatabase {
 					tblNpcDialogueMap = conn.prepareStatement("truncate table npcDialogueMap");
 					tblNpcDialogueMap.executeUpdate();
 
-					System.out.print("Tables cleared!"); // messages are good
+					System.out.println("Tables cleared!"); // messages are good
 
 				} finally { // close the things
 					DBUtil.closeQuietly(tblWord);
@@ -567,7 +567,7 @@ public class DerbyDatabase {
 
 	public void fillAll() { // refill tables
 		loadInitialData(); // don't judge me
-		System.out.print("Tables filled!"); // messages are good
+		System.out.println("Tables filled!"); // messages are good
 	}
 	
 	public void dropTables() {
@@ -1509,7 +1509,6 @@ public class DerbyDatabase {
 			public Integer execute(Connection conn) throws SQLException {
 				PreparedStatement stmt0 = null;
 				PreparedStatement stmt = null;
-				System.out.println("Saving: " + s);
 				try {
 					stmt0 = conn.prepareStatement("truncate table status");
 					stmt0.executeUpdate();
