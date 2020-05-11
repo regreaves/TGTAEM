@@ -102,6 +102,8 @@ public class Game {
 		updates.put(Talk.name, new Talk());
 		updates.put(DialogueHandler.name, new DialogueHandler());
 		updates.put(OpenContainer.name, new OpenContainer());
+		updates.put(Sitting.name, new Sitting());
+		updates.put(MonsterCheck.name, new MonsterCheck());
 	}
 
 	public String getLog() {
@@ -138,6 +140,10 @@ public class Game {
 		return output;
 	}
 
+	public Player player() { //get player
+		return player;
+	}
+	
 	public String here() { //get player's current room ID
 		return player.getLocation();
 	}
