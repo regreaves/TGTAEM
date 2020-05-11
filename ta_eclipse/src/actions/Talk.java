@@ -16,11 +16,11 @@ public class Talk implements Updater{
 		Room r = g.room();
 		ArrayList<NPC> npcList = r.getNPCs();
 		for(NPC n : npcList) {
-			if(obj.equals(n.getName())) {
+			if(obj.equalsIgnoreCase(n.getName())) {
 				if(n.getLocation().equals(r.getID())) {
 					if(!n.getDialogue().equals(null)) {
 						g.status.setDialogue(true);
-						g.setOutput("You walk over and start a conversation with " + n.getName() + "<br>");
+						g.setOutput("You walk over and start a conversation with " + n.getName() + ".<br>");
 						g.addOutput("<em>To exit conversation, WALK AWAY.</em><br>");
 						g.addOutput(n.getDialogue().getDialogue());
 						return;

@@ -16,11 +16,11 @@ public class DialogueHandler implements Updater{
 		n.getDialogue().parseNewickTree(g.dialogueTrees.get(0));
 		switch (s) {
 			case "1":
-				g.setOutput(g.dialogue.get(n.getDialogue().getTreeList().get(0).getLeftData()).getDialogue());
+				g.setOutput(g.dialogue.get(n.getDialogue().getTreeList().get(0).getLeftData()).getDialogue() + "<br>" + n.getName() + " walks away.");
 				g.status.setDialogue(false);
 				return;
 			case "2":
-				g.setOutput(g.dialogue.get(n.getDialogue().getTreeList().get(0).getRightData()).getDialogue());
+				g.setOutput(g.dialogue.get(n.getDialogue().getTreeList().get(0).getRightData()).getDialogue() + "<br>" + n.getName() + " walks away.");
 				g.status.setDialogue(false);
 				return;
 			case "walk away":

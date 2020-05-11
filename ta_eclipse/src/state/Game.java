@@ -104,6 +104,7 @@ public class Game {
 		updates.put(OpenContainer.name, new OpenContainer());
 		updates.put(Sitting.name, new Sitting());
 		updates.put(MonsterCheck.name, new MonsterCheck());
+		updates.put(Search.name, new Search());
 	}
 
 	public String getLog() {
