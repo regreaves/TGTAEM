@@ -1,5 +1,0 @@
-quit
-wear
-type laptop
-search
-type PC
