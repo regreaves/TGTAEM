@@ -10,12 +10,33 @@ public class Sitting implements Updater {
 	@Override
 	public void update(Game g, Action a) throws SQLException {
 		String v = a.verb();
+		String n = a.noun();
 		switch (v) {
 		case "sit":
-			g.status.setSitting(true);
+			if(n.equalsIgnoreCase("desk") && g.status.isSitting() == false) {
+				g.status.setSitting(true);
+				g.setOutput("You sit down at the desk.");
+			} else if(n.equalsIgnoreCase("bench") && g.status.isSitting() == false) {
+				g.status.setSitting(true);
+				g.setOutput("You sit down on the bench.");
+			} else if(n.equalsIgnoreCase("swings") && g.status.isSitting() == false) {
+				g.status.setSitting(true);
+				g.setOutput("You sit down on the swings.");
+			} else if(g.status.isSitting()) {
+				g.setOutput("You're already sitting.");
+			} else {
+				g.setOutput("You can't do that.");
+			}
 			break;
 		case "stand":
-			g.status.setSitting(false);
+			if(g.status.isSitting() == false) {
+				g.setOutput("You're already standing.");
+			} else if(g.status.isSitting()) {
+				g.status.setSitting(false);
+				g.setOutput("You stand up.");
+			} else {
+				g.setOutput("You can't do that.");
+			}
 			break;
 		}
 	}
