@@ -1546,12 +1546,6 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(rs);
 					DBUtil.closeQuietly(stmt);
 				}
-				try {
-					System.out.println("Loaded: " + s.toJSON());
-				} catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				return s;
 			}
 		});
