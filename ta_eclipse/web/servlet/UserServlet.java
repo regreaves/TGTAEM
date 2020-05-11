@@ -49,7 +49,11 @@ public class UserServlet extends HttpServlet {
 		UserController controller = new UserController();
 		User model = new User();
 		controller.setModel(model);
+		
+		boolean done = false;
+		req.getSession().setAttribute("done", done);
 
+		
 		String i = req.getParameter("input");
 		
 		if (i.equalsIgnoreCase("n")) {

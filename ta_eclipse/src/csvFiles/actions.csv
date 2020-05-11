@@ -72,10 +72,10 @@ wear jacket|wear|jacket|wear
 take off jacket|take off|jacket|wear
 jump on bed|jump on|bed|textOnly
 sleep in bed|sleep in|bed|textOnly
-hide under bed|hide under|bed|hide
+hide under bed|hide under|bed|monster check
 check for monsters|check for|monsters|monster check
 sit at desk|sit at|desk|sit
-stand up|stand|up|stand
+stand up|stand|up|sit
 open laptop|open|laptop|switch
 close laptop|close|laptop|switch
 type on laptop|type on |laptop|type laptop
@@ -126,3 +126,18 @@ turn on laptop|turn on|laptop|switch
 turn off laptop|turn off|laptop|switch
 talk to dad|talk to|dad|talk
 walk away|walk|away|dialogue
+take puddle|take|puddle|take item
+take fountain|take|fountain|take item
+take tree|take|tree|take item
+take flowers|take|flowers|take item
+take dumpster|take|dumpster|take item
+take streetlights|take|streetlights|take item
+drop flowers|drop|flowers|drop item
+examine puddle|examine|puddle|examine
+examine fountain|examine|fountain|examine
+examine tree|examine|tree|examine
+examine flowers|examine|flowers|examine
+examine dumpster|examine|dumpster|examine
+examine streetlights|examine|streetlights|examine
+smell flowers|smell|flowers|textOnly
+jump in puddle|jump in|puddle|textOnly
