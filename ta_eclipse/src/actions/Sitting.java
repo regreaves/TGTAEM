@@ -36,6 +36,9 @@ public class Sitting implements Updater {
 			} else if(g.status.isSitting()) {
 				g.status.setSitting(false);
 				g.setOutput("You stand up.");
+			} else if(g.status.isHiding()) {
+				g.status.setHiding(false);
+				g.setOutput("You get out from under the bed.");
 			} else {
 				g.setOutput("You can't do that.");
 			}
