@@ -12,7 +12,7 @@
 
 <body>
 		<div id="output">
-			<br>${log}
+			<br>${log}<br>
 				<c:if test="${game.done}">
           			<div class="over">${over}</div>
         </c:if>
