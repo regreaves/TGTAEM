@@ -19,8 +19,9 @@ public class Examine implements Updater {
 		} else {
 			ArrayList<Item> roomItems = g.itemsHere();
 			for (Item i : roomItems) {
-				if (i.getName().equals(obj)) {
+				if (i.getName().equalsIgnoreCase(obj)) {
 					g.setOutput(i.getInventDscrpt());
+					return;
 				} else {
 					g.setOutput("There's no " + obj + " for you to examine.");
 
