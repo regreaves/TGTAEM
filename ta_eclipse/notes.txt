@@ -1,13 +1,5 @@
 quit
 wear
-hide
-monster check
-sit
-stand
 type laptop
-
-
 search
-
 type PC
-open

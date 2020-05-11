@@ -104,6 +104,7 @@ public class Game {
 		updates.put(OpenContainer.name, new OpenContainer());
 		updates.put(Sitting.name, new Sitting());
 		updates.put(MonsterCheck.name, new MonsterCheck());
+		updates.put(Quit.name, new Quit());
 	}
 
 	public String getLog() {
@@ -116,6 +117,14 @@ public class Game {
 	
 	public void setDone(boolean done) {
 		status.setDone(done);
+	}
+	
+	public boolean isQuit() {
+		return status.isQuit();
+	}
+
+	public void setQuit(boolean quit) {
+		status.setQuit(quit);
 	}
 
 	public String getCommand() {
