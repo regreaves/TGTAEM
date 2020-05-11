@@ -59,24 +59,35 @@ public class GameServlet extends HttpServlet {
 		
 		
 		if(done) {
-			gameOver = "";
-			done = false;
-			req.getSession().setAttribute("done", done);
-			if(command.equalsIgnoreCase("y"))
-			{
-				try {
-					model.reset();
+			if(model.isDone()) {
+				gameOver = "";
+				done = false;
+				req.getSession().setAttribute("done", done);
+				if(command.equalsIgnoreCase("y"))
+				{
+					try {
+						model.reset();
+						model.setDone(false);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					log = "Loading new game... <br>";
+					log += "<br>" + model.loadRoom("1") + "<br>";
+				} else if(command.equalsIgnoreCase("n")) {
+					log  = "Goodbye. <br>";
 					model.setDone(false);
-				} catch (SQLException e) {
-					e.printStackTrace();
+				} else {
+					log += "<br>> " + command + "<br> Please enter Y for yes and N for no. <br>";
 				}
-				log = "Loading new game... <br>";
-				log += "<br>" + model.loadRoom("1") + "<br>";
-			} else if(command.equalsIgnoreCase("n")) {
-				log  = "Goodbye. <br>";
-				model.setDone(false);
-			} else {
-				log += "<br>> " + command + "<br> Please enter Y for yes and N for no. <br>";
+			}
+			if(model.isQuit()) {
+				model.setQuit(false);
+				req.getSession().invalidate();
+				done = false;
+				req.getSession().setAttribute("done", done);
+				log = "Welcome to TGTAEM. Please login. <br>";
+				req.getSession().setAttribute("log", log);
+				req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 			}
 		} else {
 			try {
@@ -88,6 +99,12 @@ public class GameServlet extends HttpServlet {
 		
 		if(model.isDone()) {
 			gameOver = "YOU DIED <br> Try again? y/n <br>";
+			done = true;
+			req.getSession().setAttribute("done", done);
+		}
+		
+		if(model.isQuit()) {
+			log += "Your game is saved. <br> Come back soon! <br>";
 			done = true;
 			req.getSession().setAttribute("done", done);
 		}

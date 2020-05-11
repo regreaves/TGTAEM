@@ -157,13 +157,13 @@ public class TextOnly implements Updater {
 			if (g.inventory().hasItem("letter")) {
 				g.setOutput(
 						"You look at the envelope. It is addressed to you and the return address is... Your house? The sender is listed as your dad."
-								+ "What game is he up to this time?. You open it, expecting a letter, but it seems to be an old ad with word-art quality graphics that says: <br> "
+								+ "What game is he up to this time?. You open it, expecting a letter, but it seems to be an old ad with word-art quality graphics that says: <br> <br>"
 								+ "<strong>" + "WELCOME TO TGTAEM!" + "<br>"
 								+ "TGTAEM is an adventure more than a game, but it will test your wits and cunning!"
 								+ "In it, you will see things no mortal has ever seen before! No computer should be without one!!!1!"
-								+ "</strong>" + "<br>"
+								+ "</strong>" + "<br> <br>"
 								+ "At the bottom of the ad there is an arrow with your dad's handwriting: \"Read Back\" it says..."
-								+ "<br>" + "You turn the paper over. There is a letter from you dad, which you read:"
+								+ "<br>" + "You turn the paper over. There is a letter from you dad, which you read: <br>"
 								+ "<br>" + "<em>" + "Congratulations kiddo!" + "<br>"
 								+ "If you are reading this, you are finally ready to begin your GRAND ADVENTURE."
 								+ "I am so proud of you. I wanted to give you some final tips to make sure you just have a swell time:"
@@ -177,10 +177,10 @@ public class TextOnly implements Updater {
 								+ "<br>"
 								+ "-- If you go down a hole without the aid of a ladder or the like, you might not be able to come back the way you came right away, if at all."
 								+ "<br>" + "-- Sources of light are only useful if you turn them on." + "<br>"
-								+ "-- You can TYPE on your laptop to keep notes." + "<br>"
+								//+ "-- You can TYPE on your laptop to keep notes." + "<br>"
 								+ "-- If you have a key, it will automatically open its door when you GO through it."
 								+ "<br>" + "There is more that you will discover along the way, kiddo. You'll do great."
-								+ "<br>" + "Good Luck," + "<br>" + "Dad" + "</em>" + "<br>"
+								+ "<br>" + "Good Luck," + "<br>" + "Dad" + "</em>" + "<br> <br>"
 								+ "Well that was a lot. Some of it you definitely wish you had known " + g.status.getMove()
 								+ " turns ago. Some of it made no sense at all."
 								+ "But that's Dad for you. You put the letter back in your pocket.");

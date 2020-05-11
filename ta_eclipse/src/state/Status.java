@@ -33,6 +33,7 @@ public class Status {
 	boolean flood;
 	boolean dialogue;
 	boolean done;
+	boolean quit;
 
 	public Status() {
 		clothes = true;
@@ -230,6 +231,14 @@ public class Status {
 	
 	public void setDone(boolean done) {
 		this.done = done;
+	}
+	
+	public boolean isQuit() {
+		return quit;
+	}
+
+	public void setQuit(boolean quit) {
+		this.quit = quit;
 	}
 
 	public String toJSON() throws JsonProcessingException {
