@@ -177,7 +177,7 @@ public class TextOnly implements Updater {
 								+ "<br>"
 								+ "-- If you go down a hole without the aid of a ladder or the like, you might not be able to come back the way you came right away, if at all."
 								+ "<br>" + "-- Sources of light are only useful if you turn them on." + "<br>"
-								+ "-- You can TYPE on your laptop to keep notes." + "<br>"
+								//+ "-- You can TYPE on your laptop to keep notes." + "<br>"
 								+ "-- If you have a key, it will automatically open its door when you GO through it."
 								+ "<br>" + "There is more that you will discover along the way, kiddo. You'll do great."
 								+ "<br>" + "Good Luck," + "<br>" + "Dad" + "</em>" + "<br> <br>"
