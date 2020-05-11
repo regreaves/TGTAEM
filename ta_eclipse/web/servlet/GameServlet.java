@@ -33,7 +33,7 @@ public class GameServlet extends HttpServlet {
 		Game model = new Game();
 		String log = (String) req.getSession().getAttribute("log");
 		req.getSession().setAttribute("log", log);
-		
+		req.setAttribute("game", model);
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
 
@@ -57,7 +57,29 @@ public class GameServlet extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		String gameOver = "";
+		if(model.isDone()) {
+			gameOver = "YOU DIED <br> Try again? y/n <br>";
+			if(command.equalsIgnoreCase("y"))
+			{
+				try {
+					model.reset();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				log += "<br>> " + command + "<br> Loading new game... <br>";
+				log += "<br>" + model.loadRoom("1") + "<br>";
+			} else if(command.equalsIgnoreCase("n")) {
+				log += "<br>> " + command + "<br> Goodbye. <br>";
+				req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
+
+			} else {
+				log += "<br>> " + command + "<br> Please enter Y for yes and N for no. <br>";
+			}
+		}
 		req.getSession().setAttribute("log", log);
+		req.setAttribute("game", model);
+		req.setAttribute("over", gameOver);
 
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}

@@ -30,6 +30,11 @@ body {
 	padding-right: 1ch;
 }
 
+.over {
+	color : red;
+	font-size : 20pt;
+}
+
 input {
 	flex: 1; 
 	resize : none;

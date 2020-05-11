@@ -36,8 +36,6 @@ public class Game {
 	public ActionLog al = new ActionLog(); // log of all actions performed by user
 	public Status status = new Status(); // the current status of the game
 
-	boolean done = false; // if game is finished or user quits
-
 	String command = ""; // user input
 	String output = ""; // game output to interface
 
@@ -111,7 +109,11 @@ public class Game {
 	}
 
 	public boolean isDone() {
-		return done;
+		return status.isDone();
+	}
+	
+	public void setDone(boolean done) {
+		status.setDone(done);
 	}
 
 	public String getCommand() {

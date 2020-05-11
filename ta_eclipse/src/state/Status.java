@@ -32,6 +32,7 @@ public class Status {
 	boolean searchGrass2;
 	boolean flood;
 	boolean dialogue;
+	boolean done;
 
 	public Status() {
 		clothes = true;
@@ -221,6 +222,14 @@ public class Status {
 
 	public void setDialogue(boolean dialogue) {
 		this.dialogue = dialogue;
+	}
+	
+	public boolean isDone() {
+		return done;
+	}
+	
+	public void setDone(boolean done) {
+		this.done = done;
 	}
 
 	public String toJSON() throws JsonProcessingException {
