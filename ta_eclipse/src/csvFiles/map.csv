@@ -16,4 +16,17 @@ id|name|description|visited|dark|locked|temp
 15|E/W Road|It's a long and empty road.|0|0|0|0
 16|E/W Road|This road seems to go on forever.|0|0|0|0
 17|W/E Road|It's not too long a walk to town. It's just across the bridge.|0|0|0|0
-18|W/E Road|You encounter a sign. "BRIDGE OUT AHEAD" Well, guess we aren't going to town today.|0|0|0|0
+18|W/E Road|You encounter a sign. "BRIDGE OPEN AHEAD" Well, guess we can go into town today.|0|0|0|0
+19|Bridge|It's the old bridge that leads to town. It's not a very long walk.|0|0|0|0
+20|Town Entrance|It's the entrance to town. Nothing seems to be going on today, it's quiet.|0|0|0|0
+21|Main Street|The town's main street. The town square is to the WEST. To the SOUTH is an alleyway.|0|0|0|0
+22|Alleyway|A narrow alleyway. Looks like it's a dead-end.|0|0|0|0
+23|Town Square|The central hub of the town. The fountain is to the NORTH. To the EAST and WEST is the main street. To the SOUTH is the shops. To the SOUTHWEST is a park.|0|0|0|0
+24|Fountain|The town's fountain. It doesn't seem as impressive as the one in your memories.|0|0|0|0
+25|Main Street|The town's main street. The town square is to the EAST. To the SOUTH is another entrance to the park. To the WEST is a neighborhood, but you don't know anyone living there.|0|0|0|0
+26|S/N Street|To the EAST is a small shop. There used to be shops all along this street, but many of the other shops shut down. The street continues to the SOUTH.|0|0|0|0
+27|S/N Street|There's an old store to the WEST. It's been here for as long as you can remember. This street eventually leads to another town, but there's no reason to head that way.|0|0|0|0
+28|Small Shop|You encounter a sign. "STORE CLOSED" No shopping today, then.|0|0|0|0
+29|Old Store|You encounter a sign. "STORE CLOSED" No shopping today, then.|0|0|0|0
+30|Park|You used to come here quite a bit. It seems to have become overgrown though. To the NORTH is the main street. To the NORTHEAST is the town square. To the WEST is another section of the park.|0|0|0|0
+31|Park|This section of the park is just as overgrown. It is nice and quiet though.|0|0|0|0
