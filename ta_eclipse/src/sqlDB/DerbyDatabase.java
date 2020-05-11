@@ -1545,6 +1545,7 @@ public class DerbyDatabase {
 					DBUtil.closeQuietly(rs);
 					DBUtil.closeQuietly(stmt);
 				}
+
 				return s;
 			}
 		});

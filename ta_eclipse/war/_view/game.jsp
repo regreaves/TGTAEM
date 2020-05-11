@@ -12,10 +12,10 @@
 
 <body>
 		<div id="output">
-			<br>${log}</br>
+			<br>${log}
 				<c:if test="${game.done}">
           			<div class="over">${over}</div>
-        		</c:if>
+        </c:if>
 				<form
 					action="${pageContext.servletContext.contextPath}/game"
 					method="post">
