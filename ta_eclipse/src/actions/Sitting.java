@@ -13,15 +13,17 @@ public class Sitting implements Updater {
 		String n = a.noun();
 		switch (v) {
 		case "sit":
-			if(n.equalsIgnoreCase("desk") && g.status.isSitting() == false) {
-				g.status.setSitting(true);
-				g.setOutput("You sit down at the desk.");
-			} else if(n.equalsIgnoreCase("bench") && g.status.isSitting() == false) {
-				g.status.setSitting(true);
-				g.setOutput("You sit down on the bench.");
-			} else if(n.equalsIgnoreCase("swings") && g.status.isSitting() == false) {
-				g.status.setSitting(true);
-				g.setOutput("You sit down on the swings.");
+			if(g.status.isSitting() == false) {
+				if(n.equalsIgnoreCase("desk")) {
+					g.status.setSitting(true);
+					g.setOutput("You sit down at the desk.");
+				} else if(n.equalsIgnoreCase("bench")) {
+					g.status.setSitting(true);
+					g.setOutput("You sit down on the bench.");
+				} else if(n.equalsIgnoreCase("swings")) {
+					g.status.setSitting(true);
+					g.setOutput("You sit down on the swings.");
+				}
 			} else if(g.status.isSitting()) {
 				g.setOutput("You're already sitting.");
 			} else {
