@@ -1549,7 +1549,6 @@ public class DerbyDatabase {
 				try {
 					System.out.println("Loaded: " + s.toJSON());
 				} catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				return s;

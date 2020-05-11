@@ -1,16 +1,19 @@
 package databasetests;
 
-import static org.junit.Assert.assertEquals;
-import java.sql.SQLException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.stream.Stream;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import command.Action;
 import objects.Item;
@@ -20,201 +23,114 @@ import sqlDB.DerbyDatabase;
 
 public class DerbyDatabaseTests {
 
-	private static DerbyDatabase db = new DerbyDatabase();
+	private static DerbyDatabase db = null;
 
-	private ArrayList<Action> actionList = null;
-	private ArrayList<Item> itemList = null;
+	@BeforeAll
+	private static void setUpBeforeClass() throws Exception {
+		db = new DerbyDatabase();
 
-	private HashMap<String, Room> map = null;
-	private HashMap<String, String> shortcutList = null;
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		System.out.println("  " + "******************************");
-		System.out.println("  " + "**    DERBYDATABASETESTS    **");
-		System.out.println("  " + "******************************");
-
-		System.out.println("- " + "Creating the database tables...");
 		db.createTables();
-
-		System.out.println("- " + "Filling the database tables...");
 		db.fillAll();
 	}
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		System.out.println("- " + "Dropping the database tables...");
+	@AfterAll
+	private static void tearDownAfterClass() throws Exception {
 		db.dropTables();
 	}
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeEach
+	private void setUp() throws Exception {
 		DatabaseProvider.setInstance(db);
 		db = DatabaseProvider.getInstance();
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		System.out.println("- " + "Clearing the database tables...");
-		db.clearAll();
+	@AfterEach
+	private void tearDown() throws Exception {
 
-		System.out.println("- " + "Filling the database tables...");
-		db.fillAll();
 	}
 
-	@Test
-	public void testGetVerbs() {
-		System.out.println("\n> TESTING String sqlDB.DerbyDatabase.getVerbs():\n");
-
-		System.out.println("  Trying db.getVerbs(\"tenderize\")...");
-		System.out.println("  " + "Result: " + "<" + db.getVerbs("tenderize") + ">");
-
-		System.out.println();
-
-		System.out.println("  Trying db.getVerbs(\"wear\")...");
-		System.out.println("  " + "Result: " + "<" + db.getVerbs("wear") + ">");
-
-		System.out.println();
-
-		if ((db.getVerbs("tenderize").isEmpty()) && (!db.getVerbs("wear").isEmpty())) {
-			System.out.println("  " + "Test successful!");
-		} else {
-			System.out.println("  " + "Test failed.");
-		}
-
-		assertEquals(db.getVerbs("tenderize").isEmpty(), true);
-		assertEquals(db.getVerbs("wear").isEmpty(), false);
-
-		System.out.println();
+	@ParameterizedTest
+	@CsvFileSource(resources = "/csvFiles/shortcuts.csv", numLinesToSkip = 1, delimiter = '|')
+	void testGetShortcuts(String shortcut, String action) {
+		assertEquals(action, db.getShortcuts().getOrDefault(shortcut, action));
 	}
 
-	@Test
-	public void testGetLog() {
-		System.out.println("\n> TESTING String sqlDB.DerbyDatabase.getLog():\n");
-
-		db.addRowToLog("  " + "ha!");
-		System.out.println(db.getLog());
-
-		System.out.println();
+	@ParameterizedTest(name = "[{index}] {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}")
+	@MethodSource("provideItemList")
+	void testGetItems(Item item, String id, String name, String init, String invent, boolean hidden, boolean moved,
+			boolean vowel, boolean plural, boolean container, int weight) {
+		assertEquals(item.getID(), id);
+		assertEquals(item.getName(), name);
+		assertEquals(item.getInitDscrpt(), init);
+		assertEquals(item.getInventDscrpt(), invent);
+		assertEquals(item.hidden(), hidden);
+		assertEquals(item.moved(), moved);
+		assertEquals(item.vowel(), vowel);
+		assertEquals(item.plural(), plural);
+		assertEquals(item.isContainer(), container);
+		assertEquals(item.getWeight(), weight);
 	}
 
-	@Test
-	public void testGetMap() {
-		System.out.println("\n> TESTING HashMap<String, Room> sqlDB.DerbyDatabase.getMap():\n");
+	private static Stream<Arguments> provideItemList() {
+		ArrayList<Item> itemList = db.getItems();
 
-		map = db.getMap();
-
-		for (int i = 1; i <= map.size(); i++) {
-			if ((i == 1) || (i == 2) || (i == 3) || (i == (map.size() - 2)) || (i == (map.size() - 1))
-					|| (i == map.size())) {
-				System.out.format(
-						"  " + "%2s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s"
-								+ "%n",
-						map.get(Integer.toString(i)).getID(), map.get(Integer.toString(i)).getDisplayName(),
-						map.get(Integer.toString(i)).getDescription(), map.get(Integer.toString(i)).getVisited(),
-						map.get(Integer.toString(i)).dark(), map.get(Integer.toString(i)).locked(),
-						map.get(Integer.toString(i)).temp());
-			} else if (i == (map.size() / 2)) {
-				System.out.println("\t...");
-			}
-		}
-
-		System.out.println();
+		return Stream.of(
+				Arguments.of(itemList.get(0), "i01", "bed", "Your bed is in the corner. It's very comfy.",
+						"It's calling you. You feel your eyes getting heavy.", false, false, false, false, false, 1000),
+				Arguments.of(itemList.get(13), "i14", "remote", "Where is the remote?",
+						"The remote for your living room TV. Generally useless without the TV.", true, false, false,
+						false, false, 1));
 	}
 
-	@Test
-	public void testSetVisited() {
-		System.out.println("\n> TESTING String sqlDB.DerbyDatabase.setVisited(String id):\n");
-
-		System.out.println("  " + "Trying db.setVisited(\"1\")...\n");
-
-		db.setVisited("1");
-
-		System.out.println("  " + "Result: " + "<" + db.getMap().get("1").getVisited() + ">");
-
-		System.out.println();
-
-		if (db.getMap().get("1").getVisited()) {
-			System.out.println("  " + "Test successful!");
-		} else {
-			System.out.println("  " + "Test failed.");
-		}
-
-		System.out.println();
-
-		assertEquals(db.getMap().get("1").getVisited(), true);
+	@ParameterizedTest(name = "[{index}] {1}, {2}, {3}, {4}")
+	@MethodSource("provideActionList")
+	void testGetActions(Action action, String name, String verb, String noun, String method) {
+		assertEquals(action.getName(), name);
+		assertEquals(action.getVerb().getPrime(), verb);
+		assertEquals(action.getNoun().getPrime(), noun);
+		assertEquals(action.getMethod(), method);
 	}
 
-	@Test
-	public void testGetActions() {
-		System.out.println("\n> TESTING ArrayList<Action> sqlDB.DerbyDatabase.getActions():\n");
+	private static Stream<Arguments> provideActionList() {
+		ArrayList<Action> actionList = db.getActions();
 
-		actionList = db.getActions();
-
-		for (int i = 0; i < actionList.size(); i++) {
-			if ((i == 0) || (i == 1) || (i == 2) || (i == (actionList.size() - 3)) || (i == (actionList.size() - 2))
-					|| (i == (actionList.size() - 1))) {
-				System.out.format("  " + "%03d" + ". " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + "%n", i,
-						actionList.get(i).getName(), actionList.get(i).getVerb().getPrime(),
-						actionList.get(i).getNoun().getPrime(), actionList.get(i).getMethod());
-			} else if (i == (actionList.size() / 2)) {
-				System.out.println("         ...");
-			}
-		}
-
-		System.out.println();
+		return Stream.of(Arguments.of(actionList.get(0), "go north", "go", "north", "move"),
+				Arguments.of(actionList.get(32), "take pikachu", "take", "pikachu", "take item"));
 	}
 
-	@Test
-	public void testGetShortcuts() {
-		System.out.println("\n> TESTING HashMap<String, String> sqlDB.DerbyDatabase.getShortcuts():\n");
-
-		shortcutList = db.getShortcuts();
-
-		for (Entry<String, String> entry : shortcutList.entrySet()) {
-			System.out.format("  " + "%2s" + ", " + "%s" + "%n", entry.getKey(), entry.getValue());
-		}
-
-		System.out.println();
+	@ParameterizedTest(name = "[{index}] {1}, {2}, {3}, {4}, {5}, {6}, {7}")
+	@MethodSource("provideMap")
+	void testGetMap(Room room, String id, String name, String description, boolean visited, boolean dark,
+			boolean locked, String temp) {
+		assertEquals(room.getID(), id);
+		assertEquals(room.getDisplayName(), name);
+		assertEquals(room.getDescription(), description);
+		assertEquals(room.getVisited(), visited);
+		assertEquals(room.dark(), dark);
+		assertEquals(room.locked(), locked);
+		assertEquals(room.temp(), temp);
 	}
 
-	@Test
-	public void testGetItems() {
-		System.out.println("\n> TESTING ArrayList<Item> sqlDB.DerbyDatabase.getItems():\n");
+	private static Stream<Arguments> provideMap() {
+		HashMap<String, Room> map = db.getMap();
 
-		itemList = db.getItems();
-
-		for (int i = 0; i < itemList.size(); i++) {
-			if ((i == 0) || (i == 1) || (i == 2) || (i == (itemList.size() - 3)) || (i == (itemList.size() - 2))
-					|| (i == (itemList.size() - 1))) {
-				System.out.format(
-						"  " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s" + ", " + "%s"
-								+ ", " + "%s" + ", " + "%s" + ", " + "%s" + "%n",
-						itemList.get(i).getID(), itemList.get(i).getName(), itemList.get(i).getInitDscrpt(),
-						itemList.get(i).getInventDscrpt(), itemList.get(i).hidden(), itemList.get(i).moved(),
-						itemList.get(i).vowel(), itemList.get(i).plural(), itemList.get(i).isContainer(),
-						itemList.get(i).getWeight());
-			} else if (i == (itemList.size() / 2)) {
-				System.out.println("         ...");
-			}
-		}
-
-		System.out.println();
+		return Stream.of(
+				Arguments.of(map.get("2"), "2", "Closet", "It's your closet. It's a mess.", false, false, false, ""),
+				Arguments.of(map.get("15"), "15", "E/W Road", "It's a long and empty road.", false, false, false, ""));
 	}
 
-	/*
-	 * Is this really acceptable...?
-	 */
-	@Test
-	public void testPlaceItems() throws SQLException {
-		System.out.println(
-				"\n> TESTING boolean sqlDB.DerbyDatabase.placeItems(HashMap<String, Room> map, ArrayList<Item> items) throws SQLException:\n");
+	@ParameterizedTest(name = "[{index}] {0}, {1}")
+	@MethodSource("provideVisited")
+	void testSetVisited(Room room, boolean wasVisited) {
+		assertEquals(wasVisited, room.getVisited());
+	}
 
-		map = db.getMap();
-		itemList = db.getItems();
+	private static Stream<Arguments> provideVisited() {
+		HashMap<String, Room> map = db.getMap();
 
-		System.out.println("  ** See DerbyDatabaseTests.testPlaceItems() comment. **");
+		map.get("1").setVisited(false);
+		map.get("3").setVisited(true);
 
-		System.out.println();
+		return Stream.of(Arguments.of(map.get("1"), false), Arguments.of(map.get("3"), true));
 	}
 }
