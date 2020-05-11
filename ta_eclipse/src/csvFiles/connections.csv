@@ -56,3 +56,44 @@ go east|14
 go west|18
 room|18
 go east|17
+go west|19
+room|19
+go east|18
+go west|20
+room|20
+go east|19
+go west|21
+room|21
+go east|20
+go south|22
+go west|23
+room|22
+go north|21
+room|23
+go east|21
+go north|24
+go west|25
+go south|26
+go southwest|30
+room|24
+go south|23
+room|25
+go east|23
+go south|30
+room|26
+go north|23
+go south|27
+go east|28
+room|27
+go north|26
+go west|29
+room|28
+go west|26
+room|29
+go east|27
+room|30
+go northeast|23
+go north|25
+go west|31
+room|31
+go east|30

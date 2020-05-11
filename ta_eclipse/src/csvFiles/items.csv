@@ -24,3 +24,10 @@ i22|letter|null|A letter to you... from your dad? Why did he go through the trou
 i23|swings|You spent many days on these swings, but you haven't been on them in ages. Hopefully they aren't rusted up.|Your childhood swing set.|0|0|0|0|0|1000
 i24|pikachu|null|A pikachu toy you thought you lost long ago. You swore it was real when you were a kid.|1|0|0|0|0|1
 i25|sword|null|A sword. An honest to goodness sword, you just found lying in your yard.|1|0|0|0|0|5
+i26|towel|There's a towel hanging on a hook.|A good hitchhiker always knows where their towel is. |0|0|0|0|0|1
+i27|puddle|There's a shallow puddle here. |It's a puddle. |0|0|0|0|0|1000
+i28|fountain|null|An old fountain. The water is clear though.|0|0|0|0|0|1000
+i29|tree|There's a big tree here.|The oldest tree in the town.|0|0|0|0|0|1000
+i30|flowers|Bright yellow flowers grow along the path.|Pretty flowers. Someone must be taking care of them.|0|0|0|0|0|2
+i31|dumpster|A dumpster sits against a wall.|It's overflowing with trash. You really don't want to get any closer.|0|0|0|0|0|1000
+i32|streetlights|Streetlights line both sides of the main road.|The town's streetlights. They aren't on right now.|0|0|0|0|0|1000
