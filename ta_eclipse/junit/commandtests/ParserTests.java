@@ -14,7 +14,6 @@ import sqlDB.DerbyDatabase;
 
 public class ParserTests {
 	private Parser parser;
-	Action action = new Action("action", null, null, null);
 	ArrayList<Action> actionBank = new ArrayList<>();
 	DerbyDatabase db;
 	
@@ -28,7 +27,9 @@ public class ParserTests {
 
 	@Test
 	public void testGetAction() {
-		assertEquals(actionBank.get(0).getName(), parser.getAction(actionBank.get(0).getName()).getName());
+		String actionName = actionBank.get(0).getName();
+		String getAction = parser.getAction(actionBank.get(0).getName()).getName();
+		assertEquals(actionName, getAction);
 	}
 
 }
