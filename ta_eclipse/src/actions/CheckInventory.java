@@ -20,6 +20,7 @@ public class CheckInventory implements Updater {
 			}
 			if (empty) {
 				g.addOutput("Your inventory is empty. <br>");
+				return;
 			}
 		}
 	}

@@ -26,6 +26,7 @@ public class MonsterCheck implements Updater {
 				} else {
 					g.setOutput("You can't do that.");
 				}
+				break;
 			case "hide under":
 				if(g.status.isMonsterCheck1() == false) {
 					if(n.equalsIgnoreCase("bed")) {
@@ -44,6 +45,7 @@ public class MonsterCheck implements Updater {
 						g.setOutput("You get out from under the bed.");
 					}
 				}
+				break;
 		}
 	}
 
