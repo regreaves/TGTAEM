@@ -4,9 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import objects.Item;
 import state.Status;
 
 public class StatusTests {
@@ -223,5 +226,30 @@ public class StatusTests {
 		status.setShower(true);
 		assertTrue(status.advance());
 		assertTrue(status.isFlood());
+	}
+	
+	@Test
+	public void testEquip() throws Exception {
+		ArrayList<Item> equipped = status.getEquipped();
+
+		Item item = new Item();
+		Item item2 = new Item();
+
+		item.setID("i999");
+		item.setName("MY GKDSKGDK");
+
+		item2.setID("i654");
+		item2.setName("ghrdshsK");
+
+		status.equip(item);
+		status.equip(item2);
+		
+		System.out.println(status.equippedToString(equipped));
+		System.out.println(status.equippedToItemArrayList(status.equippedToString(equipped)));
+
+		equipped.remove(1);
+		
+		System.out.println(status.equippedToString(equipped));
+		System.out.println(status.equippedToItemArrayList(status.equippedToString(equipped)));
 	}
 }
