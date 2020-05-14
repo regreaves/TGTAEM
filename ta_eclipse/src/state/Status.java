@@ -2,10 +2,6 @@ package state;
 
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
-
 import objects.Item;
 
 public class Status {
@@ -36,20 +32,46 @@ public class Status {
 	boolean quit;
 
 	public Status() {
+//		move = 0;
+//		waterOn = 0;
+//
+//		equipped = new ArrayList<>();
+//
+//		hiding = false;
+//		monsterCheck1 = false;
+//		sitting = false;
+//		laptop = false;
+//		window = false;
+//		flashlight = false;
+//		sink = false;
+//		shower = false;
 		clothes = true;
+//		wet = false;
 		TV = true;
+//		searchCouch = false;
+//		PC = false;
+//		mailFlag = false;
+//		searchGrass1 = false;
+//		searchGrass2 = false;
+//		flood = false;
+//		dialogue = false;
+//		done = false;
+//		quit = false;
 	}
 
 	public boolean advance() {
 		move++;
+
 		if (sink && shower) {
 			waterOn++;
 		} else {
 			waterOn = 0;
 		}
+
 		if (waterOn > 10) {
 			flood = true;
 		}
+
 		return true;
 	}
 
@@ -76,7 +98,7 @@ public class Status {
 	public void setEquipped(ArrayList<Item> equipped) {
 		this.equipped = equipped;
 	}
-	
+
 	public void equip(Item i) {
 		this.equipped.add(i);
 	}
@@ -216,7 +238,7 @@ public class Status {
 	public void setFlood(boolean flood) {
 		this.flood = flood;
 	}
-	
+
 	public boolean isDialogue() {
 		return dialogue;
 	}
@@ -224,31 +246,48 @@ public class Status {
 	public void setDialogue(boolean dialogue) {
 		this.dialogue = dialogue;
 	}
-	
+
 	public boolean isDone() {
 		return done;
 	}
-	
+
 	public void setDone(boolean done) {
 		this.done = done;
 	}
-	
+
 	public boolean isQuit() {
 		return quit;
 	}
 
-	public void setQuit(boolean quit) {
+	public void setIsQuitting(boolean quit) {
 		this.quit = quit;
 	}
 
-	public String toJSON() throws JsonProcessingException {
-		ObjectMapper om = new ObjectMapper();
-		return om.writeValueAsString(this);
+	public String equippedToString(ArrayList<Item> itemArrayList) {
+		String equipped = "";
+		if (itemArrayList != null) {
+
+			for (int i = 0; i < itemArrayList.size(); i++) {
+				equipped += (itemArrayList.get(i).toString() + ";");
+			}
+		}
+
+		return equipped;
 	}
-	
-	public Status fromJSON(String s) throws JsonMappingException, JsonProcessingException {
-		ObjectMapper om = new ObjectMapper();
-		return om.readValue(s, Status.class);
+
+	public ArrayList<Item> equippedToItemArrayList(String string) {
+		ArrayList<Item> equipped = new ArrayList<Item>();
+
+		if (string != null) {
+			String[] stringArray = string.split(";");
+
+			for (int i = 0; i < stringArray.length; i++) {
+				Item item = new Item().stringToItem(stringArray[i]);
+
+				equipped.add(item);
+			}
+		}
+
+		return equipped;
 	}
-	
 }
