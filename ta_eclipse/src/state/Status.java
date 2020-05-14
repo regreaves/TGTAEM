@@ -31,33 +31,7 @@ public class Status {
 	boolean done;
 	boolean quit;
 
-	public Status() {
-//		move = 0;
-//		waterOn = 0;
-//
-//		equipped = new ArrayList<>();
-//
-//		hiding = false;
-//		monsterCheck1 = false;
-//		sitting = false;
-//		laptop = false;
-//		window = false;
-//		flashlight = false;
-//		sink = false;
-//		shower = false;
-		clothes = true;
-//		wet = false;
-		TV = true;
-//		searchCouch = false;
-//		PC = false;
-//		mailFlag = false;
-//		searchGrass1 = false;
-//		searchGrass2 = false;
-//		flood = false;
-//		dialogue = false;
-//		done = false;
-//		quit = false;
-	}
+	public Status() { }
 
 	public boolean advance() {
 		move++;
