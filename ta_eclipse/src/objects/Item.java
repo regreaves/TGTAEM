@@ -1,9 +1,5 @@
 package objects;
 
-import java.util.ArrayList;
-
-import command.Action;
-
 public class Item {
 	String name; // basic name
 	String id; // reference id
@@ -17,9 +13,37 @@ public class Item {
 	boolean plural; // is plural form
 	boolean isContainer; // is am ItemContainer
 
-	int weight; // weight 
-	
+	int weight; // weight
+
 	public Item() { // POJO
+	}
+
+	@Override
+	public String toString() {
+		return (id + ", " + name + ", " + init_dscrpt + ", " + invent_dscrpt + ", " + critical + ", " + hidden + ", "
+				+ moved + ", " + vowel + ", " + plural + ", " + isContainer + ", " + Integer.toString(weight));
+	}
+
+	public Item stringToItem(String string) {
+		Item item = new Item();
+
+		String[] stringArray = string.split(", ");
+
+		item.setID(stringArray[0]);
+		item.setName(stringArray[1]);
+		item.setInitDscrpt(stringArray[2]);
+		item.setInventDscrpt(stringArray[3]);
+
+		item.setCritical(Boolean.valueOf(stringArray[4]));
+		item.setHidden(Boolean.valueOf(stringArray[5]));
+		item.setMoved(Boolean.valueOf(stringArray[6]));
+		item.setVowel(Boolean.valueOf(stringArray[7]));
+		item.setPlural(Boolean.valueOf(stringArray[8]));
+		item.setIsContainer(Boolean.valueOf(stringArray[9]));
+
+		item.setWeight(Integer.valueOf(stringArray[10]));
+
+		return item;
 	}
 
 	public String getID() {
@@ -112,11 +136,11 @@ public class Item {
 		this.plural = plural;
 		return;
 	}
-	
+
 	public boolean isContainer() {
 		return isContainer;
 	}
-	
+
 	public void setIsContainer(boolean isContainer) {
 		this.isContainer = isContainer;
 		return;
