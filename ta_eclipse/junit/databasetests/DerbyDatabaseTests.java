@@ -1,6 +1,7 @@
 package databasetests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -132,5 +136,14 @@ public class DerbyDatabaseTests {
 		map.get("3").setVisited(true);
 
 		return Stream.of(Arguments.of(map.get("1"), false), Arguments.of(map.get("3"), true));
+	}
+
+	@Disabled
+	@TestFactory
+	DynamicTest[] dynamicTestsFromArray() {
+		db.addRowToLog("This is the added row to log.");
+
+		return new DynamicTest[] {
+				dynamicTest("testGetLog", () -> assertEquals("This is the added row to log.", db.getLog())) };
 	}
 }
