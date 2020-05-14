@@ -125,7 +125,7 @@ public class Game {
 	}
 
 	public void setQuit(boolean quit) {
-		status.setQuit(quit);
+		status.setIsQuitting(quit);
 	}
 
 	public String getCommand() {
@@ -206,7 +206,8 @@ public class Game {
 		}
 		status.advance();
 		db.addRowToLog("<br>" + s);
-		db.saveStatus(status.toJSON());
+//		db.saveStatus(status).toJSON());
+		db.saveStatus(status);//.toJSON());
 		return s;
 	}
 
